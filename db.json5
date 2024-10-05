@@ -13,5 +13,13 @@
   species: [
     { id: '1', name: 'Bigeye Tuna' }, 
     { id: '2', name: 'Swordfish' }
+  ],
+  precipitation: [
+    { id: '1', description: 'None' },
+    { id: '2', description: 'Light drizzle' },
+    { id: '3', description: 'Light rain' },
+    { id: '4', description: 'Moderate rain' },
+    { id: '5', description: 'Heavy rain' },
+    { id: '6', description: 'Thunderstorm' }
   ]
 }
