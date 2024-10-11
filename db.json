@@ -1,0 +1,1063 @@
+{
+  "cruises": [
+    {
+      "id": 1,
+      "cruiseName": "CRUISE001",
+      "cruiseStatus": 5,
+      "vesselName": "RADFish Research Vessel",
+      "startDate": "2024-08-11",
+      "endDate": "2024-08-28",
+      "departurePort": 2,
+      "returnPort": 1
+    },
+    {
+      "id": 2,
+      "cruiseName": "CRUISE002",
+      "cruiseStatus": 4,
+      "vesselName": "RADFish Research Vessel",
+      "startDate": "2024-09-01",
+      "endDate": "2024-09-07",
+      "departurePort": 1,
+      "returnPort": 3
+    },
+    {
+      "id": 3,
+      "cruiseName": "CRUISE003",
+      "cruiseStatus": 3,
+      "vesselName": "RADFish Research Vessel",
+      "startDate": "2024-09-10",
+      "endDate": "2024-09-25",
+      "departurePort": 3,
+      "returnPort": 1
+    },
+    {
+      "id": 4,
+      "cruiseName": "CRUISE004",
+      "cruiseStatus": 1,
+      "vesselName": "RADFish Research Vessel",
+      "startDate": "2024-10-01",
+      "endDate": null,
+      "departurePort": 1,
+      "returnPort": null
+    }
+  ],
+  "stations": [
+    {
+      "id": 1,
+      "cruiseId": 1,
+      "stationName": "STATION001",
+      "location": {
+        "latitude": 45.1234,
+        "longitude": -123.4567
+      },
+      "events": {
+        "beginSet": {
+          "timestamp": "2024-10-02T08:00:00Z",
+          "latitude": 45.123,
+          "longitude": -123.457,
+          "weatherConditions": {
+            "windSpeedKnots": 15,
+            "waveHeightMeters": 2.5,
+            "visibilityKm": 10,
+            "precipitation": 1
+          },
+          "comments": "Calm conditions, clear sky."
+        },
+        "endSet": {
+          "timestamp": "2024-10-02T09:00:00Z",
+          "latitude": 45.124,
+          "longitude": -123.455,
+          "weatherConditions": {
+            "windSpeedKnots": 18,
+            "waveHeightMeters": 2.8,
+            "visibilityKm": 9,
+            "precipitation": 2
+          },
+          "comments": "Slight increase in wind, light drizzle started."
+        },
+        "beginHaul": {
+          "timestamp": "2024-10-02T10:00:00Z",
+          "latitude": 45.125,
+          "longitude": -123.454,
+          "weatherConditions": {
+            "windSpeedKnots": 20,
+            "waveHeightMeters": 3.0,
+            "visibilityKm": 8,
+            "precipitation": 4
+          },
+          "comments": "Moderate rain, waves increased."
+        },
+        "endHaul": {
+          "timestamp": "2024-10-02T11:00:00Z",
+          "latitude": 45.126,
+          "longitude": -123.453,
+          "weatherConditions": {
+            "windSpeedKnots": 22,
+            "waveHeightMeters": 3.5,
+            "visibilityKm": 7,
+            "precipitation": 5
+          },
+          "comments": "Heavy rain, reduced visibility."
+        }
+      },
+      "catch": [
+        {
+          "speciesName": 1,
+          "aggregateWeightKg": 100.5,
+          "individuals": [
+            {
+              "lengthCm": 35.4,
+              "bioSample": {
+                "sampleId": "BIO001",
+                "sampleType": 3,
+                "notes": "Sample taken from dorsal fin."
+              }
+            },
+            {
+              "lengthCm": 40.2,
+              "bioSample": {
+                "sampleId": "BIO002",
+                "sampleType": 1,
+                "notes": "Sample taken for age analysis."
+              }
+            }
+          ]
+        },
+        {
+          "speciesName": 2,
+          "aggregateWeightKg": 75.3,
+          "individuals": [
+            {
+              "lengthCm": 28.1,
+              "bioSample": {
+                "sampleId": "BIO003",
+                "sampleType": 3,
+                "notes": "Sample taken from ventral side."
+              }
+            },
+            {
+              "lengthCm": 32.6,
+              "bioSample": {
+                "sampleId": "BIO004",
+                "sampleType": "Tissue",
+                "notes": "Sample taken for genetic analysis."
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "cruiseId": 1,
+      "stationName": "STATION002",
+      "location": {
+        "latitude": 45.5678,
+        "longitude": -123.789
+      },
+      "events": {
+        "beginSet": {
+          "timestamp": "2024-10-03T07:30:00Z",
+          "latitude": 45.5675,
+          "longitude": -123.7895,
+          "weatherConditions": {
+            "windSpeedKnots": 10,
+            "waveHeightMeters": 1.2,
+            "visibilityKm": 12,
+            "precipitation": 1
+          },
+          "comments": "Clear morning, smooth seas."
+        },
+        "endSet": {
+          "timestamp": "2024-10-03T08:30:00Z",
+          "latitude": 45.568,
+          "longitude": -123.7885,
+          "weatherConditions": {
+            "windSpeedKnots": 12,
+            "waveHeightMeters": 1.5,
+            "visibilityKm": 11,
+            "precipitation": 1
+          },
+          "comments": "Conditions remain favorable."
+        },
+        "beginHaul": {
+          "timestamp": "2024-10-03T09:30:00Z",
+          "latitude": 45.5685,
+          "longitude": -123.788,
+          "weatherConditions": {
+            "windSpeedKnots": 15,
+            "waveHeightMeters": 2.0,
+            "visibilityKm": 10,
+            "precipitation": 1
+          },
+          "comments": "Wind picking up slightly."
+        },
+        "endHaul": {
+          "timestamp": "2024-10-03T10:30:00Z",
+          "latitude": 45.569,
+          "longitude": -123.7875,
+          "weatherConditions": {
+            "windSpeedKnots": 18,
+            "waveHeightMeters": 2.3,
+            "visibilityKm": 9,
+            "precipitation": 3
+          },
+          "comments": "Light rain, increased wind."
+        }
+      },
+      "catch": [
+        {
+          "speciesName": 3,
+          "aggregateWeightKg": 120.8,
+          "individuals": [
+            {
+              "lengthCm": 44.5,
+              "bioSample": {
+                "sampleId": "BIO005",
+                "sampleType": 3,
+                "notes": "Sample taken from dorsal side."
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "cruiseId": 1,
+      "stationName": "STATION003",
+      "location": {
+        "latitude": 46.1234,
+        "longitude": -122.4567
+      },
+      "events": {
+        "beginSet": {
+          "timestamp": "2024-10-04T08:00:00Z",
+          "latitude": 46.123,
+          "longitude": -122.457,
+          "weatherConditions": {
+            "windSpeedKnots": 12,
+            "waveHeightMeters": 1.8,
+            "visibilityKm": 11,
+            "precipitation": 0
+          },
+          "comments": "Mostly sunny, moderate waves."
+        },
+        "endSet": {
+          "timestamp": "2024-10-04T09:00:00Z",
+          "latitude": 46.124,
+          "longitude": -122.455,
+          "weatherConditions": {
+            "windSpeedKnots": 15,
+            "waveHeightMeters": 2.2,
+            "visibilityKm": 10,
+            "precipitation": 0
+          },
+          "comments": "Conditions remain stable."
+        },
+        "beginHaul": {
+          "timestamp": "2024-10-04T10:00:00Z",
+          "latitude": 46.125,
+          "longitude": -122.454,
+          "weatherConditions": {
+            "windSpeedKnots": 18,
+            "waveHeightMeters": 2.8,
+            "visibilityKm": 8,
+            "precipitation": 2
+          },
+          "comments": "Light rain, waves increasing."
+        },
+        "endHaul": {
+          "timestamp": "2024-10-04T11:00:00Z",
+          "latitude": 46.126,
+          "longitude": -122.453,
+          "weatherConditions": {
+            "windSpeedKnots": 20,
+            "waveHeightMeters": 3.2,
+            "visibilityKm": 7,
+            "precipitation": 4
+          },
+          "comments": "Moderate rain, reduced visibility."
+        }
+      },
+      "catch": [
+        {
+          "speciesName": 1,
+          "aggregateWeightKg": 85.2,
+          "individuals": [
+            {
+              "lengthCm": 32.1,
+              "bioSample": {
+                "sampleId": "BIO006",
+                "sampleType": 3,
+                "notes": "Sample taken from dorsal fin."
+              }
+            },
+            {
+              "lengthCm": 38.7,
+              "bioSample": {
+                "sampleId": "BIO007",
+                "sampleType": 1,
+                "notes": "Sample taken for age analysis."
+              }
+            }
+          ]
+        },
+        {
+          "speciesName": 4,
+          "aggregateWeightKg": 50.7,
+          "individuals": [
+            {
+              "lengthCm": 25.6,
+              "bioSample": {
+                "sampleId": "BIO008",
+                "sampleType": 3,
+                "notes": "Sample taken from ventral side."
+              }
+            },
+            {
+              "lengthCm": 31.2,
+              "bioSample": {
+                "sampleId": "BIO009",
+                "sampleType": 2,
+                "notes": "Sample taken for tissue analysis."
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "cruiseId": 2,
+      "stationName": "STATION004",
+      "location": {
+        "latitude": 44.8765,
+        "longitude": -124.1234
+      },
+      "events": {
+        "beginSet": {
+          "timestamp": "2024-09-02T08:00:00Z",
+          "latitude": 44.876,
+          "longitude": -124.1235,
+          "weatherConditions": {
+            "windSpeedKnots": 12,
+            "waveHeightMeters": 1.5,
+            "visibilityKm": 11,
+            "precipitation": 0
+          },
+          "comments": "Calm morning, clear sky."
+        },
+        "endSet": {
+          "timestamp": "2024-09-02T09:00:00Z",
+          "latitude": 44.877,
+          "longitude": -124.1225,
+          "weatherConditions": {
+            "windSpeedKnots": 15,
+            "waveHeightMeters": 2.0,
+            "visibilityKm": 10,
+            "precipitation": 1
+          },
+          "comments": "Slight increase in wind, light drizzle started."
+        },
+        "beginHaul": {
+          "timestamp": "2024-09-02T10:00:00Z",
+          "latitude": 44.878,
+          "longitude": -124.1215,
+          "weatherConditions": {
+            "windSpeedKnots": 18,
+            "waveHeightMeters": 2.5,
+            "visibilityKm": 9,
+            "precipitation": 2
+          },
+          "comments": "Moderate rain, waves increased."
+        },
+        "endHaul": {
+          "timestamp": "2024-09-02T11:00:00Z",
+          "latitude": 44.879,
+          "longitude": -124.1205,
+          "weatherConditions": {
+            "windSpeedKnots": 20,
+            "waveHeightMeters": 3.0,
+            "visibilityKm": 8,
+            "precipitation": 3
+          },
+          "comments": "Heavy rain, reduced visibility."
+        }
+      },
+      "catch": [
+        {
+          "speciesName": 1,
+          "aggregateWeightKg": 120.5,
+          "individuals": [
+            {
+              "lengthCm": 35.4,
+              "bioSample": {
+                "sampleId": "BIO001",
+                "sampleType": 3,
+                "notes": "Sample taken from dorsal fin."
+              }
+            },
+            {
+              "lengthCm": 40.2,
+              "bioSample": {
+                "sampleId": "BIO002",
+                "sampleType": 1,
+                "notes": "Sample taken for age analysis."
+              }
+            }
+          ]
+        },
+        {
+          "speciesName": 2,
+          "aggregateWeightKg": 75.3,
+          "individuals": [
+            {
+              "lengthCm": 28.1,
+              "bioSample": {
+                "sampleId": "BIO003",
+                "sampleType": 3,
+                "notes": "Sample taken from ventral side."
+              }
+            },
+            {
+              "lengthCm": 32.6,
+              "bioSample": {
+                "sampleId": "BIO004",
+                "sampleType": 4,
+                "notes": "Sample taken for genetic analysis."
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "cruiseId": 2,
+      "stationName": "STATION005",
+      "location": {
+        "latitude": 45.2345,
+        "longitude": -123.6789
+      },
+      "events": {
+        "beginSet": {
+          "timestamp": "2024-09-03T07:30:00Z",
+          "latitude": 45.234,
+          "longitude": -123.6795,
+          "weatherConditions": {
+            "windSpeedKnots": 10,
+            "waveHeightMeters": 1.2,
+            "visibilityKm": 12,
+            "precipitation": 1
+          },
+          "comments": "Clear morning, smooth seas."
+        },
+        "endSet": {
+          "timestamp": "2024-09-03T08:30:00Z",
+          "latitude": 45.234,
+          "longitude": -123.6795,
+          "weatherConditions": {
+            "windSpeedKnots": 12,
+            "waveHeightMeters": 1.5,
+            "visibilityKm": 11,
+            "precipitation": 1
+          },
+          "comments": "Conditions remain favorable."
+        },
+        "beginHaul": {
+          "timestamp": "2024-09-03T09:30:00Z",
+          "latitude": 45.234,
+          "longitude": -123.6795,
+          "weatherConditions": {
+            "windSpeedKnots": 15,
+            "waveHeightMeters": 2.0,
+            "visibilityKm": 10,
+            "precipitation": 1
+          },
+          "comments": "Wind picking up slightly."
+        },
+        "endHaul": {
+          "timestamp": "2024-09-03T10:30:00Z",
+          "latitude": 45.234,
+          "longitude": -123.6795,
+          "weatherConditions": {
+            "windSpeedKnots": 18,
+            "waveHeightMeters": 2.3,
+            "visibilityKm": 9,
+            "precipitation": 3
+          },
+          "comments": "Light rain, increased wind."
+        }
+      },
+      "catch": [
+        {
+          "speciesName": 3,
+          "aggregateWeightKg": 120.8,
+          "individuals": [
+            {
+              "lengthCm": 44.5,
+              "bioSample": {
+                "sampleId": "BIO005",
+                "sampleType": 3,
+                "notes": "Sample taken from dorsal side."
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "cruiseId": 2,
+      "stationName": "STATION006",
+      "location": {
+        "latitude": 45.6789,
+        "longitude": -122.3456
+      },
+      "events": {
+        "beginSet": {
+          "timestamp": "2024-09-04T08:00:00Z",
+          "latitude": 45.678,
+          "longitude": -122.3457,
+          "weatherConditions": {
+            "windSpeedKnots": 12,
+            "waveHeightMeters": 1.8,
+            "visibilityKm": 11,
+            "precipitation": 0
+          },
+          "comments": "Mostly sunny, moderate waves."
+        },
+        "endSet": {
+          "timestamp": "2024-09-04T09:00:00Z",
+          "latitude": 45.679,
+          "longitude": -122.3455,
+          "weatherConditions": {
+            "windSpeedKnots": 15,
+            "waveHeightMeters": 2.2,
+            "visibilityKm": 10,
+            "precipitation": 0
+          },
+          "comments": "Conditions remain stable."
+        },
+        "beginHaul": {
+          "timestamp": "2024-09-04T10:00:00Z",
+          "latitude": 45.6795,
+          "longitude": -122.345,
+          "weatherConditions": {
+            "windSpeedKnots": 18,
+            "waveHeightMeters": 2.8,
+            "visibilityKm": 8,
+            "precipitation": 2
+          },
+          "comments": "Light rain, waves increasing."
+        },
+        "endHaul": {
+          "timestamp": "2024-09-04T11:00:00Z",
+          "latitude": 45.68,
+          "longitude": -122.3445,
+          "weatherConditions": {
+            "windSpeedKnots": 20,
+            "waveHeightMeters": 3.2,
+            "visibilityKm": 7,
+            "precipitation": 4
+          },
+          "comments": "Moderate rain, reduced visibility."
+        }
+      },
+      "catch": [
+        {
+          "speciesName": 1,
+          "aggregateWeightKg": 85.2,
+          "individuals": [
+            {
+              "lengthCm": 32.1,
+              "bioSample": {
+                "sampleId": "BIO006",
+                "sampleType": 3,
+                "notes": "Sample taken from dorsal fin."
+              }
+            },
+            {
+              "lengthCm": 38.7,
+              "bioSample": {
+                "sampleId": "BIO007",
+                "sampleType": 1,
+                "notes": "Sample taken for age analysis."
+              }
+            }
+          ]
+        },
+        {
+          "speciesName": 4,
+          "aggregateWeightKg": 50.7,
+          "individuals": [
+            {
+              "lengthCm": 25.6,
+              "bioSample": {
+                "sampleId": "BIO008",
+                "sampleType": 3,
+                "notes": "Sample taken from ventral side."
+              }
+            },
+            {
+              "lengthCm": 31.2,
+              "bioSample": {
+                "sampleId": "BIO009",
+                "sampleType": 2,
+                "notes": "Sample taken for tissue analysis."
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 7,
+      "cruiseId": 3,
+      "stationName": "STATION007",
+      "location": {
+        "latitude": 45.1234,
+        "longitude": -123.4567
+      },
+      "events": {
+        "beginSet": {
+          "timestamp": "2024-09-11T08:00:00Z",
+          "latitude": 45.123,
+          "longitude": -123.457,
+          "weatherConditions": {
+            "windSpeedKnots": 15,
+            "waveHeightMeters": 2.5,
+            "visibilityKm": 10,
+            "precipitation": 1
+          },
+          "comments": "Calm conditions, clear sky."
+        },
+        "endSet": {
+          "timestamp": "2024-09-11T09:00:00Z",
+          "latitude": 45.124,
+          "longitude": -123.455,
+          "weatherConditions": {
+            "windSpeedKnots": 18,
+            "waveHeightMeters": 2.8,
+            "visibilityKm": 9,
+            "precipitation": 2
+          },
+          "comments": "Slight increase in wind, light drizzle started."
+        },
+        "beginHaul": {
+          "timestamp": "2024-09-11T10:00:00Z",
+          "latitude": 45.125,
+          "longitude": -123.454,
+          "weatherConditions": {
+            "windSpeedKnots": 20,
+            "waveHeightMeters": 3.0,
+            "visibilityKm": 8,
+            "precipitation": 4
+          },
+          "comments": "Moderate rain, waves increased."
+        },
+        "endHaul": {
+          "timestamp": "2024-09-11T11:00:00Z",
+          "latitude": 45.126,
+          "longitude": -123.453,
+          "weatherConditions": {
+            "windSpeedKnots": 22,
+            "waveHeightMeters": 3.5,
+            "visibilityKm": 7,
+            "precipitation": 5
+          },
+          "comments": "Heavy rain, reduced visibility."
+        }
+      },
+      "catch": [
+        {
+          "speciesName": 1,
+          "aggregateWeightKg": 100.5,
+          "individuals": [
+            {
+              "lengthCm": 35.4,
+              "bioSample": {
+                "sampleId": "BIO001",
+                "sampleType": 3,
+                "notes": "Sample taken from dorsal fin."
+              }
+            },
+            {
+              "lengthCm": 40.2,
+              "bioSample": {
+                "sampleId": "BIO002",
+                "sampleType": 1,
+                "notes": "Sample taken for age analysis."
+              }
+            }
+          ]
+        },
+        {
+          "speciesName": 2,
+          "aggregateWeightKg": 75.3,
+          "individuals": [
+            {
+              "lengthCm": 28.1,
+              "bioSample": {
+                "sampleId": "BIO003",
+                "sampleType": 3,
+                "notes": "Sample taken from ventral side."
+              }
+            },
+            {
+              "lengthCm": 32.6,
+              "bioSample": {
+                "sampleId": "BIO004",
+                "sampleType": 4,
+                "notes": "Sample taken for genetic analysis."
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 8,
+      "cruiseId": 3,
+      "stationName": "STATION008",
+      "location": {
+        "latitude": 45.5678,
+        "longitude": -123.789
+      },
+      "events": {
+        "beginSet": {
+          "timestamp": "2024-09-12T07:30:00Z",
+          "latitude": 45.5675,
+          "longitude": -123.7895,
+          "weatherConditions": {
+            "windSpeedKnots": 10,
+            "waveHeightMeters": 1.2,
+            "visibilityKm": 12,
+            "precipitation": 1
+          },
+          "comments": "Clear morning, smooth seas."
+        },
+        "endSet": {
+          "timestamp": "2024-09-12T08:30:00Z",
+          "latitude": 45.568,
+          "longitude": -123.7885,
+          "weatherConditions": {
+            "windSpeedKnots": 12,
+            "waveHeightMeters": 1.5,
+            "visibilityKm": 11,
+            "precipitation": 1
+          },
+          "comments": "Conditions remain favorable."
+        },
+        "beginHaul": {
+          "timestamp": "2024-09-12T09:30:00Z",
+          "latitude": 45.5685,
+          "longitude": -123.788,
+          "weatherConditions": {
+            "windSpeedKnots": 15,
+            "waveHeightMeters": 2.0,
+            "visibilityKm": 10,
+            "precipitation": 1
+          },
+          "comments": "Wind picking up slightly."
+        },
+        "endHaul": {
+          "timestamp": "2024-09-12T10:30:00Z",
+          "latitude": 45.569,
+          "longitude": -123.7875,
+          "weatherConditions": {
+            "windSpeedKnots": 18,
+            "waveHeightMeters": 2.3,
+            "visibilityKm": 9,
+            "precipitation": 3
+          },
+          "comments": "Light rain, increased wind."
+        }
+      },
+      "catch": [
+        {
+          "speciesName": 3,
+          "aggregateWeightKg": 120.8,
+          "individuals": [
+            {
+              "lengthCm": 44.5,
+              "bioSample": {
+                "sampleId": "BIO005",
+                "sampleType": 3,
+                "notes": "Sample taken from dorsal side."
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 9,
+      "cruiseId": 3,
+      "stationName": "STATION009",
+      "location": {
+        "latitude": 46.1234,
+        "longitude": -122.4567
+      },
+      "events": {
+        "beginSet": {
+          "timestamp": "2024-09-13T08:00:00Z",
+          "latitude": 46.123,
+          "longitude": -122.457,
+          "weatherConditions": {
+            "windSpeedKnots": 12,
+            "waveHeightMeters": 1.8,
+            "visibilityKm": 11,
+            "precipitation": 0
+          },
+          "comments": "Mostly sunny, moderate waves."
+        },
+        "endSet": {
+          "timestamp": "2024-09-13T09:00:00Z",
+          "latitude": 46.124,
+          "longitude": -122.455,
+          "weatherConditions": {
+            "windSpeedKnots": 15,
+            "waveHeightMeters": 2.2,
+            "visibilityKm": 10,
+            "precipitation": 0
+          },
+          "comments": "Conditions remain stable."
+        },
+        "beginHaul": {
+          "timestamp": "2024-09-13T10:00:00Z",
+          "latitude": 46.125,
+          "longitude": -122.454,
+          "weatherConditions": {
+            "windSpeedKnots": 18,
+            "waveHeightMeters": 2.8,
+            "visibilityKm": 8,
+            "precipitation": 2
+          },
+          "comments": "Light rain, waves increasing."
+        },
+        "endHaul": {
+          "timestamp": "2024-09-13T11:00:00Z",
+          "latitude": 46.126,
+          "longitude": -122.453,
+          "weatherConditions": {
+            "windSpeedKnots": 20,
+            "waveHeightMeters": 3.2,
+            "visibilityKm": 7,
+            "precipitation": 4
+          },
+          "comments": "Moderate rain, reduced visibility."
+        }
+      },
+      "catch": [
+        {
+          "speciesName": 1,
+          "aggregateWeightKg": 85.2,
+          "individuals": [
+            {
+              "lengthCm": 32.1,
+              "bioSample": {
+                "sampleId": "BIO006",
+                "sampleType": 3,
+                "notes": "Sample taken from dorsal fin."
+              }
+            },
+            {
+              "lengthCm": 38.7,
+              "bioSample": {
+                "sampleId": "BIO007",
+                "sampleType": 1,
+                "notes": "Sample taken for age analysis."
+              }
+            }
+          ]
+        },
+        {
+          "speciesName": 4,
+          "aggregateWeightKg": 50.7,
+          "individuals": [
+            {
+              "lengthCm": 25.6,
+              "bioSample": {
+                "sampleId": "BIO008",
+                "sampleType": 3,
+                "notes": "Sample taken from ventral side."
+              }
+            },
+            {
+              "lengthCm": 31.2,
+              "bioSample": {
+                "sampleId": "BIO009",
+                "sampleType": 2,
+                "notes": "Sample taken for tissue analysis."
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 10,
+      "cruiseId": 4,
+      "stationName": "STATION010",
+      "location": {
+        "latitude": 45.1234,
+        "longitude": -123.4567
+      },
+      "events": {
+        "beginSet": {
+          "timestamp": "2024-10-01T08:00:00Z",
+          "latitude": 45.123,
+          "longitude": -123.457,
+          "weatherConditions": {
+            "windSpeedKnots": 15,
+            "waveHeightMeters": 2.5,
+            "visibilityKm": 10,
+            "precipitation": 1
+          },
+          "comments": "Calm conditions, clear sky."
+        },
+        "endSet": {
+          "timestamp": "2024-10-01T09:00:00Z",
+          "latitude": 45.124,
+          "longitude": -123.455,
+          "weatherConditions": {
+            "windSpeedKnots": 18,
+            "waveHeightMeters": 2.8,
+            "visibilityKm": 9,
+            "precipitation": 2
+          },
+          "comments": "Slight increase in wind, light drizzle started."
+        },
+        "beginHaul": {
+          "timestamp": "2024-10-01T10:00:00Z",
+          "latitude": 45.125,
+          "longitude": -123.454,
+          "weatherConditions": {
+            "windSpeedKnots": 20,
+            "waveHeightMeters": 3.0,
+            "visibilityKm": 8,
+            "precipitation": 4
+          },
+          "comments": "Moderate rain, waves increased."
+        },
+        "endHaul": {
+          "timestamp": "2024-10-01T11:00:00Z",
+          "latitude": 45.126,
+          "longitude": -123.453,
+          "weatherConditions": {
+            "windSpeedKnots": 22,
+            "waveHeightMeters": 3.5,
+            "visibilityKm": 7,
+            "precipitation": 5
+          },
+          "comments": "Heavy rain, reduced visibility."
+        }
+      },
+      "catch": [
+        {
+          "speciesName": 1,
+          "aggregateWeightKg": 100.5,
+          "individuals": [
+            {
+              "lengthCm": 35.4,
+              "bioSample": {
+                "sampleId": "BIO001",
+                "sampleType": 3,
+                "notes": "Sample taken from dorsal fin."
+              }
+            },
+            {
+              "lengthCm": 40.2,
+              "bioSample": {
+                "sampleId": "BIO002",
+                "sampleType": 1,
+                "notes": "Sample taken for age analysis."
+              }
+            }
+          ]
+        },
+        {
+          "speciesName": 2,
+          "aggregateWeightKg": 75.3,
+          "individuals": [
+            {
+              "lengthCm": 28.1,
+              "bioSample": {
+                "sampleId": "BIO003",
+                "sampleType": 3,
+                "notes": "Sample taken from ventral side."
+              }
+            },
+            {
+              "lengthCm": 32.6,
+              "bioSample": {
+                "sampleId": "BIO004",
+                "sampleType": 4,
+                "notes": "Sample taken for genetic analysis."
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 11,
+      "cruiseId": 4,
+      "stationName": "STATION011",
+      "location": {
+        "latitude": 45.5678,
+        "longitude": -123.789
+      },
+      "events": {
+        "beginSet": {
+          "timestamp": "2024-10-01T07:30:00Z",
+          "latitude": 45.5675,
+          "longitude": -123.7895,
+          "weatherConditions": {
+            "windSpeedKnots": 10,
+            "waveHeightMeters": 1.2,
+            "visibilityKm": 12,
+            "precipitation": 1
+          },
+          "comments": "Clear morning, smooth seas."
+        }
+      }
+    }
+  ],
+  "ports": [
+    { "id": 1, "name": "Port A" },
+    { "id": 2, "name": "Port B" },
+    { "id": 3, "name": "Port C" }
+  ],
+  "species": [
+    { "id": 1, "name": "Species A" },
+    { "id": 2, "name": "Species B" },
+    { "id": 3, "name": "Species C" },
+    { "id": 4, "name": "Species D" }
+  ],
+  "precipitation": [
+    { "id": 1, "description": "None" },
+    { "id": 2, "description": "Light drizzle" },
+    { "id": 3, "description": "Light rain" },
+    { "id": 4, "description": "Moderate rain" },
+    { "id": 5, "description": "Heavy rain" },
+    { "id": 6, "description": "Thunderstorm" }
+  ],
+  "sampleTypes": [
+    { "id": 1, "name": "Otolith" },
+    { "id": 2, "name": "Liver" },
+    { "id": 3, "name": "Scale" },
+    { "id": 4, "name": "Tissue" },
+    { "id": 4, "name": "Gonad" },
+    { "id": 5, "name": "Eye" }
+  ],
+  "cruiseStatuses": [
+    { "id": 1, "name": "Started" },
+    { "id": 2, "name": "Ended" },
+    { "id": 3, "name": "Submitted" },
+    { "id": 4, "name": "Rejected" },
+    { "id": 5, "name": "Accepted" }
+  ]
+}
