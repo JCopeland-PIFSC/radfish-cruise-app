@@ -4,7 +4,7 @@ import { Button } from "@trussworks/react-uswds";
 import { Link } from "react-router-dom";
 import { Table } from "@nmfs-radfish/react-radfish";
 
-function HomePage({ cruiseList, portsList, cruiseStatusList }) {
+function CruiseListPage({ cruiseList, portsList, cruiseStatusList }) {
 
   const columns = [
     {
@@ -43,8 +43,8 @@ function HomePage({ cruiseList, portsList, cruiseStatusList }) {
   ];
 
   return (
-    <Table columns={columns} data={cruiseList} bordered striped />
+    <Table columns={columns} data={cruiseList} bordered striped scrollable/>
   );
 }
 
-export default HomePage;
+export default CruiseListPage;

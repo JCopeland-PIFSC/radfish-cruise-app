@@ -1,5 +1,5 @@
 import "./index.css";
-import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate, Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { Application } from "@nmfs-radfish/react-radfish";
 import {
@@ -11,22 +11,22 @@ import {
 } from "@trussworks/react-uswds";
 import { get } from "./utils/requestMethods";
 
-import HomePage from "./pages/Home";
-
+import CruiseListPage from "./pages/CruiseList";
+const API_BASE_URL = 'http://localhost:5000';
 
 function App() {
   const [isExpanded, setExpanded] = useState(false);
   const [cruiseList, setCruiseList] = useState([]);
   const [portsList, setPortsList] = useState([]);
   const [cruiseStatusList, setCruiseStatusList] = useState([]);
-  const API_BASE_URL = 'http://localhost:5000';
+  
   // Fetch Cruises
   useEffect(() => {
-    const API_URL = `${API_BASE_URL}/cruises`
+    const api_url = `${API_BASE_URL}/cruises`
     const params = { _sort: "-startDate" };
 
     const fetchCruises = async () => {
-      const data = await get(API_URL, params);
+      const data = await get(api_url, params);
       setCruiseList(data);
     }
 
@@ -35,28 +35,27 @@ function App() {
 
   // Fetch Ports
   useEffect(() => {
-    const API_URL = `${API_BASE_URL}/ports`
+    const api_url = `${API_BASE_URL}/ports`
 
-    const fetchCruises = async () => {
-      const data = await get(API_URL);
+    const fetchPorts = async () => {
+      const data = await get(api_url);
       setPortsList(data);
     }
 
-    fetchCruises();
+    fetchPorts();
   }, [])
 
   // Fetch CruiseStatuses
   useEffect(() => {
-    const API_URL = `${API_BASE_URL}/cruiseStatuses`
+    const api_url = `${API_BASE_URL}/cruiseStatuses`
 
-    const fetchCruises = async () => {
-      const data = await get(API_URL);
+    const fetchCruiseStatuses = async () => {
+      const data = await get(api_url);
       setCruiseStatusList(data);
     }
 
-    fetchCruises();
+    fetchCruiseStatuses();
   }, [])
-
 
   return (
     <Application>
@@ -81,10 +80,10 @@ function App() {
               <PrimaryNav
                 items={[
                   <Link
-                    to="/"
+                    to="/cruise"
                     style={{ color: `${isExpanded ? "black" : "white"}` }}
                   >
-                    Home
+                    Cruises
                   </Link>,
                 ]}
                 mobileExpanded={isExpanded}
@@ -96,8 +95,9 @@ function App() {
           </Header>
           <GridContainer>
             <Routes>
-              <Route path="/" element={
-                <HomePage
+              <Route path="/" element={<Navigate to="/cruise" />} /> 
+              <Route path="/cruise" element={
+                <CruiseListPage
                   cruiseList={cruiseList}
                   portsList={portsList}
                   cruiseStatusList={cruiseStatusList}
