@@ -1,7 +1,6 @@
 import "../index.css";
 import React from "react";
-import { Button } from "@trussworks/react-uswds";
-import { Link } from "react-router-dom";
+import { Button, GridContainer, Grid } from "@trussworks/react-uswds";
 import { Table } from "@nmfs-radfish/react-radfish";
 
 function CruiseListPage({ cruiseList, portsList, cruiseStatusList }) {
@@ -43,7 +42,14 @@ function CruiseListPage({ cruiseList, portsList, cruiseStatusList }) {
   ];
 
   return (
-    <Table columns={columns} data={cruiseList} bordered striped scrollable/>
+    <GridContainer containerSize="tablet-lg">
+      <Grid row className="margin-top-2">
+        <Button size="big">New Cruise</Button>
+      </Grid>
+      <Grid row>
+        <Table columns={columns} data={cruiseList} bordered striped fullWidth />
+      </Grid>
+    </GridContainer>
   );
 }
 
