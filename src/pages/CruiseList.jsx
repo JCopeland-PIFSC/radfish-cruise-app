@@ -1,9 +1,14 @@
 import "../index.css";
-import React from "react";
+import React, { useContext } from 'react';
 import { Button, GridContainer, Grid } from "@trussworks/react-uswds";
 import { Table } from "@nmfs-radfish/react-radfish";
+import { ListContext } from '../ListContext';
 
-function CruiseListPage({ cruiseList, portsList, cruiseStatusList }) {
+function CruiseListPage() {
+  const { state } = useContext(ListContext);
+  const { ports, cruiseStatuses, cruises, cruisesLoading } = state;
+
+  if (cruisesLoading) return <div>Loading...</div>;
 
   const columns = [
     {
@@ -15,7 +20,7 @@ function CruiseListPage({ cruiseList, portsList, cruiseStatusList }) {
       key: "departurePort",
       label: "Departure Port",
       render: (row) => {
-        const port = portsList.find(elem => elem.id === row.departurePort);
+        const port = ports.find(elem => elem.id === row.departurePortId);
         return port ? port.name : '';
       }
     },
@@ -23,7 +28,7 @@ function CruiseListPage({ cruiseList, portsList, cruiseStatusList }) {
       key: "returnPort",
       label: "Return Port",
       render: (row) => {
-        const port = portsList.find(elem => elem.id === row.returnPort);
+        const port = ports.find(elem => elem.id === row.returnPortId);
         return port ? port.name : '';
       }
     },
@@ -31,7 +36,7 @@ function CruiseListPage({ cruiseList, portsList, cruiseStatusList }) {
       key: "cruiseStatus",
       label: "Status",
       render: (row) => {
-        const status = cruiseStatusList.find(elem => elem.id === row.cruiseStatus);
+        const status = cruiseStatuses.find(elem => elem.id === row.cruiseStatusId);
         return status ? status.name : '';
       }
     },
@@ -47,7 +52,7 @@ function CruiseListPage({ cruiseList, portsList, cruiseStatusList }) {
         <Button size="big">New Cruise</Button>
       </Grid>
       <Grid row>
-        <Table columns={columns} data={cruiseList} bordered striped fullWidth />
+        <Table columns={columns} data={cruises} bordered striped fullWidth />
       </Grid>
     </GridContainer>
   );
