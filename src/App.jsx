@@ -12,6 +12,7 @@ import {
 } from "@trussworks/react-uswds";
 import { get } from "./utils/requestMethods"
 import CruiseListPage from "./pages/CruiseList";
+
 const API_BASE_URL = 'http://localhost:5000';
 
 function App() {
@@ -57,7 +58,7 @@ function App() {
               <PrimaryNav
                 items={[
                   <Link
-                    to="/cruise"
+                    to="/cruises"
                     style={{ color: `${isExpanded ? "black" : "white"}` }}
                   >
                     Cruises
@@ -72,8 +73,8 @@ function App() {
           </Header>
           <GridContainer>
             <Routes>
-              <Route path="/" element={<Navigate to="/cruise" />} />
-              <Route path="/cruise" element={<CruiseListPage />} />
+              <Route path="/" element={<Navigate to="/cruises" />} />
+              <Route path="/cruises" element={<CruiseListPage />} />
             </Routes>
           </GridContainer>
         </BrowserRouter>
