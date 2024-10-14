@@ -1,6 +1,7 @@
 import "./index.css";
 import { BrowserRouter, Routes, Route, Navigate, Link } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
+import { ListContext, LIST_ACTIONS } from './ListContext';
 import { Application } from "@nmfs-radfish/react-radfish";
 import {
   GridContainer,
@@ -9,53 +10,29 @@ import {
   PrimaryNav,
   Header,
 } from "@trussworks/react-uswds";
-import { get } from "./utils/requestMethods";
-
+import { get } from "./utils/requestMethods"
 import CruiseListPage from "./pages/CruiseList";
 const API_BASE_URL = 'http://localhost:5000';
 
 function App() {
   const [isExpanded, setExpanded] = useState(false);
-  const [cruiseList, setCruiseList] = useState([]);
-  const [portsList, setPortsList] = useState([]);
-  const [cruiseStatusList, setCruiseStatusList] = useState([]);
-  
-  // Fetch Cruises
+  const { dispatch } = useContext(ListContext);
+
+  async function fetchList(actionType, endpoint, queryParams) {
+    const responseData = await get(endpoint, queryParams);
+    dispatch({ type: actionType, payload: responseData });
+  };
+
   useEffect(() => {
-    const api_url = `${API_BASE_URL}/cruises`
-    const params = { _sort: "-startDate" };
+    // Fetch lists asynchronously
+    fetchList(LIST_ACTIONS.SET_PORTS, `${API_BASE_URL}/ports`, { _sort: "name" });
+    fetchList(LIST_ACTIONS.SET_CRUISE_STATUSES, `${API_BASE_URL}/cruiseStatuses`);
+    fetchList(LIST_ACTIONS.SET_CRUISES, `${API_BASE_URL}/cruises`, { _sort: "-startDate" });
+    fetchList(LIST_ACTIONS.SET_SPECIES, `${API_BASE_URL}/species`, { _sort: "name" });
+    fetchList(LIST_ACTIONS.SET_SAMPLE_TYPES, `${API_BASE_URL}/sampleTypes`);
+    fetchList(LIST_ACTIONS.SET_PRECIPITATION, `${API_BASE_URL}/precipitation`);
 
-    const fetchCruises = async () => {
-      const data = await get(api_url, params);
-      setCruiseList(data);
-    }
-
-    fetchCruises();
-  }, [])
-
-  // Fetch Ports
-  useEffect(() => {
-    const api_url = `${API_BASE_URL}/ports`
-
-    const fetchPorts = async () => {
-      const data = await get(api_url);
-      setPortsList(data);
-    }
-
-    fetchPorts();
-  }, [])
-
-  // Fetch CruiseStatuses
-  useEffect(() => {
-    const api_url = `${API_BASE_URL}/cruiseStatuses`
-
-    const fetchCruiseStatuses = async () => {
-      const data = await get(api_url);
-      setCruiseStatusList(data);
-    }
-
-    fetchCruiseStatuses();
-  }, [])
+  }, [dispatch]);
 
   return (
     <Application>
@@ -95,13 +72,8 @@ function App() {
           </Header>
           <GridContainer>
             <Routes>
-              <Route path="/" element={<Navigate to="/cruise" />} /> 
-              <Route path="/cruise" element={
-                <CruiseListPage
-                  cruiseList={cruiseList}
-                  portsList={portsList}
-                  cruiseStatusList={cruiseStatusList}
-                />} />
+              <Route path="/" element={<Navigate to="/cruise" />} />
+              <Route path="/cruise" element={<CruiseListPage />} />
             </Routes>
           </GridContainer>
         </BrowserRouter>
