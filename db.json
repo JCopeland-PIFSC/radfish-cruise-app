@@ -3,42 +3,42 @@
     {
       "id": 1,
       "cruiseName": "CRUISE001",
-      "cruiseStatus": 5,
+      "cruiseStatusId": 5,
       "vesselName": "RADFish Research Vessel",
       "startDate": "2024-08-11",
       "endDate": "2024-08-28",
-      "departurePort": 2,
-      "returnPort": 1
+      "departurePortId": 2,
+      "returnPortId": 1
     },
     {
       "id": 2,
       "cruiseName": "CRUISE002",
-      "cruiseStatus": 4,
+      "cruiseStatusId": 4,
       "vesselName": "RADFish Research Vessel",
       "startDate": "2024-09-01",
       "endDate": "2024-09-07",
-      "departurePort": 1,
-      "returnPort": 3
+      "departurePortId": 1,
+      "returnPortId": 3
     },
     {
       "id": 3,
       "cruiseName": "CRUISE003",
-      "cruiseStatus": 3,
+      "cruiseStatusId": 3,
       "vesselName": "RADFish Research Vessel",
       "startDate": "2024-09-10",
       "endDate": "2024-09-25",
-      "departurePort": 3,
-      "returnPort": 1
+      "departurePortId": 3,
+      "returnPortId": 1
     },
     {
       "id": 4,
       "cruiseName": "CRUISE004",
-      "cruiseStatus": 1,
+      "cruiseStatusId": 1,
       "vesselName": "RADFish Research Vessel",
       "startDate": "2024-10-01",
       "endDate": null,
-      "departurePort": 1,
-      "returnPort": null
+      "departurePortId": 1,
+      "returnPortId": null
     }
   ],
   "stations": [
@@ -59,7 +59,7 @@
             "windSpeedKnots": 15,
             "waveHeightMeters": 2.5,
             "visibilityKm": 10,
-            "precipitation": 1
+            "precipitationId": 1
           },
           "comments": "Calm conditions, clear sky."
         },
@@ -71,7 +71,7 @@
             "windSpeedKnots": 18,
             "waveHeightMeters": 2.8,
             "visibilityKm": 9,
-            "precipitation": 2
+            "precipitationId": 2
           },
           "comments": "Slight increase in wind, light drizzle started."
         },
@@ -83,7 +83,7 @@
             "windSpeedKnots": 20,
             "waveHeightMeters": 3.0,
             "visibilityKm": 8,
-            "precipitation": 4
+            "precipitationId": 4
           },
           "comments": "Moderate rain, waves increased."
         },
@@ -95,51 +95,51 @@
             "windSpeedKnots": 22,
             "waveHeightMeters": 3.5,
             "visibilityKm": 7,
-            "precipitation": 5
+            "precipitationId": 5
           },
           "comments": "Heavy rain, reduced visibility."
         }
       },
       "catch": [
         {
-          "speciesName": 1,
+          "speciesId": 1,
           "aggregateWeightKg": 100.5,
           "individuals": [
             {
               "lengthCm": 35.4,
               "bioSample": {
-                "sampleId": "BIO001",
-                "sampleType": 3,
+                "sampleName": "BIO001",
+                "sampleTypeId": 3,
                 "notes": "Sample taken from dorsal fin."
               }
             },
             {
               "lengthCm": 40.2,
               "bioSample": {
-                "sampleId": "BIO002",
-                "sampleType": 1,
+                "sampleName": "BIO002",
+                "sampleTypeId": 1,
                 "notes": "Sample taken for age analysis."
               }
             }
           ]
         },
         {
-          "speciesName": 2,
+          "speciesId": 2,
           "aggregateWeightKg": 75.3,
           "individuals": [
             {
               "lengthCm": 28.1,
               "bioSample": {
-                "sampleId": "BIO003",
-                "sampleType": 3,
+                "sampleName": "BIO003",
+                "sampleTypeId": 3,
                 "notes": "Sample taken from ventral side."
               }
             },
             {
               "lengthCm": 32.6,
               "bioSample": {
-                "sampleId": "BIO004",
-                "sampleType": "Tissue",
+                "sampleName": "BIO004",
+                "sampleTypeId": "Tissue",
                 "notes": "Sample taken for genetic analysis."
               }
             }
@@ -164,7 +164,7 @@
             "windSpeedKnots": 10,
             "waveHeightMeters": 1.2,
             "visibilityKm": 12,
-            "precipitation": 1
+            "precipitationId": 1
           },
           "comments": "Clear morning, smooth seas."
         },
@@ -176,7 +176,7 @@
             "windSpeedKnots": 12,
             "waveHeightMeters": 1.5,
             "visibilityKm": 11,
-            "precipitation": 1
+            "precipitationId": 1
           },
           "comments": "Conditions remain favorable."
         },
@@ -188,7 +188,7 @@
             "windSpeedKnots": 15,
             "waveHeightMeters": 2.0,
             "visibilityKm": 10,
-            "precipitation": 1
+            "precipitationId": 1
           },
           "comments": "Wind picking up slightly."
         },
@@ -200,21 +200,21 @@
             "windSpeedKnots": 18,
             "waveHeightMeters": 2.3,
             "visibilityKm": 9,
-            "precipitation": 3
+            "precipitationId": 3
           },
           "comments": "Light rain, increased wind."
         }
       },
       "catch": [
         {
-          "speciesName": 3,
+          "speciesId": 3,
           "aggregateWeightKg": 120.8,
           "individuals": [
             {
               "lengthCm": 44.5,
               "bioSample": {
-                "sampleId": "BIO005",
-                "sampleType": 3,
+                "sampleName": "BIO005",
+                "sampleTypeId": 3,
                 "notes": "Sample taken from dorsal side."
               }
             }
@@ -239,7 +239,7 @@
             "windSpeedKnots": 12,
             "waveHeightMeters": 1.8,
             "visibilityKm": 11,
-            "precipitation": 0
+            "precipitationId": 0
           },
           "comments": "Mostly sunny, moderate waves."
         },
@@ -251,7 +251,7 @@
             "windSpeedKnots": 15,
             "waveHeightMeters": 2.2,
             "visibilityKm": 10,
-            "precipitation": 0
+            "precipitationId": 0
           },
           "comments": "Conditions remain stable."
         },
@@ -263,7 +263,7 @@
             "windSpeedKnots": 18,
             "waveHeightMeters": 2.8,
             "visibilityKm": 8,
-            "precipitation": 2
+            "precipitationId": 2
           },
           "comments": "Light rain, waves increasing."
         },
@@ -275,51 +275,51 @@
             "windSpeedKnots": 20,
             "waveHeightMeters": 3.2,
             "visibilityKm": 7,
-            "precipitation": 4
+            "precipitationId": 4
           },
           "comments": "Moderate rain, reduced visibility."
         }
       },
       "catch": [
         {
-          "speciesName": 1,
+          "speciesId": 1,
           "aggregateWeightKg": 85.2,
           "individuals": [
             {
               "lengthCm": 32.1,
               "bioSample": {
-                "sampleId": "BIO006",
-                "sampleType": 3,
+                "sampleName": "BIO006",
+                "sampleTypeId": 3,
                 "notes": "Sample taken from dorsal fin."
               }
             },
             {
               "lengthCm": 38.7,
               "bioSample": {
-                "sampleId": "BIO007",
-                "sampleType": 1,
+                "sampleName": "BIO007",
+                "sampleTypeId": 1,
                 "notes": "Sample taken for age analysis."
               }
             }
           ]
         },
         {
-          "speciesName": 4,
+          "speciesId": 4,
           "aggregateWeightKg": 50.7,
           "individuals": [
             {
               "lengthCm": 25.6,
               "bioSample": {
-                "sampleId": "BIO008",
-                "sampleType": 3,
+                "sampleName": "BIO008",
+                "sampleTypeId": 3,
                 "notes": "Sample taken from ventral side."
               }
             },
             {
               "lengthCm": 31.2,
               "bioSample": {
-                "sampleId": "BIO009",
-                "sampleType": 2,
+                "sampleName": "BIO009",
+                "sampleTypeId": 2,
                 "notes": "Sample taken for tissue analysis."
               }
             }
@@ -344,7 +344,7 @@
             "windSpeedKnots": 12,
             "waveHeightMeters": 1.5,
             "visibilityKm": 11,
-            "precipitation": 0
+            "precipitationId": 0
           },
           "comments": "Calm morning, clear sky."
         },
@@ -356,7 +356,7 @@
             "windSpeedKnots": 15,
             "waveHeightMeters": 2.0,
             "visibilityKm": 10,
-            "precipitation": 1
+            "precipitationId": 1
           },
           "comments": "Slight increase in wind, light drizzle started."
         },
@@ -368,7 +368,7 @@
             "windSpeedKnots": 18,
             "waveHeightMeters": 2.5,
             "visibilityKm": 9,
-            "precipitation": 2
+            "precipitationId": 2
           },
           "comments": "Moderate rain, waves increased."
         },
@@ -380,51 +380,51 @@
             "windSpeedKnots": 20,
             "waveHeightMeters": 3.0,
             "visibilityKm": 8,
-            "precipitation": 3
+            "precipitationId": 3
           },
           "comments": "Heavy rain, reduced visibility."
         }
       },
       "catch": [
         {
-          "speciesName": 1,
+          "speciesId": 1,
           "aggregateWeightKg": 120.5,
           "individuals": [
             {
               "lengthCm": 35.4,
               "bioSample": {
-                "sampleId": "BIO001",
-                "sampleType": 3,
+                "sampleName": "BIO001",
+                "sampleTypeId": 3,
                 "notes": "Sample taken from dorsal fin."
               }
             },
             {
               "lengthCm": 40.2,
               "bioSample": {
-                "sampleId": "BIO002",
-                "sampleType": 1,
+                "sampleName": "BIO002",
+                "sampleTypeId": 1,
                 "notes": "Sample taken for age analysis."
               }
             }
           ]
         },
         {
-          "speciesName": 2,
+          "speciesId": 2,
           "aggregateWeightKg": 75.3,
           "individuals": [
             {
               "lengthCm": 28.1,
               "bioSample": {
-                "sampleId": "BIO003",
-                "sampleType": 3,
+                "sampleName": "BIO003",
+                "sampleTypeId": 3,
                 "notes": "Sample taken from ventral side."
               }
             },
             {
               "lengthCm": 32.6,
               "bioSample": {
-                "sampleId": "BIO004",
-                "sampleType": 4,
+                "sampleName": "BIO004",
+                "sampleTypeId": 4,
                 "notes": "Sample taken for genetic analysis."
               }
             }
@@ -449,7 +449,7 @@
             "windSpeedKnots": 10,
             "waveHeightMeters": 1.2,
             "visibilityKm": 12,
-            "precipitation": 1
+            "precipitationId": 1
           },
           "comments": "Clear morning, smooth seas."
         },
@@ -461,7 +461,7 @@
             "windSpeedKnots": 12,
             "waveHeightMeters": 1.5,
             "visibilityKm": 11,
-            "precipitation": 1
+            "precipitationId": 1
           },
           "comments": "Conditions remain favorable."
         },
@@ -473,7 +473,7 @@
             "windSpeedKnots": 15,
             "waveHeightMeters": 2.0,
             "visibilityKm": 10,
-            "precipitation": 1
+            "precipitationId": 1
           },
           "comments": "Wind picking up slightly."
         },
@@ -485,21 +485,21 @@
             "windSpeedKnots": 18,
             "waveHeightMeters": 2.3,
             "visibilityKm": 9,
-            "precipitation": 3
+            "precipitationId": 3
           },
           "comments": "Light rain, increased wind."
         }
       },
       "catch": [
         {
-          "speciesName": 3,
+          "speciesId": 3,
           "aggregateWeightKg": 120.8,
           "individuals": [
             {
               "lengthCm": 44.5,
               "bioSample": {
-                "sampleId": "BIO005",
-                "sampleType": 3,
+                "sampleName": "BIO005",
+                "sampleTypeId": 3,
                 "notes": "Sample taken from dorsal side."
               }
             }
@@ -524,7 +524,7 @@
             "windSpeedKnots": 12,
             "waveHeightMeters": 1.8,
             "visibilityKm": 11,
-            "precipitation": 0
+            "precipitationId": 0
           },
           "comments": "Mostly sunny, moderate waves."
         },
@@ -536,7 +536,7 @@
             "windSpeedKnots": 15,
             "waveHeightMeters": 2.2,
             "visibilityKm": 10,
-            "precipitation": 0
+            "precipitationId": 0
           },
           "comments": "Conditions remain stable."
         },
@@ -548,7 +548,7 @@
             "windSpeedKnots": 18,
             "waveHeightMeters": 2.8,
             "visibilityKm": 8,
-            "precipitation": 2
+            "precipitationId": 2
           },
           "comments": "Light rain, waves increasing."
         },
@@ -560,51 +560,51 @@
             "windSpeedKnots": 20,
             "waveHeightMeters": 3.2,
             "visibilityKm": 7,
-            "precipitation": 4
+            "precipitationId": 4
           },
           "comments": "Moderate rain, reduced visibility."
         }
       },
       "catch": [
         {
-          "speciesName": 1,
+          "speciesId": 1,
           "aggregateWeightKg": 85.2,
           "individuals": [
             {
               "lengthCm": 32.1,
               "bioSample": {
-                "sampleId": "BIO006",
-                "sampleType": 3,
+                "sampleName": "BIO006",
+                "sampleTypeId": 3,
                 "notes": "Sample taken from dorsal fin."
               }
             },
             {
               "lengthCm": 38.7,
               "bioSample": {
-                "sampleId": "BIO007",
-                "sampleType": 1,
+                "sampleName": "BIO007",
+                "sampleTypeId": 1,
                 "notes": "Sample taken for age analysis."
               }
             }
           ]
         },
         {
-          "speciesName": 4,
+          "speciesId": 4,
           "aggregateWeightKg": 50.7,
           "individuals": [
             {
               "lengthCm": 25.6,
               "bioSample": {
-                "sampleId": "BIO008",
-                "sampleType": 3,
+                "sampleName": "BIO008",
+                "sampleTypeId": 3,
                 "notes": "Sample taken from ventral side."
               }
             },
             {
               "lengthCm": 31.2,
               "bioSample": {
-                "sampleId": "BIO009",
-                "sampleType": 2,
+                "sampleName": "BIO009",
+                "sampleTypeId": 2,
                 "notes": "Sample taken for tissue analysis."
               }
             }
@@ -629,7 +629,7 @@
             "windSpeedKnots": 15,
             "waveHeightMeters": 2.5,
             "visibilityKm": 10,
-            "precipitation": 1
+            "precipitationId": 1
           },
           "comments": "Calm conditions, clear sky."
         },
@@ -641,7 +641,7 @@
             "windSpeedKnots": 18,
             "waveHeightMeters": 2.8,
             "visibilityKm": 9,
-            "precipitation": 2
+            "precipitationId": 2
           },
           "comments": "Slight increase in wind, light drizzle started."
         },
@@ -653,7 +653,7 @@
             "windSpeedKnots": 20,
             "waveHeightMeters": 3.0,
             "visibilityKm": 8,
-            "precipitation": 4
+            "precipitationId": 4
           },
           "comments": "Moderate rain, waves increased."
         },
@@ -665,51 +665,51 @@
             "windSpeedKnots": 22,
             "waveHeightMeters": 3.5,
             "visibilityKm": 7,
-            "precipitation": 5
+            "precipitationId": 5
           },
           "comments": "Heavy rain, reduced visibility."
         }
       },
       "catch": [
         {
-          "speciesName": 1,
+          "speciesId": 1,
           "aggregateWeightKg": 100.5,
           "individuals": [
             {
               "lengthCm": 35.4,
               "bioSample": {
-                "sampleId": "BIO001",
-                "sampleType": 3,
+                "sampleName": "BIO001",
+                "sampleTypeId": 3,
                 "notes": "Sample taken from dorsal fin."
               }
             },
             {
               "lengthCm": 40.2,
               "bioSample": {
-                "sampleId": "BIO002",
-                "sampleType": 1,
+                "sampleName": "BIO002",
+                "sampleTypeId": 1,
                 "notes": "Sample taken for age analysis."
               }
             }
           ]
         },
         {
-          "speciesName": 2,
+          "speciesId": 2,
           "aggregateWeightKg": 75.3,
           "individuals": [
             {
               "lengthCm": 28.1,
               "bioSample": {
-                "sampleId": "BIO003",
-                "sampleType": 3,
+                "sampleName": "BIO003",
+                "sampleTypeId": 3,
                 "notes": "Sample taken from ventral side."
               }
             },
             {
               "lengthCm": 32.6,
               "bioSample": {
-                "sampleId": "BIO004",
-                "sampleType": 4,
+                "sampleName": "BIO004",
+                "sampleTypeId": 4,
                 "notes": "Sample taken for genetic analysis."
               }
             }
@@ -734,7 +734,7 @@
             "windSpeedKnots": 10,
             "waveHeightMeters": 1.2,
             "visibilityKm": 12,
-            "precipitation": 1
+            "precipitationId": 1
           },
           "comments": "Clear morning, smooth seas."
         },
@@ -746,7 +746,7 @@
             "windSpeedKnots": 12,
             "waveHeightMeters": 1.5,
             "visibilityKm": 11,
-            "precipitation": 1
+            "precipitationId": 1
           },
           "comments": "Conditions remain favorable."
         },
@@ -758,7 +758,7 @@
             "windSpeedKnots": 15,
             "waveHeightMeters": 2.0,
             "visibilityKm": 10,
-            "precipitation": 1
+            "precipitationId": 1
           },
           "comments": "Wind picking up slightly."
         },
@@ -770,21 +770,21 @@
             "windSpeedKnots": 18,
             "waveHeightMeters": 2.3,
             "visibilityKm": 9,
-            "precipitation": 3
+            "precipitationId": 3
           },
           "comments": "Light rain, increased wind."
         }
       },
       "catch": [
         {
-          "speciesName": 3,
+          "speciesId": 3,
           "aggregateWeightKg": 120.8,
           "individuals": [
             {
               "lengthCm": 44.5,
               "bioSample": {
-                "sampleId": "BIO005",
-                "sampleType": 3,
+                "sampleName": "BIO005",
+                "sampleTypeId": 3,
                 "notes": "Sample taken from dorsal side."
               }
             }
@@ -809,7 +809,7 @@
             "windSpeedKnots": 12,
             "waveHeightMeters": 1.8,
             "visibilityKm": 11,
-            "precipitation": 0
+            "precipitationId": 0
           },
           "comments": "Mostly sunny, moderate waves."
         },
@@ -821,7 +821,7 @@
             "windSpeedKnots": 15,
             "waveHeightMeters": 2.2,
             "visibilityKm": 10,
-            "precipitation": 0
+            "precipitationId": 0
           },
           "comments": "Conditions remain stable."
         },
@@ -833,7 +833,7 @@
             "windSpeedKnots": 18,
             "waveHeightMeters": 2.8,
             "visibilityKm": 8,
-            "precipitation": 2
+            "precipitationId": 2
           },
           "comments": "Light rain, waves increasing."
         },
@@ -845,51 +845,51 @@
             "windSpeedKnots": 20,
             "waveHeightMeters": 3.2,
             "visibilityKm": 7,
-            "precipitation": 4
+            "precipitationId": 4
           },
           "comments": "Moderate rain, reduced visibility."
         }
       },
       "catch": [
         {
-          "speciesName": 1,
+          "speciesId": 1,
           "aggregateWeightKg": 85.2,
           "individuals": [
             {
               "lengthCm": 32.1,
               "bioSample": {
-                "sampleId": "BIO006",
-                "sampleType": 3,
+                "sampleName": "BIO006",
+                "sampleTypeId": 3,
                 "notes": "Sample taken from dorsal fin."
               }
             },
             {
               "lengthCm": 38.7,
               "bioSample": {
-                "sampleId": "BIO007",
-                "sampleType": 1,
+                "sampleName": "BIO007",
+                "sampleTypeId": 1,
                 "notes": "Sample taken for age analysis."
               }
             }
           ]
         },
         {
-          "speciesName": 4,
+          "speciesId": 4,
           "aggregateWeightKg": 50.7,
           "individuals": [
             {
               "lengthCm": 25.6,
               "bioSample": {
-                "sampleId": "BIO008",
-                "sampleType": 3,
+                "sampleName": "BIO008",
+                "sampleTypeId": 3,
                 "notes": "Sample taken from ventral side."
               }
             },
             {
               "lengthCm": 31.2,
               "bioSample": {
-                "sampleId": "BIO009",
-                "sampleType": 2,
+                "sampleName": "BIO009",
+                "sampleTypeId": 2,
                 "notes": "Sample taken for tissue analysis."
               }
             }
@@ -914,7 +914,7 @@
             "windSpeedKnots": 15,
             "waveHeightMeters": 2.5,
             "visibilityKm": 10,
-            "precipitation": 1
+            "precipitationId": 1
           },
           "comments": "Calm conditions, clear sky."
         },
@@ -926,7 +926,7 @@
             "windSpeedKnots": 18,
             "waveHeightMeters": 2.8,
             "visibilityKm": 9,
-            "precipitation": 2
+            "precipitationId": 2
           },
           "comments": "Slight increase in wind, light drizzle started."
         },
@@ -938,7 +938,7 @@
             "windSpeedKnots": 20,
             "waveHeightMeters": 3.0,
             "visibilityKm": 8,
-            "precipitation": 4
+            "precipitationId": 4
           },
           "comments": "Moderate rain, waves increased."
         },
@@ -950,51 +950,51 @@
             "windSpeedKnots": 22,
             "waveHeightMeters": 3.5,
             "visibilityKm": 7,
-            "precipitation": 5
+            "precipitationId": 5
           },
           "comments": "Heavy rain, reduced visibility."
         }
       },
       "catch": [
         {
-          "speciesName": 1,
+          "speciesId": 1,
           "aggregateWeightKg": 100.5,
           "individuals": [
             {
               "lengthCm": 35.4,
               "bioSample": {
-                "sampleId": "BIO001",
-                "sampleType": 3,
+                "sampleName": "BIO001",
+                "sampleTypeId": 3,
                 "notes": "Sample taken from dorsal fin."
               }
             },
             {
               "lengthCm": 40.2,
               "bioSample": {
-                "sampleId": "BIO002",
-                "sampleType": 1,
+                "sampleName": "BIO002",
+                "sampleTypeId": 1,
                 "notes": "Sample taken for age analysis."
               }
             }
           ]
         },
         {
-          "speciesName": 2,
+          "speciesId": 2,
           "aggregateWeightKg": 75.3,
           "individuals": [
             {
               "lengthCm": 28.1,
               "bioSample": {
-                "sampleId": "BIO003",
-                "sampleType": 3,
+                "sampleName": "BIO003",
+                "sampleTypeId": 3,
                 "notes": "Sample taken from ventral side."
               }
             },
             {
               "lengthCm": 32.6,
               "bioSample": {
-                "sampleId": "BIO004",
-                "sampleType": 4,
+                "sampleName": "BIO004",
+                "sampleTypeId": 4,
                 "notes": "Sample taken for genetic analysis."
               }
             }
@@ -1019,7 +1019,7 @@
             "windSpeedKnots": 10,
             "waveHeightMeters": 1.2,
             "visibilityKm": 12,
-            "precipitation": 1
+            "precipitationId": 1
           },
           "comments": "Clear morning, smooth seas."
         }
@@ -1037,7 +1037,7 @@
     { "id": 3, "name": "Species C" },
     { "id": 4, "name": "Species D" }
   ],
-  "precipitation": [
+  "precipitationId": [
     { "id": 1, "description": "None" },
     { "id": 2, "description": "Light drizzle" },
     { "id": 3, "description": "Light rain" },
