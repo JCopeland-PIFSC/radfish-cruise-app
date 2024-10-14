@@ -1037,7 +1037,7 @@
     { "id": 3, "name": "Species C" },
     { "id": 4, "name": "Species D" }
   ],
-  "precipitationId": [
+  "precipitation": [
     { "id": 1, "description": "None" },
     { "id": 2, "description": "Light drizzle" },
     { "id": 3, "description": "Light rain" },
