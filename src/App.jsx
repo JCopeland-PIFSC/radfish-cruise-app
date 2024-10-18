@@ -12,6 +12,7 @@ import {
 } from "@trussworks/react-uswds";
 import { get } from "./utils/requestMethods"
 import CruiseListPage from "./pages/CruiseList";
+import CruiseNewPage from "./pages/CruiseNew";
 
 const API_BASE_URL = 'http://localhost:5000';
 
@@ -49,7 +50,7 @@ function App() {
           >
             <div className="usa-nav-container">
               <div className="usa-navbar">
-                <Title className="header-title">RADFish Application</Title>
+                <Title className="header-title">RADFish Cruise App</Title>
                 <NavMenuButton
                   onClick={() => setExpanded((prvExpanded) => !prvExpanded)}
                   label="Menu"
@@ -75,6 +76,7 @@ function App() {
             <Routes>
               <Route path="/" element={<Navigate to="/cruises" />} />
               <Route path="/cruises" element={<CruiseListPage />} />
+              <Route path="/cruises/new" element={<CruiseNewPage />} />
             </Routes>
           </GridContainer>
         </BrowserRouter>
