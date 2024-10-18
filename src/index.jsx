@@ -2,6 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import "./styles/theme.css";
 import App from "./App";
+import { ListProvider } from './ListContext';
 import { Application } from "@nmfs-radfish/radfish";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
@@ -21,7 +22,9 @@ const app = new Application({
 app.on("ready", () => {
   root.render(
     <React.StrictMode>
-      <App />
+      <ListProvider>
+        <App />
+      </ListProvider>
     </React.StrictMode>,
   );
 });

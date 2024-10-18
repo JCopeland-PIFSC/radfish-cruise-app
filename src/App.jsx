@@ -1,6 +1,7 @@
 import "./index.css";
-import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
-import { useState } from "react";
+import { BrowserRouter, Routes, Route, Navigate, Link } from "react-router-dom";
+import { useContext, useEffect, useState } from "react";
+import { ListContext, LIST_ACTIONS } from './ListContext';
 import { Application } from "@nmfs-radfish/react-radfish";
 import {
   GridContainer,
@@ -9,11 +10,31 @@ import {
   PrimaryNav,
   Header,
 } from "@trussworks/react-uswds";
+import { get } from "./utils/requestMethods"
+import CruiseListPage from "./pages/CruiseList";
 
-import HomePage from "./pages/Home";
+const API_BASE_URL = 'http://localhost:5000';
 
 function App() {
   const [isExpanded, setExpanded] = useState(false);
+  const { dispatch } = useContext(ListContext);
+
+  async function fetchList(actionType, endpoint, queryParams) {
+    const responseData = await get(endpoint, queryParams);
+    dispatch({ type: actionType, payload: responseData });
+  };
+
+  useEffect(() => {
+    // Fetch lists asynchronously
+    fetchList(LIST_ACTIONS.SET_PORTS, `${API_BASE_URL}/ports`, { _sort: "name" });
+    fetchList(LIST_ACTIONS.SET_CRUISE_STATUSES, `${API_BASE_URL}/cruiseStatuses`);
+    fetchList(LIST_ACTIONS.SET_CRUISES, `${API_BASE_URL}/cruises`, { _sort: "-startDate" });
+    fetchList(LIST_ACTIONS.SET_SPECIES, `${API_BASE_URL}/species`, { _sort: "name" });
+    fetchList(LIST_ACTIONS.SET_SAMPLE_TYPES, `${API_BASE_URL}/sampleTypes`);
+    fetchList(LIST_ACTIONS.SET_PRECIPITATION, `${API_BASE_URL}/precipitation`);
+
+  }, [dispatch]);
+
   return (
     <Application>
       <a className="usa-skipnav" href="#main-content">
@@ -37,10 +58,10 @@ function App() {
               <PrimaryNav
                 items={[
                   <Link
-                    to="/"
+                    to="/cruises"
                     style={{ color: `${isExpanded ? "black" : "white"}` }}
                   >
-                    Home
+                    Cruises
                   </Link>,
                 ]}
                 mobileExpanded={isExpanded}
@@ -52,7 +73,8 @@ function App() {
           </Header>
           <GridContainer>
             <Routes>
-              <Route path="/" element={<HomePage />} />
+              <Route path="/" element={<Navigate to="/cruises" />} />
+              <Route path="/cruises" element={<CruiseListPage />} />
             </Routes>
           </GridContainer>
         </BrowserRouter>

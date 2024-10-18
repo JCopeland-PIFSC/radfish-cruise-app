@@ -34,7 +34,7 @@
     "lint:fix": "eslint --fix src",
     "format": "prettier --write src --config ./.prettierrc",
     "serve": "vite preview",
-    "serve:json": "json-server db.json",
+    "serve:json": "json-server --port 5000 db.json",
     "lhci:mobile": "lhci autorun",
     "lhci:desktop": "lhci autorun --collect.settings.preset=desktop"
   },
