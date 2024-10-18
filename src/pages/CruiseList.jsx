@@ -1,14 +1,20 @@
 import "../index.css";
 import React, { useContext } from 'react';
-import { Button, GridContainer, Grid } from "@trussworks/react-uswds";
+import { useNavigate } from "react-router-dom";
+import { Button, GridContainer, Grid, Title } from "@trussworks/react-uswds";
 import { Table } from "@nmfs-radfish/react-radfish";
 import { ListContext } from '../ListContext';
 
 function CruiseListPage() {
+  const navigate = useNavigate();
   const { state } = useContext(ListContext);
   const { ports, cruiseStatuses, cruises, cruisesLoading } = state;
 
   if (cruisesLoading) return <div>Loading...</div>;
+
+  const handleNavNewCruise = () => {
+    navigate("/cruises/new");
+  };
 
   const columns = [
     {
@@ -47,14 +53,17 @@ function CruiseListPage() {
   ];
 
   return (
-    <GridContainer containerSize="tablet-lg">
-      <Grid row className="margin-top-2">
-        <Button size="big">New Cruise</Button>
-      </Grid>
-      <Grid row>
-        <Table columns={columns} data={cruises} bordered striped fullWidth />
-      </Grid>
-    </GridContainer>
+    <>
+      <Title>Cruise List</Title>
+      <GridContainer containerSize="tablet-lg">
+        <Grid row className="margin-top-2">
+          <Button onClick={handleNavNewCruise}>New Cruise</Button>
+        </Grid>
+        <Grid row>
+          <Table columns={columns} data={cruises} bordered striped fullWidth />
+        </Grid>
+      </GridContainer>
+    </>
   );
 }
 
