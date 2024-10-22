@@ -3,11 +3,11 @@ import React, { useContext } from 'react';
 import { useNavigate } from "react-router-dom";
 import { Button, GridContainer, Grid, Title } from "@trussworks/react-uswds";
 import { Table } from "@nmfs-radfish/react-radfish";
-import { ListContext } from '../ListContext';
+import { CruiseContext } from '../CruiseContext';
 
 function CruiseListPage() {
   const navigate = useNavigate();
-  const { state } = useContext(ListContext);
+  const { state } = useContext(CruiseContext);
   const { ports, cruiseStatuses, cruises, cruisesLoading } = state;
 
   if (cruisesLoading) return <div>Loading...</div>;
@@ -26,7 +26,7 @@ function CruiseListPage() {
       key: "departurePort",
       label: "Departure Port",
       render: (row) => {
-        const port = ports.find(elem => elem.id === row.departurePortId);
+        const port = ports.find(elem => elem.id == row.departurePortId);
         return port ? port.name : '';
       }
     },
@@ -34,7 +34,7 @@ function CruiseListPage() {
       key: "returnPort",
       label: "Return Port",
       render: (row) => {
-        const port = ports.find(elem => elem.id === row.returnPortId);
+        const port = ports.find(elem => elem.id == row.returnPortId);
         return port ? port.name : '';
       }
     },
@@ -42,7 +42,7 @@ function CruiseListPage() {
       key: "cruiseStatus",
       label: "Status",
       render: (row) => {
-        const status = cruiseStatuses.find(elem => elem.id === row.cruiseStatusId);
+        const status = cruiseStatuses.find(elem => elem.id == row.cruiseStatusId);
         return status ? status.name : '';
       }
     },

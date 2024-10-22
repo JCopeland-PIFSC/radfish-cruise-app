@@ -1,13 +1,13 @@
 import "../index.css";
 import React, { useContext, useState, useRef, useEffect } from 'react';
 import { Title, Form, Button, GridContainer, Grid, Label, TextInput, Select } from "@trussworks/react-uswds";
-import { ListContext } from '../ListContext';
+import { CruiseContext, ACTIONS } from '../CruiseContext';
 import { DatePicker } from "@nmfs-radfish/react-radfish";
 import { useNavigate } from "react-router-dom";
 
 function CruiseNewPage() {
   const navigate = useNavigate();
-  const { state } = useContext(ListContext);
+  const { dispatch, state } = useContext(CruiseContext);
   const { ports } = state;
   const [resetToggle, setResetToggle] = useState(false);
   const inputFocus = useRef(null);
