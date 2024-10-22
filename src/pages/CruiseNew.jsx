@@ -4,6 +4,9 @@ import { Title, Form, Button, GridContainer, Grid, Label, TextInput, Select } fr
 import { CruiseContext, ACTIONS } from '../CruiseContext';
 import { DatePicker } from "@nmfs-radfish/react-radfish";
 import { useNavigate } from "react-router-dom";
+import { post } from "../utils/requestMethods"
+
+const API_BASE_URL = 'http://localhost:5000';
 
 function CruiseNewPage() {
   const navigate = useNavigate();
@@ -16,20 +19,20 @@ function CruiseNewPage() {
     navigate("/cruises");
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     const formData = new FormData(event.target);
-    const values = { cruiseStatusId: 1 };
-    let alertString = 'cruiseStatusId: 1\n';
+    const values = { cruiseStatusId: 1, returnPort: null, endDate: null };
 
     for (const [key, value] of formData.entries()) {
       values[key] = value;
-      alertString += `${key}: ${value}\n`;
     }
 
-    window.alert(alertString);
+    const newCruise = await post(`${API_BASE_URL}/cruises`, values);
+    dispatch({ type: ACTIONS.SET_NEW_CRUISE, payload: newCruise });
     event.target.reset();
     setResetToggle(true);
+    handleNavCruisesList();
   }
 
   const handleReset = (event) => {
