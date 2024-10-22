@@ -1,14 +1,20 @@
 import "../index.css";
 import React, { useContext } from 'react';
-import { Button, GridContainer, Grid } from "@trussworks/react-uswds";
+import { useNavigate } from "react-router-dom";
+import { Button, GridContainer, Grid, Title } from "@trussworks/react-uswds";
 import { Table } from "@nmfs-radfish/react-radfish";
-import { ListContext } from '../ListContext';
+import { CruiseContext } from '../CruiseContext';
 
 function CruiseListPage() {
-  const { state } = useContext(ListContext);
+  const navigate = useNavigate();
+  const { state } = useContext(CruiseContext);
   const { ports, cruiseStatuses, cruises, cruisesLoading } = state;
 
   if (cruisesLoading) return <div>Loading...</div>;
+
+  const handleNavNewCruise = () => {
+    navigate("/cruises/new");
+  };
 
   const columns = [
     {
@@ -20,7 +26,7 @@ function CruiseListPage() {
       key: "departurePort",
       label: "Departure Port",
       render: (row) => {
-        const port = ports.find(elem => elem.id === row.departurePortId);
+        const port = ports.find(elem => elem.id == row.departurePortId);
         return port ? port.name : '';
       }
     },
@@ -28,7 +34,7 @@ function CruiseListPage() {
       key: "returnPort",
       label: "Return Port",
       render: (row) => {
-        const port = ports.find(elem => elem.id === row.returnPortId);
+        const port = ports.find(elem => elem.id == row.returnPortId);
         return port ? port.name : '';
       }
     },
@@ -36,7 +42,7 @@ function CruiseListPage() {
       key: "cruiseStatus",
       label: "Status",
       render: (row) => {
-        const status = cruiseStatuses.find(elem => elem.id === row.cruiseStatusId);
+        const status = cruiseStatuses.find(elem => elem.id == row.cruiseStatusId);
         return status ? status.name : '';
       }
     },
@@ -47,14 +53,17 @@ function CruiseListPage() {
   ];
 
   return (
-    <GridContainer containerSize="tablet-lg">
-      <Grid row className="margin-top-2">
-        <Button size="big">New Cruise</Button>
-      </Grid>
-      <Grid row>
-        <Table columns={columns} data={cruises} bordered striped fullWidth />
-      </Grid>
-    </GridContainer>
+    <>
+      <Title>Cruise List</Title>
+      <GridContainer containerSize="tablet-lg">
+        <Grid row className="margin-top-2">
+          <Button onClick={handleNavNewCruise}>New Cruise</Button>
+        </Grid>
+        <Grid row>
+          <Table columns={columns} data={cruises} bordered striped fullWidth />
+        </Grid>
+      </GridContainer>
+    </>
   );
 }
 
