@@ -1,12 +1,21 @@
 import "../index.css";
-import React, { useContext, useState, useRef, useEffect } from 'react';
-import { Title, Form, Button, GridContainer, Grid, Label, TextInput, Select } from "@trussworks/react-uswds";
-import { CruiseContext, ACTIONS } from '../CruiseContext';
+import React, { useContext, useState, useRef, useEffect } from "react";
+import {
+  Title,
+  Form,
+  Button,
+  GridContainer,
+  Grid,
+  Label,
+  TextInput,
+  Select,
+} from "@trussworks/react-uswds";
+import { CruiseContext, ACTIONS } from "../CruiseContext";
 import { DatePicker } from "@nmfs-radfish/react-radfish";
 import { useNavigate } from "react-router-dom";
-import { post } from "../utils/requestMethods"
+import { post } from "../utils/requestMethods";
 
-const API_BASE_URL = 'http://localhost:5000';
+const API_BASE_URL = "http://localhost:5000";
 
 function CruiseNewPage() {
   const navigate = useNavigate();
@@ -39,12 +48,12 @@ function CruiseNewPage() {
     event.preventDefault();
     event.target.reset();
     setResetToggle(true);
-  }
+  };
 
   useEffect(() => {
     if (inputFocus.current) {
       inputFocus.current.focus();
-    };
+    }
     setResetToggle(false);
   }, [resetToggle]);
 
@@ -90,6 +99,6 @@ function CruiseNewPage() {
       </GridContainer>
     </>
   );
-};
+}
 
 export default CruiseNewPage;

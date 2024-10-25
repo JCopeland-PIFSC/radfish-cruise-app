@@ -1,7 +1,7 @@
 import "./index.css";
 import { BrowserRouter, Routes, Route, Navigate, Link } from "react-router-dom";
 import { useContext, useEffect, useState } from "react";
-import { CruiseContext, ACTIONS } from './CruiseContext';
+import { CruiseContext, ACTIONS } from "./CruiseContext";
 import { Application } from "@nmfs-radfish/react-radfish";
 import {
   GridContainer,
@@ -10,11 +10,11 @@ import {
   PrimaryNav,
   Header,
 } from "@trussworks/react-uswds";
-import { get } from "./utils/requestMethods"
+import { get } from "./utils/requestMethods";
 import CruiseListPage from "./pages/CruiseList";
 import CruiseNewPage from "./pages/CruiseNew";
 
-const API_BASE_URL = 'http://localhost:5000';
+const API_BASE_URL = "http://localhost:5000";
 
 function App() {
   const [isExpanded, setExpanded] = useState(false);
@@ -27,10 +27,19 @@ function App() {
 
   useEffect(() => {
     // Fetch lists asynchronously
-    fetchList(ACTIONS.SET_PORTS_LIST, `${API_BASE_URL}/ports`, { _sort: "name" });
-    fetchList(ACTIONS.SET_CRUISE_STATUSES_LIST, `${API_BASE_URL}/cruiseStatuses`);
-    fetchList(ACTIONS.SET_CRUISES_LIST, `${API_BASE_URL}/cruises`, { _sort: "-startDate" });
-    fetchList(ACTIONS.SET_SPECIES_LIST, `${API_BASE_URL}/species`, { _sort: "name" });
+    fetchList(ACTIONS.SET_PORTS_LIST, `${API_BASE_URL}/ports`, {
+      _sort: "name",
+    });
+    fetchList(
+      ACTIONS.SET_CRUISE_STATUSES_LIST,
+      `${API_BASE_URL}/cruiseStatuses`,
+    );
+    fetchList(ACTIONS.SET_CRUISES_LIST, `${API_BASE_URL}/cruises`, {
+      _sort: "-startDate",
+    });
+    fetchList(ACTIONS.SET_SPECIES_LIST, `${API_BASE_URL}/species`, {
+      _sort: "name",
+    });
     fetchList(ACTIONS.SET_SAMPLE_TYPES_LIST, `${API_BASE_URL}/sampleTypes`);
     fetchList(ACTIONS.SET_PRECIPITATION_LIST, `${API_BASE_URL}/precipitation`);
 
