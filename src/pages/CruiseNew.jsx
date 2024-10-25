@@ -1,12 +1,19 @@
 import "../index.css";
-import React, { useContext, useState, useRef, useEffect } from 'react';
-import { Title, Form, Button, GridContainer, Grid, Label, TextInput, Select } from "@trussworks/react-uswds";
-import { CruiseContext, ACTIONS } from '../CruiseContext';
+import React, { useContext, useState, useRef, useEffect } from "react";
+import {
+  Form,
+  Button,
+  Grid,
+  Label,
+  TextInput,
+  Select,
+} from "@trussworks/react-uswds";
+import { CruiseContext, ACTIONS } from "../CruiseContext";
 import { DatePicker } from "@nmfs-radfish/react-radfish";
 import { useNavigate } from "react-router-dom";
-import { post } from "../utils/requestMethods"
+import { post } from "../utils/requestMethods";
 
-const API_BASE_URL = 'http://localhost:5000';
+const API_BASE_URL = "http://localhost:5000";
 
 function CruiseNewPage() {
   const navigate = useNavigate();
@@ -32,64 +39,89 @@ function CruiseNewPage() {
     dispatch({ type: ACTIONS.SET_NEW_CRUISE, payload: newCruise });
     event.target.reset();
     setResetToggle(true);
-    handleNavCruisesList();
-  }
+    navigate(`/cruises/${newCruise.id}`);
+  };
 
   const handleReset = (event) => {
     event.preventDefault();
     event.target.reset();
     setResetToggle(true);
-  }
+  };
 
   useEffect(() => {
     if (inputFocus.current) {
       inputFocus.current.focus();
-    };
+    }
     setResetToggle(false);
   }, [resetToggle]);
 
   return (
     <>
-      <Title>New Cruise Form</Title>
-      <GridContainer containerSize="tablet-lg">
+      <Grid col={12}>
         <Grid row className="margin-top-2">
-          <Button onClick={handleNavCruisesList} >{`< Cruise List`}</Button>
+          <Button className="margin-right-0" onClick={handleNavCruisesList}>&lt; Cruise List</Button>
         </Grid>
-        <Form onSubmit={handleSubmit} onReset={handleReset}>
-          <Grid row>
-            <Label htmlFor="cruise-name" requiredMarker>Cruise Name:</Label>
-            <TextInput id="cruise-name" name="cruiseName" inputRef={inputFocus} required />
+        <Grid row>
+          <h1 className="app-sec-header">New Cruise Form</h1>
+        </Grid>
+        <Grid row>
+          <Grid col={12}>
+            <div className="border radius-lg padding-1 margin-bottom-2 app-box-shadow">
+              <Form className="maxw-full" onSubmit={handleSubmit} onReset={handleReset}>
+                <Grid row gap>
+                  <Grid col={12} tablet={{ col: true }}>
+                    <Label htmlFor="cruise-name" className="text-bold" requiredMarker>
+                      Cruise Name:
+                    </Label>
+                    <TextInput
+                      id="cruise-name"
+                      name="cruiseName"
+                      inputRef={inputFocus}
+                      required
+                    />
+                  </Grid>
+                  <Grid col={12} tablet={{ col: true }}>
+                    <Label htmlFor="vessel-name" className="text-bold" requiredMarker>
+                      Vessel Name:
+                    </Label>
+                    <TextInput id="vessel-name" name="vesselName" required />
+                  </Grid>
+                </Grid>
+                <Grid row gap>
+                  <Grid col={12} tablet={{ col: true }}>
+                    <DatePicker name="startDate" label="Start Date:" required />
+                  </Grid>
+                  <Grid col={12} tablet={{ col: true }}>
+                    <Label htmlFor="departure-port-select" className="text-bold" requiredMarker>
+                      Departure Port:
+                    </Label>
+                    <Select
+                      id="departure-port-select"
+                      name="departurePortId"
+                      required
+                    >
+                      <option value={null}>- Select Port -</option>
+                      {ports.map((port) => (
+                        <option key={port.id} value={port.id}>
+                          {port.name}
+                        </option>
+                      ))}
+                    </Select>
+                  </Grid>
+                </Grid>
+                <Grid row>
+                  <Button type="reset" secondary>
+                    Reset
+                  </Button>
+                  <Button type="submit">Add Cruise</Button>
+                </Grid>
+              </Form>
+            </div>
           </Grid>
-          <Grid row>
-            <Label htmlFor="vessel-name" requiredMarker>Vessel Name:</Label>
-            <TextInput id="vessel-name" name="vesselName" required />
-          </Grid>
-          <Grid row>
-            <DatePicker name="startDate" label="Start Date:" required />
-          </Grid>
-          <Grid row>
-            <Label htmlFor="departure-port-select" requiredMarker>Departure Port:</Label>
-            <Select
-              id="departure-port-select"
-              name="departurePortId"
-              required
-            >
-              <option value={null}>- Select Port -</option>
-              {
-                ports.map(port => (
-                  <option key={port.id} value={port.id}>{port.name}</option>
-                ))
-              }
-            </Select>
-          </Grid>
-          <Grid row>
-            <Button type="reset" secondary>Reset</Button>
-            <Button type="submit">Add Cruise</Button>
-          </Grid>
-        </Form>
-      </GridContainer>
+        </Grid>
+      </Grid>
     </>
   );
-};
+}
 
 export default CruiseNewPage;

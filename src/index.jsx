@@ -2,7 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import "./styles/theme.css";
 import App from "./App";
-import { CruiseProvider } from './CruiseContext';
+import { CruiseProvider } from "./CruiseContext";
 import { Application } from "@nmfs-radfish/radfish";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));

@@ -1,9 +1,11 @@
 import "../index.css";
-import React, { useContext } from 'react';
-import { useNavigate } from "react-router-dom";
-import { Button, GridContainer, Grid, Title } from "@trussworks/react-uswds";
+import React, { useContext } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { Button, Grid, Icon, Tag } from "@trussworks/react-uswds";
 import { Table } from "@nmfs-radfish/react-radfish";
-import { CruiseContext } from '../CruiseContext';
+import { CruiseContext } from "../CruiseContext";
+import { listValueLookup } from "../utils/listLookup";
+import { setStatusColor } from "../utils/setStatusColor";
 
 function CruiseListPage() {
   const navigate = useNavigate();
@@ -26,43 +28,58 @@ function CruiseListPage() {
       key: "departurePort",
       label: "Departure Port",
       render: (row) => {
-        const port = ports.find(elem => elem.id == row.departurePortId);
-        return port ? port.name : '';
-      }
+        return listValueLookup(ports, row.departurePortId);
+      },
     },
     {
       key: "returnPort",
       label: "Return Port",
       render: (row) => {
-        const port = ports.find(elem => elem.id == row.returnPortId);
-        return port ? port.name : '';
-      }
+        return listValueLookup(ports, row.returnPortId);
+      },
     },
     {
       key: "cruiseStatus",
       label: "Status",
       render: (row) => {
-        const status = cruiseStatuses.find(elem => elem.id == row.cruiseStatusId);
-        return status ? status.name : '';
-      }
+        const cruiseStatus = listValueLookup(cruiseStatuses, row.cruiseStatusId);
+        return (
+          <Tag className={`usa-tag--big ${setStatusColor(row.cruiseStatusId)}`}>{cruiseStatus}</Tag>
+        )
+      },
     },
     {
       key: "startDate",
-      label: "Start Date"
-    }
+      label: "Start Date",
+    },
+    {
+      key: "cruiseEdit",
+      label: "Edit Cruise",
+      render: (row) => (
+        <Link to={`/cruises/${row.id}`}>
+          <Button>
+            <Icon.Edit aria-hidden={true} alt="edit icon" />
+          </Button>
+        </Link>
+      ),
+    },
   ];
 
   return (
     <>
-      <Title>Cruise List</Title>
-      <GridContainer containerSize="tablet-lg">
-        <Grid row className="margin-top-2">
-          <Button onClick={handleNavNewCruise}>New Cruise</Button>
+      <Grid row>
+        <Grid col>
+          <h1 className="app-sec-header">Cruise List</h1>
         </Grid>
-        <Grid row>
-          <Table columns={columns} data={cruises} bordered striped fullWidth />
+        <Grid col>
+          <Button className="margin-right-0" onClick={handleNavNewCruise}>
+            New Cruise
+          </Button>
         </Grid>
-      </GridContainer>
+      </Grid>
+      <Grid row>
+        <Table columns={columns} data={cruises} className="margin-top-0" bordered striped scrollable />
+      </Grid>
     </>
   );
 }
