@@ -12,7 +12,7 @@ const ACTIONS = {
 };
 
 // Initial state for the lists
-const INITIAL_STATE = {
+const initialState = {
   ports: [],
   species: [],
   precipitation: [],
@@ -51,9 +51,8 @@ function cruiseReducer(state, action) {
 const CruiseContext = createContext();
 
 // Context provider component
-function CruiseProvider({ children, initialState=INITIAL_STATE }) {
+function CruiseProvider({ children }) {
   const [state, dispatch] = useReducer(cruiseReducer, initialState);
-  console.log('state: ', state)
 
   return (
     <CruiseContext.Provider value={{ state, dispatch }}>
