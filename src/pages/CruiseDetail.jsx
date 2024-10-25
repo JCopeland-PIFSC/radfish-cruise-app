@@ -12,6 +12,7 @@ import { CruiseContext } from "../CruiseContext";
 import { DescriptionListItem } from "../components/DescriptionListItem";
 import { useNavigate } from "react-router-dom";
 import { listValueLookup } from "../utils/listLookup";
+import { setStatusColor } from "../utils/setStatusColor";
 
 function CruiseDetailPage({ data }) {
   const { cruise, stations } = data;

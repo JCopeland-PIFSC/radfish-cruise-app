@@ -1,16 +1,11 @@
 import "../index.css";
 import React, { useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import {
-  Button,
-  GridContainer,
-  Grid,
-  Title,
-  Icon,
-} from "@trussworks/react-uswds";
+import { Button, Grid, Icon, Tag } from "@trussworks/react-uswds";
 import { Table } from "@nmfs-radfish/react-radfish";
 import { CruiseContext } from "../CruiseContext";
 import { listValueLookup } from "../utils/listLookup";
+import { setStatusColor } from "../utils/setStatusColor";
 
 function CruiseListPage() {
   const navigate = useNavigate();
@@ -47,7 +42,10 @@ function CruiseListPage() {
       key: "cruiseStatus",
       label: "Status",
       render: (row) => {
-        return listValueLookup(cruiseStatuses, row.cruiseStatusId);
+        const cruiseStatus = listValueLookup(cruiseStatuses, row.cruiseStatusId);
+        return (
+          <Tag className={`usa-tag--big ${setStatusColor(row.cruiseStatusId)}`}>{cruiseStatus}</Tag>
+        )
       },
     },
     {
