@@ -1,5 +1,12 @@
 import "./index.css";
-import { BrowserRouter, Routes, Route, Navigate, Link } from "react-router-dom";
+import {
+  BrowserRouter,
+  Routes,
+  Route,
+  Navigate,
+  Link,
+  useParams,
+} from "react-router-dom";
 import { useContext, useEffect, useState } from "react";
 import { CruiseContext, ACTIONS } from "./CruiseContext";
 import { Application } from "@nmfs-radfish/react-radfish";
@@ -13,6 +20,7 @@ import {
 import { get } from "./utils/requestMethods";
 import CruiseListPage from "./pages/CruiseList";
 import CruiseNewPage from "./pages/CruiseNew";
+import CruiseDetailPage from "./pages/CruiseDetail";
 
 const API_BASE_URL = "http://localhost:5000";
 
@@ -23,7 +31,36 @@ function App() {
   async function fetchList(actionType, endpoint, queryParams) {
     const responseData = await get(endpoint, queryParams);
     dispatch({ type: actionType, payload: responseData });
-  };
+  }
+
+  async function fetchCruiseDetails(id) {
+    return await get(`${API_BASE_URL}/cruises/${id}`);
+  }
+
+  async function fetchCruiseStations(id) {
+    return await get(`${API_BASE_URL}/stations`, { cruiseId: id });
+  }
+
+  function CruiseLoaderWrapper() {
+    const { id } = useParams();
+    const [cruise, setCruise] = useState(null);
+    const [stations, setStations] = useState(null);
+
+    useEffect(() => {
+      const load = async () => {
+        const cruiseRes = await fetchCruiseDetails(id);
+        const stationsRes = await fetchCruiseStations(id);
+        setCruise(cruiseRes);
+        setStations(stationsRes);
+      };
+
+      load();
+    }, [id]);
+
+    if (!cruise || !stations) return <div>Loading...</div>;
+
+    return <CruiseDetailPage data={{ cruise, stations }} />;
+  }
 
   useEffect(() => {
     // Fetch lists asynchronously
@@ -42,7 +79,6 @@ function App() {
     });
     fetchList(ACTIONS.SET_SAMPLE_TYPES_LIST, `${API_BASE_URL}/sampleTypes`);
     fetchList(ACTIONS.SET_PRECIPITATION_LIST, `${API_BASE_URL}/precipitation`);
-
   }, [dispatch]);
 
   return (
@@ -81,13 +117,12 @@ function App() {
               ></PrimaryNav>
             </div>
           </Header>
-          <GridContainer>
-            <Routes>
-              <Route path="/" element={<Navigate to="/cruises" />} />
-              <Route path="/cruises" element={<CruiseListPage />} />
-              <Route path="/cruises/new" element={<CruiseNewPage />} />
-            </Routes>
-          </GridContainer>
+          <Routes>
+            <Route path="/" element={<Navigate to="/cruises" />} />
+            <Route path="/cruises" element={<CruiseListPage />} />
+            <Route path="/cruises/new" element={<CruiseNewPage />} />
+            <Route path="/cruises/:id" element={<CruiseLoaderWrapper />} />
+          </Routes>
         </BrowserRouter>
       </main>
     </Application>
