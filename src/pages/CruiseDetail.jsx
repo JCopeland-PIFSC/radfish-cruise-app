@@ -37,7 +37,7 @@ function CruiseDetailPage({ data }) {
   };
 
   return (
-    <GridContainer containerSize="tablet-lg">
+    <>
       <Grid row className="margin-top-2">
         <Button onClick={handleNavCruisesList}>&lt; Cruise List</Button>
       </Grid>
@@ -79,7 +79,7 @@ function CruiseDetailPage({ data }) {
           ))
           : ""}
       </div>
-    </GridContainer>
+    </>
   );
 }
 

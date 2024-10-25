@@ -117,12 +117,16 @@ function App() {
               ></PrimaryNav>
             </div>
           </Header>
-          <Routes>
-            <Route path="/" element={<Navigate to="/cruises" />} />
-            <Route path="/cruises" element={<CruiseListPage />} />
-            <Route path="/cruises/new" element={<CruiseNewPage />} />
-            <Route path="/cruises/:id" element={<CruiseLoaderWrapper />} />
-          </Routes>
+          {/* <div className="display-flex flex-justify-center"> */}
+          <GridContainer containerSize="tablet-lg">
+            <Routes>
+              <Route path="/" element={<Navigate to="/cruises" />} />
+              <Route path="/cruises" element={<CruiseListPage />} />
+              <Route path="/cruises/new" element={<CruiseNewPage />} />
+              <Route path="/cruises/:id" element={<CruiseLoaderWrapper />} />
+            </Routes>
+          </GridContainer>
+          {/* </div> */}
         </BrowserRouter>
       </main>
     </Application>
