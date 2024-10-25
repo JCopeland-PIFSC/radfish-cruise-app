@@ -39,7 +39,7 @@ function CruiseDetailPage({ data }) {
   return (
     <>
       <Grid row className="margin-top-2">
-        <Button onClick={handleNavCruisesList}>&lt; Cruise List</Button>
+        <Button className="margin-right-0" onClick={handleNavCruisesList}>&lt; Cruise List</Button>
       </Grid>
       <Grid row>
         <Grid col>

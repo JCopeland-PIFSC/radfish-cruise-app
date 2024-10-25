@@ -57,8 +57,8 @@ function CruiseListPage() {
       label: "Edit Cruise",
       render: (row) => (
         <Link to={`/cruises/${row.id}`}>
-          <Button role="button" aria-label="Edit item">
-            <Icon.Edit alt="edit icon" />
+          <Button>
+            <Icon.Edit aria-hidden={true} alt="edit icon" />
           </Button>
         </Link>
       ),
