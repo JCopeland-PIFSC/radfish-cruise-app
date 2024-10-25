@@ -41,8 +41,8 @@ function CruiseNewPage() {
     dispatch({ type: ACTIONS.SET_NEW_CRUISE, payload: newCruise });
     event.target.reset();
     setResetToggle(true);
-    handleNavCruisesList();
-  }
+    navigate(`/cruises/${newCruise.id}`);
+  };
 
   const handleReset = (event) => {
     event.preventDefault();
@@ -59,44 +59,65 @@ function CruiseNewPage() {
 
   return (
     <>
-      <Title>New Cruise Form</Title>
-      <GridContainer containerSize="tablet-lg">
-        <Grid row className="margin-top-2">
-          <Button onClick={handleNavCruisesList} >{`< Cruise List`}</Button>
-        </Grid>
-        <Form onSubmit={handleSubmit} onReset={handleReset}>
+      <div className="display-flex flex-justify-center">
+        <GridContainer containerSize="tablet">
           <Grid row>
-            <Label htmlFor="cruise-name" requiredMarker>Cruise Name:</Label>
-            <TextInput id="cruise-name" name="cruiseName" inputRef={inputFocus} required />
+            <Title>New Cruise Form</Title>
           </Grid>
           <Grid row>
-            <Label htmlFor="vessel-name" requiredMarker>Vessel Name:</Label>
-            <TextInput id="vessel-name" name="vesselName" required />
+            <Grid col>
+              <Grid row className="margin-top-2">
+                <Button onClick={handleNavCruisesList}>&lt; Cruise List</Button>
+              </Grid>
+              <Form onSubmit={handleSubmit} onReset={handleReset}>
+                <Grid row>
+                  <Label htmlFor="cruise-name" requiredMarker>
+                    Cruise Name:
+                  </Label>
+                  <TextInput
+                    id="cruise-name"
+                    name="cruiseName"
+                    inputRef={inputFocus}
+                    required
+                  />
+                </Grid>
+                <Grid row>
+                  <Label htmlFor="vessel-name" requiredMarker>
+                    Vessel Name:
+                  </Label>
+                  <TextInput id="vessel-name" name="vesselName" required />
+                </Grid>
+                <Grid row>
+                  <DatePicker name="startDate" label="Start Date:" required />
+                </Grid>
+                <Grid row>
+                  <Label htmlFor="departure-port-select" requiredMarker>
+                    Departure Port:
+                  </Label>
+                  <Select
+                    id="departure-port-select"
+                    name="departurePortId"
+                    required
+                  >
+                    <option value={null}>- Select Port -</option>
+                    {ports.map((port) => (
+                      <option key={port.id} value={port.id}>
+                        {port.name}
+                      </option>
+                    ))}
+                  </Select>
+                </Grid>
+                <Grid row>
+                  <Button type="reset" secondary>
+                    Reset
+                  </Button>
+                  <Button type="submit">Add Cruise</Button>
+                </Grid>
+              </Form>
+            </Grid>
           </Grid>
-          <Grid row>
-            <DatePicker name="startDate" label="Start Date:" required />
-          </Grid>
-          <Grid row>
-            <Label htmlFor="departure-port-select" requiredMarker>Departure Port:</Label>
-            <Select
-              id="departure-port-select"
-              name="departurePortId"
-              required
-            >
-              <option value={null}>- Select Port -</option>
-              {
-                ports.map(port => (
-                  <option key={port.id} value={port.id}>{port.name}</option>
-                ))
-              }
-            </Select>
-          </Grid>
-          <Grid row>
-            <Button type="reset" secondary>Reset</Button>
-            <Button type="submit">Add Cruise</Button>
-          </Grid>
-        </Form>
-      </GridContainer>
+        </GridContainer>
+      </div>
     </>
   );
 }
