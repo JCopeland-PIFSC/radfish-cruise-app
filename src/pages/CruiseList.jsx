@@ -10,6 +10,7 @@ import {
 } from "@trussworks/react-uswds";
 import { Table } from "@nmfs-radfish/react-radfish";
 import { CruiseContext } from "../CruiseContext";
+import { listValueLookup } from "../utils/listLookup";
 
 function CruiseListPage() {
   const navigate = useNavigate();
@@ -32,41 +33,53 @@ function CruiseListPage() {
       key: "departurePort",
       label: "Departure Port",
       render: (row) => {
-        const port = ports.find(elem => elem.id == row.departurePortId);
-        return port ? port.name : '';
-      }
+        return listValueLookup(ports, row.departurePortId);
+      },
     },
     {
       key: "returnPort",
       label: "Return Port",
       render: (row) => {
-        const port = ports.find(elem => elem.id == row.returnPortId);
-        return port ? port.name : '';
-      }
+        return listValueLookup(ports, row.returnPortId);
+      },
     },
     {
       key: "cruiseStatus",
       label: "Status",
       render: (row) => {
-        const status = cruiseStatuses.find(elem => elem.id == row.cruiseStatusId);
-        return status ? status.name : '';
-      }
+        return listValueLookup(cruiseStatuses, row.cruiseStatusId);
+      },
     },
     {
       key: "startDate",
-      label: "Start Date"
-    }
+      label: "Start Date",
+    },
+    {
+      key: "cruiseEdit",
+      label: "Edit Cruise",
+      render: (row) => (
+        <Link to={`/cruises/${row.id}`}>
+          <Button role="button" aria-label="Edit item">
+            <Icon.Edit alt="edit icon" />
+          </Button>
+        </Link>
+      ),
+    },
   ];
 
   return (
     <>
       <Title>Cruise List</Title>
       <GridContainer containerSize="tablet-lg">
-        <Grid row className="margin-top-2">
-          <Button onClick={handleNavNewCruise}>New Cruise</Button>
+        <Grid row className="flex-column flex-align-end margin-top-2">
+          <Grid col>
+            <Button className="margin-right-0" onClick={handleNavNewCruise}>
+              New Cruise
+            </Button>
+          </Grid>
         </Grid>
         <Grid row>
-          <Table columns={columns} data={cruises} bordered striped fullWidth />
+          <Table columns={columns} data={cruises} bordered striped scrollable />
         </Grid>
       </GridContainer>
     </>
