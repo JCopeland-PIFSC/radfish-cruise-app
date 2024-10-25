@@ -10,7 +10,9 @@ export const StationSummary = ({ station }) => {
   return (
     <div className="border padding-1 margin-bottom-1 radius-lg app-box-shadow">
       <Grid row>
-        <em>{stationName}</em>
+        <Grid col={true} tablet={{ col: 6 }}>
+          <DescriptionListItem term="Station Name:" description={stationName} />
+        </Grid>
       </Grid>
       <Grid row>
         <Grid col={12} tablet={{ col: true }}>
