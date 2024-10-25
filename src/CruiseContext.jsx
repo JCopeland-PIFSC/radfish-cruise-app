@@ -1,18 +1,18 @@
 // ListContext.js
-import React, { createContext, useReducer } from 'react';
+import React, { createContext, useReducer } from "react";
 
 // Define action types
 const ACTIONS = {
-  SET_PORTS_LIST: 'SET_PORTS_LIST',
-  SET_SPECIES_LIST: 'SET_SPECIES_LIST',
-  SET_PRECIPITATION_LIST: 'SET_PRECIPITATION_LIST',
-  SET_SAMPLE_TYPES_LIST: 'SET_SAMPLE_TYPES_LIST',
-  SET_CRUISE_STATUSES_LIST: 'SET_CRUISE_STATUSES_LIST',
-  SET_CRUISES_LIST: 'SET_CRUISES_LIST',
+  SET_PORTS_LIST: "SET_PORTS_LIST",
+  SET_SPECIES_LIST: "SET_SPECIES_LIST",
+  SET_PRECIPITATION_LIST: "SET_PRECIPITATION_LIST",
+  SET_SAMPLE_TYPES_LIST: "SET_SAMPLE_TYPES_LIST",
+  SET_CRUISE_STATUSES_LIST: "SET_CRUISE_STATUSES_LIST",
+  SET_CRUISES_LIST: "SET_CRUISES_LIST",
 };
 
 // Initial state for the lists
-const INITIAL_STATE = {
+const initialState = {
   ports: [],
   species: [],
   precipitation: [],
@@ -37,7 +37,11 @@ function cruiseReducer(state, action) {
     case ACTIONS.SET_CRUISES_LIST:
       return { ...state, cruises: action.payload, cruisesLoading: false };
     case ACTIONS.SET_NEW_CRUISE:
-      return { ...state, cruises: [ action.payload, ...state.cruises ], cruisesLoading: false };
+      return {
+        ...state,
+        cruises: [action.payload, ...state.cruises],
+        cruisesLoading: false,
+      };
     default:
       return state;
   }
@@ -47,9 +51,8 @@ function cruiseReducer(state, action) {
 const CruiseContext = createContext();
 
 // Context provider component
-function CruiseProvider({ children, initialState=INITIAL_STATE }) {
+function CruiseProvider({ children }) {
   const [state, dispatch] = useReducer(cruiseReducer, initialState);
-  console.log('state: ', state)
 
   return (
     <CruiseContext.Provider value={{ state, dispatch }}>
