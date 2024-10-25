@@ -3,9 +3,9 @@ import React, { useContext } from "react";
 import {
   Title,
   Button,
-  GridContainer,
   Grid,
   Fieldset,
+  Tag,
 } from "@trussworks/react-uswds";
 import { StationSummary } from "../components/StationSummary";
 import { CruiseContext } from "../CruiseContext";
@@ -43,9 +43,13 @@ function CruiseDetailPage({ data }) {
       </Grid>
       <Grid row>
         <Grid col>
-          <Title>Cruise Details</Title>
+          <h1 className="app-sec-header">Cruise Details</h1>
         </Grid>
-        <Grid col>{cruiseStatus}</Grid>
+        <Grid col>
+          <div>
+            <Tag className={`usa-tag--big ${setStatusColor(cruiseStatusId)}`}>{cruiseStatus}</Tag>
+          </div>
+        </Grid>
       </Grid>
       <div className="border radius-lg padding-1 padding-bottom-0 margin-bottom-2 app-box-shadow">
         <Grid row>
@@ -71,7 +75,7 @@ function CruiseDetailPage({ data }) {
           </Grid>
         </Grid>
         <Grid row>
-          <Title>Stations</Title>
+          <h2 className="app-sec-header">Stations</h2>
         </Grid>
         {stations.length
           ? stations.map((station) => (

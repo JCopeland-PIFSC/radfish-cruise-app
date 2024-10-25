@@ -67,19 +67,19 @@ function CruiseListPage() {
 
   return (
     <>
-      <Title>Cruise List</Title>
-      <GridContainer containerSize="tablet-lg">
-        <Grid row className="flex-column flex-align-end margin-top-2">
-          <Grid col>
-            <Button className="margin-right-0" onClick={handleNavNewCruise}>
-              New Cruise
-            </Button>
-          </Grid>
+      <Grid row>
+        <Grid col>
+          <h1 className="app-sec-header">Cruise List</h1>
         </Grid>
-        <Grid row>
-          <Table columns={columns} data={cruises} bordered striped scrollable />
+        <Grid col>
+          <Button className="margin-right-0" onClick={handleNavNewCruise}>
+            New Cruise
+          </Button>
         </Grid>
-      </GridContainer>
+      </Grid>
+      <Grid row>
+        <Table columns={columns} data={cruises} className="margin-top-0" bordered striped scrollable />
+      </Grid>
     </>
   );
 }

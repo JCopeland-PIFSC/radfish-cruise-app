@@ -1,5 +1,5 @@
 import React from "react";
-import { Grid, Title } from "@trussworks/react-uswds";
+import { Grid } from "@trussworks/react-uswds";
 import { CatchSummary } from "./CatchSummary";
 import { utcToLocalDateTime, getSoakTime } from "../utils/dateTimeHelpers";
 import { DescriptionListItem } from "./DescriptionListItem";
@@ -45,14 +45,14 @@ export const StationSummary = ({ station }) => {
       </Grid>
       <Grid row>
         <Grid row className="width-full">
-          <Title>Catch Summary</Title>
+          <h3 className="app-sec-header">Catch Summary</h3>
         </Grid>
         <Grid col>
           <div className="border padding-1 radius-md app-box-shadow">
             {catchList && catchList.length
               ? catchList.map((catchItem, idx) => (
-                  <CatchSummary key={idx} catchItem={catchItem} />
-                ))
+                <CatchSummary key={idx} catchItem={catchItem} />
+              ))
               : ""}
           </div>
         </Grid>
