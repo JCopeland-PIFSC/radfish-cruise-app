@@ -109,11 +109,11 @@ function CruiseNewPage() {
                     </Select>
                   </Grid>
                 </Grid>
-                <Grid row>
+                <Grid row className="flex-justify-end">
                   <Button type="reset" secondary>
                     Reset
                   </Button>
-                  <Button type="submit">Add Cruise</Button>
+                  <Button type="submit" className="margin-right-0" >Add Cruise</Button>
                 </Grid>
               </Form>
             </div>

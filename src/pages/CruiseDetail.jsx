@@ -41,15 +41,11 @@ function CruiseDetailPage({ data }) {
       <Grid row className="margin-top-2">
         <Button className="margin-right-0" onClick={handleNavCruisesList}>&lt; Cruise List</Button>
       </Grid>
-      <Grid row>
-        <Grid col>
-          <h1 className="app-sec-header">Cruise Details</h1>
-        </Grid>
-        <Grid col>
-          <div>
-            <Tag className={`usa-tag--big ${setStatusColor(cruiseStatusId)}`}>{cruiseStatus}</Tag>
-          </div>
-        </Grid>
+      <Grid row className="flex-justify">
+        <h1 className="app-sec-header">Cruise Details</h1>
+        <div className="margin-top-2">
+          <Tag className={`usa-tag--big ${setStatusColor(cruiseStatusId)}`}>{cruiseStatus}</Tag>
+        </div>
       </Grid>
       <div className="border radius-lg padding-1 padding-bottom-0 margin-bottom-2 app-box-shadow">
         <Grid row>
