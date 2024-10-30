@@ -38,7 +38,7 @@ function App() {
   }
 
   async function fetchCruiseStations(id) {
-    return await get(`${API_BASE_URL}/stations`, { cruiseId: id });
+    return await get(`${API_BASE_URL}/stations`, { cruiseId: id, _sort: "-events.beginSet.timestamp", });
   }
 
   function CruiseLoaderWrapper() {

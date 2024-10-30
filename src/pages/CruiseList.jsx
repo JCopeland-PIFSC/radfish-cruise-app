@@ -67,15 +67,11 @@ function CruiseListPage() {
 
   return (
     <>
-      <Grid row>
-        <Grid col>
-          <h1 className="app-sec-header">Cruise List</h1>
-        </Grid>
-        <Grid col>
-          <Button className="margin-right-0" onClick={handleNavNewCruise}>
-            New Cruise
-          </Button>
-        </Grid>
+      <Grid row className="flex-justify margin-top-2">
+        <h1 className="app-sec-header">Cruise List</h1>
+        <Button className="margin-right-0" onClick={handleNavNewCruise}>
+          New Cruise
+        </Button>
       </Grid>
       <Grid row>
         <Table columns={columns} data={cruises} className="margin-top-0" bordered striped scrollable />
