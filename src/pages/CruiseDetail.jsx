@@ -13,7 +13,7 @@ import { DescriptionListItem } from "../components/DescriptionListItem";
 import { useNavigate } from "react-router-dom";
 import { listValueLookup } from "../utils/listLookup";
 import { setStatusColor } from "../utils/setStatusColor";
-import { combineDateTime } from "../utils/dateTimeHelpers";
+import { generateTzDateTime, getLocationTz } from "../utils/dateTimeHelpers";
 import { post } from "../utils/requestMethods";
 
 const API_BASE_URL = "http://localhost:5000";
@@ -60,21 +60,17 @@ function CruiseDetailPage({ data }) {
     event.preventDefault();
 
     const formData = new FormData(event.target);
-
-    const timeValue = formData.get('beginSetTime');
-    console.log('Selected Time:', timeValue);
-
     const values = { cruiseId: id };
 
     for (const [key, value] of formData.entries()) {
       values[key] = value;
     }
-    const beginSetDateTime = combineDateTime(values.beginSetDate, values.beginSetTime);
+
+    const timezone = getLocationTz(values.latitude, values.longitude);
+    const beginSetDateTime = generateTzDateTime(values.beginSetDate, values.beginSetTime, timezone);
     const newValues = structuredClone(InitializedStation);
     newValues.cruiseId = values.cruiseId;
     newValues.stationName = values.stationName;
-    newValues.location.latitude = values.latitude;
-    newValues.location.longitude = values.longitude;
     newValues.events.beginSet.timestamp = beginSetDateTime;
     newValues.events.beginSet.latitude = values.latitude;
     newValues.events.beginSet.longitude = values.longitude;
@@ -145,10 +141,6 @@ export default CruiseDetailPage;
 const InitializedStation = {
   cruiseId: null,
   stationName: null,
-  location: {
-    latitude: null,
-    longitude: null
-  },
   events: {
     beginSet: {
       timestamp: null,
