@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef, useContext } from "react";
-import { Grid, TextInput, Label, DatePicker, TimePicker, Button, Form, Textarea, Select } from "@trussworks/react-uswds";
+import { Grid, TextInput, Label, DatePicker, TextInputMask, Button, Form, Textarea, Select } from "@trussworks/react-uswds";
 import { CruiseContext } from "../CruiseContext";
 
 export const StationNew = ({ handleNewStation }) => {
@@ -26,11 +26,11 @@ export const StationNew = ({ handleNewStation }) => {
         </Grid>
         <Grid row gap>
           <Grid col={12} tablet={{ col: true }}>
-            <Label htmlFor="latitude" className="text-bold margin-top-2" requiredMarker>Latitude:</Label>
+            <Label htmlFor="latitude" className="text-bold margin-top-2" hint=" (Decimal Deg)" requiredMarker>Latitude:</Label>
             <TextInput id="latitude" name="latitude" required />
           </Grid>
           <Grid col={12} tablet={{ col: true }}>
-            <Label htmlFor="longitude" className="text-bold margin-top-2" requiredMarker>Longitude:</Label>
+            <Label htmlFor="longitude" className="text-bold margin-top-2" hint=" (Decimal Deg)" requiredMarker>Longitude:</Label>
             <TextInput id="longitude" name="longitude" required />
           </Grid>
         </Grid>
@@ -40,22 +40,23 @@ export const StationNew = ({ handleNewStation }) => {
             <DatePicker id="begin-set-date" name="beginSetDate" required />
           </Grid>
           <Grid col={12} tablet={{ col: true }}>
-            <TimePicker id="begin-set-time" name="beginSetTime" label={<span className="text-bold">Begin Set Time:</span>} required />
+            <Label htmlFor="begin-set-time" className="text-bold margin-top-2" hint=" (24hr 00:00 - 23:59)" requiredMarker>Begin Set Time:</Label>
+            <TextInputMask id="begin-set-time" name="beginSetTime" type="text" aria-labelledby="time" aria-describedby="hint-time" mask="__:__" pattern="([01]\d|2[0-3]):[0-5]\d" />
           </Grid>
         </Grid>
         <Grid row gap>
           <Grid col={12} tablet={{ col: true }}>
-            <Label htmlFor="wind-speed" className="text-bold margin-top-2" requiredMarker>Wind Speed:</Label>
+            <Label htmlFor="wind-speed" className="text-bold margin-top-2" hint=" (Knots)" requiredMarker>Wind Speed:</Label>
             <TextInput id="wind-speed" name="windSpeed" required />
           </Grid>
           <Grid col={12} tablet={{ col: true }}>
-            <Label htmlFor="wave-height" className="text-bold margin-top-2" requiredMarker>Wave Height:</Label>
+            <Label htmlFor="wave-height" className="text-bold margin-top-2" hint=" (Meters)" requiredMarker>Wave Height:</Label>
             <TextInput id="wave-height" name="waveHeight" required />
           </Grid>
         </Grid>
         <Grid row gap>
           <Grid col={12} tablet={{ col: true }}>
-            <Label htmlFor="visibility" className="text-bold margin-top-2" requiredMarker>Visibility:</Label>
+            <Label htmlFor="visibility" className="text-bold margin-top-2" hint=" (Km)" requiredMarker>Visibility:</Label>
             <TextInput id="visibility" name="visibility" required />
           </Grid>
           <Grid col={12} tablet={{ col: true }}>
