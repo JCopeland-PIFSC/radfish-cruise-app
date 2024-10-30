@@ -46,13 +46,9 @@
       "id": 1,
       "cruiseId": 1,
       "stationName": "STATION001",
-      "location": {
-        "latitude": 45.1234,
-        "longitude": -123.4567
-      },
       "events": {
         "beginSet": {
-          "timestamp": "2024-10-02T08:00:00Z",
+          "timestamp": "2024-10-02T08:00-07:00",
           "latitude": 45.123,
           "longitude": -123.457,
           "weatherConditions": {
@@ -64,7 +60,7 @@
           "comments": "Calm conditions, clear sky."
         },
         "endSet": {
-          "timestamp": "2024-10-02T09:00:00Z",
+          "timestamp": "2024-10-02T09:00-07:00",
           "latitude": 45.124,
           "longitude": -123.455,
           "weatherConditions": {
@@ -76,19 +72,19 @@
           "comments": "Slight increase in wind, light drizzle started."
         },
         "beginHaul": {
-          "timestamp": "2024-10-02T10:00:00Z",
+          "timestamp": "2024-10-02T10:00-07:00",
           "latitude": 45.125,
           "longitude": -123.454,
           "weatherConditions": {
             "windSpeedKnots": 20,
-            "waveHeightMeters": 3.0,
+            "waveHeightMeters": 3,
             "visibilityKm": 8,
             "precipitationId": 4
           },
           "comments": "Moderate rain, waves increased."
         },
         "endHaul": {
-          "timestamp": "2024-10-02T11:00:00Z",
+          "timestamp": "2024-10-02T11:00-07:00",
           "latitude": 45.126,
           "longitude": -123.453,
           "weatherConditions": {
@@ -151,13 +147,9 @@
       "id": 2,
       "cruiseId": 1,
       "stationName": "STATION002",
-      "location": {
-        "latitude": 45.5678,
-        "longitude": -123.789
-      },
       "events": {
         "beginSet": {
-          "timestamp": "2024-10-03T07:30:00Z",
+          "timestamp": "2024-10-03T07:30-07:00",
           "latitude": 45.5675,
           "longitude": -123.7895,
           "weatherConditions": {
@@ -169,7 +161,7 @@
           "comments": "Clear morning, smooth seas."
         },
         "endSet": {
-          "timestamp": "2024-10-03T08:30:00Z",
+          "timestamp": "2024-10-03T08:30-07:00",
           "latitude": 45.568,
           "longitude": -123.7885,
           "weatherConditions": {
@@ -181,19 +173,19 @@
           "comments": "Conditions remain favorable."
         },
         "beginHaul": {
-          "timestamp": "2024-10-03T09:30:00Z",
+          "timestamp": "2024-10-03T09:30-07:00",
           "latitude": 45.5685,
           "longitude": -123.788,
           "weatherConditions": {
             "windSpeedKnots": 15,
-            "waveHeightMeters": 2.0,
+            "waveHeightMeters": 2,
             "visibilityKm": 10,
             "precipitationId": 1
           },
           "comments": "Wind picking up slightly."
         },
         "endHaul": {
-          "timestamp": "2024-10-03T10:30:00Z",
+          "timestamp": "2024-10-03T10:30-07:00",
           "latitude": 45.569,
           "longitude": -123.7875,
           "weatherConditions": {
@@ -226,13 +218,9 @@
       "id": 3,
       "cruiseId": 1,
       "stationName": "STATION003",
-      "location": {
-        "latitude": 46.1234,
-        "longitude": -122.4567
-      },
       "events": {
         "beginSet": {
-          "timestamp": "2024-10-04T08:00:00Z",
+          "timestamp": "2024-10-04T08:00-07:00",
           "latitude": 46.123,
           "longitude": -122.457,
           "weatherConditions": {
@@ -244,7 +232,7 @@
           "comments": "Mostly sunny, moderate waves."
         },
         "endSet": {
-          "timestamp": "2024-10-04T09:00:00Z",
+          "timestamp": "2024-10-04T09:00-07:00",
           "latitude": 46.124,
           "longitude": -122.455,
           "weatherConditions": {
@@ -256,7 +244,7 @@
           "comments": "Conditions remain stable."
         },
         "beginHaul": {
-          "timestamp": "2024-10-04T10:00:00Z",
+          "timestamp": "2024-10-04T10:00-07:00",
           "latitude": 46.125,
           "longitude": -122.454,
           "weatherConditions": {
@@ -268,7 +256,7 @@
           "comments": "Light rain, waves increasing."
         },
         "endHaul": {
-          "timestamp": "2024-10-04T11:00:00Z",
+          "timestamp": "2024-10-04T11:00-07:00",
           "latitude": 46.126,
           "longitude": -122.453,
           "weatherConditions": {
@@ -331,13 +319,9 @@
       "id": 4,
       "cruiseId": 2,
       "stationName": "STATION004",
-      "location": {
-        "latitude": 44.8765,
-        "longitude": -124.1234
-      },
       "events": {
         "beginSet": {
-          "timestamp": "2024-09-02T08:00:00Z",
+          "timestamp": "2024-09-02T08:00-07:00",
           "latitude": 44.876,
           "longitude": -124.1235,
           "weatherConditions": {
@@ -349,19 +333,19 @@
           "comments": "Calm morning, clear sky."
         },
         "endSet": {
-          "timestamp": "2024-09-02T09:00:00Z",
+          "timestamp": "2024-09-02T09:00-07:00",
           "latitude": 44.877,
           "longitude": -124.1225,
           "weatherConditions": {
             "windSpeedKnots": 15,
-            "waveHeightMeters": 2.0,
+            "waveHeightMeters": 2,
             "visibilityKm": 10,
             "precipitationId": 1
           },
           "comments": "Slight increase in wind, light drizzle started."
         },
         "beginHaul": {
-          "timestamp": "2024-09-02T10:00:00Z",
+          "timestamp": "2024-09-02T10:00-07:00",
           "latitude": 44.878,
           "longitude": -124.1215,
           "weatherConditions": {
@@ -373,12 +357,12 @@
           "comments": "Moderate rain, waves increased."
         },
         "endHaul": {
-          "timestamp": "2024-09-02T11:00:00Z",
+          "timestamp": "2024-09-02T11:00-07:00",
           "latitude": 44.879,
           "longitude": -124.1205,
           "weatherConditions": {
             "windSpeedKnots": 20,
-            "waveHeightMeters": 3.0,
+            "waveHeightMeters": 3,
             "visibilityKm": 8,
             "precipitationId": 3
           },
@@ -436,13 +420,9 @@
       "id": 5,
       "cruiseId": 2,
       "stationName": "STATION005",
-      "location": {
-        "latitude": 45.2345,
-        "longitude": -123.6789
-      },
       "events": {
         "beginSet": {
-          "timestamp": "2024-09-03T07:30:00Z",
+          "timestamp": "2024-09-03T07:30-07:00",
           "latitude": 45.234,
           "longitude": -123.6795,
           "weatherConditions": {
@@ -454,7 +434,7 @@
           "comments": "Clear morning, smooth seas."
         },
         "endSet": {
-          "timestamp": "2024-09-03T08:30:00Z",
+          "timestamp": "2024-09-03T08:30-07:00",
           "latitude": 45.234,
           "longitude": -123.6795,
           "weatherConditions": {
@@ -466,19 +446,19 @@
           "comments": "Conditions remain favorable."
         },
         "beginHaul": {
-          "timestamp": "2024-09-03T09:30:00Z",
+          "timestamp": "2024-09-03T09:30-07:00",
           "latitude": 45.234,
           "longitude": -123.6795,
           "weatherConditions": {
             "windSpeedKnots": 15,
-            "waveHeightMeters": 2.0,
+            "waveHeightMeters": 2,
             "visibilityKm": 10,
             "precipitationId": 1
           },
           "comments": "Wind picking up slightly."
         },
         "endHaul": {
-          "timestamp": "2024-09-03T10:30:00Z",
+          "timestamp": "2024-09-03T10:30-07:00",
           "latitude": 45.234,
           "longitude": -123.6795,
           "weatherConditions": {
@@ -511,13 +491,9 @@
       "id": 6,
       "cruiseId": 2,
       "stationName": "STATION006",
-      "location": {
-        "latitude": 45.6789,
-        "longitude": -122.3456
-      },
       "events": {
         "beginSet": {
-          "timestamp": "2024-09-04T08:00:00Z",
+          "timestamp": "2024-09-04T08:00-07:00",
           "latitude": 45.678,
           "longitude": -122.3457,
           "weatherConditions": {
@@ -529,7 +505,7 @@
           "comments": "Mostly sunny, moderate waves."
         },
         "endSet": {
-          "timestamp": "2024-09-04T09:00:00Z",
+          "timestamp": "2024-09-04T09:00-07:00",
           "latitude": 45.679,
           "longitude": -122.3455,
           "weatherConditions": {
@@ -541,7 +517,7 @@
           "comments": "Conditions remain stable."
         },
         "beginHaul": {
-          "timestamp": "2024-09-04T10:00:00Z",
+          "timestamp": "2024-09-04T10:00-07:00",
           "latitude": 45.6795,
           "longitude": -122.345,
           "weatherConditions": {
@@ -553,7 +529,7 @@
           "comments": "Light rain, waves increasing."
         },
         "endHaul": {
-          "timestamp": "2024-09-04T11:00:00Z",
+          "timestamp": "2024-09-04T11:00-07:00",
           "latitude": 45.68,
           "longitude": -122.3445,
           "weatherConditions": {
@@ -616,13 +592,9 @@
       "id": 7,
       "cruiseId": 3,
       "stationName": "STATION007",
-      "location": {
-        "latitude": 45.1234,
-        "longitude": -123.4567
-      },
       "events": {
         "beginSet": {
-          "timestamp": "2024-09-11T08:00:00Z",
+          "timestamp": "2024-09-11T08:00-07:00",
           "latitude": 45.123,
           "longitude": -123.457,
           "weatherConditions": {
@@ -634,7 +606,7 @@
           "comments": "Calm conditions, clear sky."
         },
         "endSet": {
-          "timestamp": "2024-09-11T09:00:00Z",
+          "timestamp": "2024-09-11T09:00-07:00",
           "latitude": 45.124,
           "longitude": -123.455,
           "weatherConditions": {
@@ -646,19 +618,19 @@
           "comments": "Slight increase in wind, light drizzle started."
         },
         "beginHaul": {
-          "timestamp": "2024-09-11T10:00:00Z",
+          "timestamp": "2024-09-11T10:00-07:00",
           "latitude": 45.125,
           "longitude": -123.454,
           "weatherConditions": {
             "windSpeedKnots": 20,
-            "waveHeightMeters": 3.0,
+            "waveHeightMeters": 3,
             "visibilityKm": 8,
             "precipitationId": 4
           },
           "comments": "Moderate rain, waves increased."
         },
         "endHaul": {
-          "timestamp": "2024-09-11T11:00:00Z",
+          "timestamp": "2024-09-11T11:00-07:00",
           "latitude": 45.126,
           "longitude": -123.453,
           "weatherConditions": {
@@ -721,13 +693,9 @@
       "id": 8,
       "cruiseId": 3,
       "stationName": "STATION008",
-      "location": {
-        "latitude": 45.5678,
-        "longitude": -123.789
-      },
       "events": {
         "beginSet": {
-          "timestamp": "2024-09-12T07:30:00Z",
+          "timestamp": "2024-09-12T07:30-07:00",
           "latitude": 45.5675,
           "longitude": -123.7895,
           "weatherConditions": {
@@ -739,7 +707,7 @@
           "comments": "Clear morning, smooth seas."
         },
         "endSet": {
-          "timestamp": "2024-09-12T08:30:00Z",
+          "timestamp": "2024-09-12T08:30-07:00",
           "latitude": 45.568,
           "longitude": -123.7885,
           "weatherConditions": {
@@ -751,19 +719,19 @@
           "comments": "Conditions remain favorable."
         },
         "beginHaul": {
-          "timestamp": "2024-09-12T09:30:00Z",
+          "timestamp": "2024-09-12T09:30-07:00",
           "latitude": 45.5685,
           "longitude": -123.788,
           "weatherConditions": {
             "windSpeedKnots": 15,
-            "waveHeightMeters": 2.0,
+            "waveHeightMeters": 2,
             "visibilityKm": 10,
             "precipitationId": 1
           },
           "comments": "Wind picking up slightly."
         },
         "endHaul": {
-          "timestamp": "2024-09-12T10:30:00Z",
+          "timestamp": "2024-09-12T10:30-07:00",
           "latitude": 45.569,
           "longitude": -123.7875,
           "weatherConditions": {
@@ -796,13 +764,9 @@
       "id": 9,
       "cruiseId": 3,
       "stationName": "STATION009",
-      "location": {
-        "latitude": 46.1234,
-        "longitude": -122.4567
-      },
       "events": {
         "beginSet": {
-          "timestamp": "2024-09-13T08:00:00Z",
+          "timestamp": "2024-09-13T08:00-07:00",
           "latitude": 46.123,
           "longitude": -122.457,
           "weatherConditions": {
@@ -814,7 +778,7 @@
           "comments": "Mostly sunny, moderate waves."
         },
         "endSet": {
-          "timestamp": "2024-09-13T09:00:00Z",
+          "timestamp": "2024-09-13T09:00-07:00",
           "latitude": 46.124,
           "longitude": -122.455,
           "weatherConditions": {
@@ -826,7 +790,7 @@
           "comments": "Conditions remain stable."
         },
         "beginHaul": {
-          "timestamp": "2024-09-13T10:00:00Z",
+          "timestamp": "2024-09-13T10:00-07:00",
           "latitude": 46.125,
           "longitude": -122.454,
           "weatherConditions": {
@@ -838,7 +802,7 @@
           "comments": "Light rain, waves increasing."
         },
         "endHaul": {
-          "timestamp": "2024-09-13T11:00:00Z",
+          "timestamp": "2024-09-13T11:00-07:00",
           "latitude": 46.126,
           "longitude": -122.453,
           "weatherConditions": {
@@ -901,13 +865,9 @@
       "id": 10,
       "cruiseId": 4,
       "stationName": "STATION010",
-      "location": {
-        "latitude": 45.1234,
-        "longitude": -123.4567
-      },
       "events": {
         "beginSet": {
-          "timestamp": "2024-10-01T08:00:00Z",
+          "timestamp": "2024-10-01T08:00-07:00",
           "latitude": 45.123,
           "longitude": -123.457,
           "weatherConditions": {
@@ -919,7 +879,7 @@
           "comments": "Calm conditions, clear sky."
         },
         "endSet": {
-          "timestamp": "2024-10-01T09:00:00Z",
+          "timestamp": "2024-10-01T09:00-07:00",
           "latitude": 45.124,
           "longitude": -123.455,
           "weatherConditions": {
@@ -931,19 +891,19 @@
           "comments": "Slight increase in wind, light drizzle started."
         },
         "beginHaul": {
-          "timestamp": "2024-10-01T10:00:00Z",
+          "timestamp": "2024-10-01T10:00-07:00",
           "latitude": 45.125,
           "longitude": -123.454,
           "weatherConditions": {
             "windSpeedKnots": 20,
-            "waveHeightMeters": 3.0,
+            "waveHeightMeters": 3,
             "visibilityKm": 8,
             "precipitationId": 4
           },
           "comments": "Moderate rain, waves increased."
         },
         "endHaul": {
-          "timestamp": "2024-10-01T11:00:00Z",
+          "timestamp": "2024-10-01T11:00-07:00",
           "latitude": 45.126,
           "longitude": -123.453,
           "weatherConditions": {
@@ -1006,13 +966,9 @@
       "id": 11,
       "cruiseId": 4,
       "stationName": "STATION011",
-      "location": {
-        "latitude": 45.5678,
-        "longitude": -123.789
-      },
       "events": {
         "beginSet": {
-          "timestamp": "2024-10-01T07:30:00Z",
+          "timestamp": "2024-10-01T07:30-07:00",
           "latitude": 45.5675,
           "longitude": -123.7895,
           "weatherConditions": {
@@ -1027,37 +983,109 @@
     }
   ],
   "ports": [
-    { "id": 1, "name": "Port A" },
-    { "id": 2, "name": "Port B" },
-    { "id": 3, "name": "Port C" }
+    {
+      "id": 1,
+      "name": "Port A"
+    },
+    {
+      "id": 2,
+      "name": "Port B"
+    },
+    {
+      "id": 3,
+      "name": "Port C"
+    }
   ],
   "species": [
-    { "id": 1, "name": "Species A" },
-    { "id": 2, "name": "Species B" },
-    { "id": 3, "name": "Species C" },
-    { "id": 4, "name": "Species D" }
+    {
+      "id": 1,
+      "name": "Species A"
+    },
+    {
+      "id": 2,
+      "name": "Species B"
+    },
+    {
+      "id": 3,
+      "name": "Species C"
+    },
+    {
+      "id": 4,
+      "name": "Species D"
+    }
   ],
   "precipitation": [
-    { "id": 1, "description": "None" },
-    { "id": 2, "description": "Light drizzle" },
-    { "id": 3, "description": "Light rain" },
-    { "id": 4, "description": "Moderate rain" },
-    { "id": 5, "description": "Heavy rain" },
-    { "id": 6, "description": "Thunderstorm" }
+    {
+      "id": 1,
+      "description": "None"
+    },
+    {
+      "id": 2,
+      "description": "Light drizzle"
+    },
+    {
+      "id": 3,
+      "description": "Light rain"
+    },
+    {
+      "id": 4,
+      "description": "Moderate rain"
+    },
+    {
+      "id": 5,
+      "description": "Heavy rain"
+    },
+    {
+      "id": 6,
+      "description": "Thunderstorm"
+    }
   ],
   "sampleTypes": [
-    { "id": 1, "name": "Otolith" },
-    { "id": 2, "name": "Liver" },
-    { "id": 3, "name": "Scale" },
-    { "id": 4, "name": "Tissue" },
-    { "id": 4, "name": "Gonad" },
-    { "id": 5, "name": "Eye" }
+    {
+      "id": 1,
+      "name": "Otolith"
+    },
+    {
+      "id": 2,
+      "name": "Liver"
+    },
+    {
+      "id": 3,
+      "name": "Scale"
+    },
+    {
+      "id": 4,
+      "name": "Tissue"
+    },
+    {
+      "id": 4,
+      "name": "Gonad"
+    },
+    {
+      "id": 5,
+      "name": "Eye"
+    }
   ],
   "cruiseStatuses": [
-    { "id": 1, "name": "Started" },
-    { "id": 2, "name": "Ended" },
-    { "id": 3, "name": "Submitted" },
-    { "id": 4, "name": "Rejected" },
-    { "id": 5, "name": "Accepted" }
+    {
+      "id": 1,
+      "name": "Started"
+    },
+    {
+      "id": 2,
+      "name": "Ended"
+    },
+    {
+      "id": 3,
+      "name": "Submitted"
+    },
+    {
+      "id": 4,
+      "name": "Rejected"
+    },
+    {
+      "id": 5,
+      "name": "Accepted"
+    }
   ]
 }
