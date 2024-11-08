@@ -9,7 +9,7 @@ export const StationSummary = ({ station }) => {
   const { latitude, longitude } = events.beginSet;
 
   return (
-    <div className="border padding-1 margin-bottom-1 radius-lg app-box-shadow">
+    <div className="border padding-1 margin-y-2 radius-lg app-card">
       <Grid row>
         <Grid col={true} tablet={{ col: 6 }}>
           <DescriptionListItem term="Station Name:" description={stationName} />
@@ -51,7 +51,7 @@ export const StationSummary = ({ station }) => {
           <h3 className="app-sec-header">Catch Summary</h3>
         </Grid>
         <Grid col>
-          <div className="border padding-1 radius-md app-box-shadow">
+          <div className="border padding-1 radius-md app-card">
             {catchList && catchList.length
               ? catchList.map((catchItem, idx) => (
                 <CatchSummary key={idx} catchItem={catchItem} />
