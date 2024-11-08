@@ -21,6 +21,7 @@ import { get } from "./utils/requestMethods";
 import CruiseListPage from "./pages/CruiseList";
 import CruiseNewPage from "./pages/CruiseNew";
 import CruiseDetailPage from "./pages/CruiseDetail";
+import { StationDetailPage } from "./pages/StationDetail";
 
 const API_BASE_URL = "http://localhost:5000";
 
@@ -39,6 +40,10 @@ function App() {
 
   async function fetchCruiseStations(id) {
     return await get(`${API_BASE_URL}/stations`, { cruiseId: id, _sort: "-events.beginSet.timestamp", });
+  }
+
+  async function fetchStation(id) {
+    return await get(`${API_BASE_URL}/stations/${id}`);
   }
 
   function CruiseLoaderWrapper() {
@@ -67,6 +72,39 @@ function App() {
     if (!cruise || !stations) return <div>Loading...</div>;
 
     return <CruiseDetailPage data={{ cruise, stations }} />;
+  }
+
+  function StationLoaderWrapper() {
+    const { cruiseId, stationId } = useParams();
+    const [cruise, setCruise] = useState(null);
+    const [station, setStation] = useState(null);
+
+    useEffect(() => {
+      const load = async () => {
+        let cruiseRes;
+        let stationRes;
+        // Redirect to Cruises List view (/cruises) if cruiseId is not found.
+        try {
+          cruiseRes = await fetchCruiseDetails(cruiseId);
+        } catch (error) {
+          window.location.href = '/cruises';
+        }
+        // Redirect to parent Cruise if Station is not found
+        try {
+          stationRes = await fetchStation(stationId);
+        } catch (error) {
+          window.location.href = `/cruises/${cruiseId}`
+        }
+        setCruise(cruiseRes);
+        setStation(stationRes);
+      };
+
+      load();
+    }, [cruiseId, stationId]);
+
+    if (!cruise || !station) return <div>Loading...</div>;
+
+    return <StationDetailPage data={{ cruise, station }} />;
   }
 
   useEffect(() => {
