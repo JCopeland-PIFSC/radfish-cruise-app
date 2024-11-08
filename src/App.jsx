@@ -48,7 +48,14 @@ function App() {
 
     useEffect(() => {
       const load = async () => {
-        const cruiseRes = await fetchCruiseDetails(id);
+        let cruiseRes;
+        // Redirect to Cruises List view (/cruises) if cruiseId is not found.
+        try {
+          cruiseRes = await fetchCruiseDetails(id);
+        } catch (error) {
+          window.location.href = '/cruises';
+        }
+
         const stationsRes = await fetchCruiseStations(id);
         setCruise(cruiseRes);
         setStations(stationsRes);
@@ -124,6 +131,10 @@ function App() {
               <Route path="/cruises" element={<CruiseListPage />} />
               <Route path="/cruises/new" element={<CruiseNewPage />} />
               <Route path="/cruises/:id" element={<CruiseLoaderWrapper />} />
+              <Route path="/cruises/:cruiseId/station/:stationId" element={<StationLoaderWrapper />} />
+
+              {/* Catch-all route for unknown paths */}
+              <Route path="*" element={<Navigate to="/cruises" />} />
             </Routes>
           </GridContainer>
           {/* </div> */}
