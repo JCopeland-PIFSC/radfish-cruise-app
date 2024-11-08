@@ -61,12 +61,12 @@ function CruiseNewPage() {
         <Grid row className="margin-top-2">
           <Button className="margin-right-0" onClick={handleNavCruisesList}>&lt; Cruise List</Button>
         </Grid>
-        <Grid row>
-          <h1 className="app-sec-header">New Cruise Form</h1>
-        </Grid>
-        <Grid row>
+        <Grid row className="margin-top-2">
           <Grid col={12}>
-            <div className="border radius-lg padding-1 margin-bottom-2 app-box-shadow">
+            <Grid row>
+              <h1 className="app-sec-header">New Cruise Form</h1>
+            </Grid>
+            <div className="border radius-lg padding-1 margin-y-2 app-card">
               <Form className="maxw-full" onSubmit={handleSubmit} onReset={handleReset}>
                 <Grid row gap>
                   <Grid col={12} tablet={{ col: true }}>
@@ -110,7 +110,7 @@ function CruiseNewPage() {
                   </Grid>
                 </Grid>
                 <Grid row className="flex-justify-end">
-                  <Button type="reset" secondary>
+                  <Button type="reset" className="margin-right-0 tablet:margin-right-1" secondary>
                     Reset
                   </Button>
                   <Button type="submit" className="margin-right-0" >Add Cruise</Button>
