@@ -51,48 +51,40 @@
           "timestamp": "2024-10-02T08:00-07:00",
           "latitude": 45.123,
           "longitude": -123.457,
-          "weatherConditions": {
-            "windSpeedKnots": 15,
-            "waveHeightMeters": 2.5,
-            "visibilityKm": 10,
-            "precipitationId": 1
-          },
+          "windSpeedKnots": 15,
+          "waveHeightMeters": 2.5,
+          "visibilityKm": 10,
+          "precipitationId": 1,
           "comments": "Calm conditions, clear sky."
         },
         "endSet": {
           "timestamp": "2024-10-02T09:00-07:00",
           "latitude": 45.124,
           "longitude": -123.455,
-          "weatherConditions": {
-            "windSpeedKnots": 18,
-            "waveHeightMeters": 2.8,
-            "visibilityKm": 9,
-            "precipitationId": 2
-          },
+          "windSpeedKnots": 18,
+          "waveHeightMeters": 2.8,
+          "visibilityKm": 9,
+          "precipitationId": 2,
           "comments": "Slight increase in wind, light drizzle started."
         },
         "beginHaul": {
           "timestamp": "2024-10-02T10:00-07:00",
           "latitude": 45.125,
           "longitude": -123.454,
-          "weatherConditions": {
-            "windSpeedKnots": 20,
-            "waveHeightMeters": 3,
-            "visibilityKm": 8,
-            "precipitationId": 4
-          },
+          "windSpeedKnots": 20,
+          "waveHeightMeters": 3,
+          "visibilityKm": 8,
+          "precipitationId": 4,
           "comments": "Moderate rain, waves increased."
         },
         "endHaul": {
           "timestamp": "2024-10-02T11:00-07:00",
           "latitude": 45.126,
           "longitude": -123.453,
-          "weatherConditions": {
-            "windSpeedKnots": 22,
-            "waveHeightMeters": 3.5,
-            "visibilityKm": 7,
-            "precipitationId": 5
-          },
+          "windSpeedKnots": 22,
+          "waveHeightMeters": 3.5,
+          "visibilityKm": 7,
+          "precipitationId": 5,
           "comments": "Heavy rain, reduced visibility."
         }
       },
@@ -152,48 +144,40 @@
           "timestamp": "2024-10-03T07:30-07:00",
           "latitude": 45.5675,
           "longitude": -123.7895,
-          "weatherConditions": {
-            "windSpeedKnots": 10,
-            "waveHeightMeters": 1.2,
-            "visibilityKm": 12,
-            "precipitationId": 1
-          },
+          "windSpeedKnots": 10,
+          "waveHeightMeters": 1.2,
+          "visibilityKm": 12,
+          "precipitationId": 1,
           "comments": "Clear morning, smooth seas."
         },
         "endSet": {
           "timestamp": "2024-10-03T08:30-07:00",
           "latitude": 45.568,
           "longitude": -123.7885,
-          "weatherConditions": {
-            "windSpeedKnots": 12,
-            "waveHeightMeters": 1.5,
-            "visibilityKm": 11,
-            "precipitationId": 1
-          },
+          "windSpeedKnots": 12,
+          "waveHeightMeters": 1.5,
+          "visibilityKm": 11,
+          "precipitationId": 1,
           "comments": "Conditions remain favorable."
         },
         "beginHaul": {
           "timestamp": "2024-10-03T09:30-07:00",
           "latitude": 45.5685,
           "longitude": -123.788,
-          "weatherConditions": {
-            "windSpeedKnots": 15,
-            "waveHeightMeters": 2,
-            "visibilityKm": 10,
-            "precipitationId": 1
-          },
+          "windSpeedKnots": 15,
+          "waveHeightMeters": 2,
+          "visibilityKm": 10,
+          "precipitationId": 1,
           "comments": "Wind picking up slightly."
         },
         "endHaul": {
           "timestamp": "2024-10-03T10:30-07:00",
           "latitude": 45.569,
           "longitude": -123.7875,
-          "weatherConditions": {
-            "windSpeedKnots": 18,
-            "waveHeightMeters": 2.3,
-            "visibilityKm": 9,
-            "precipitationId": 3
-          },
+          "windSpeedKnots": 18,
+          "waveHeightMeters": 2.3,
+          "visibilityKm": 9,
+          "precipitationId": 3,
           "comments": "Light rain, increased wind."
         }
       },
@@ -223,48 +207,40 @@
           "timestamp": "2024-10-04T08:00-07:00",
           "latitude": 46.123,
           "longitude": -122.457,
-          "weatherConditions": {
-            "windSpeedKnots": 12,
-            "waveHeightMeters": 1.8,
-            "visibilityKm": 11,
-            "precipitationId": 0
-          },
+          "windSpeedKnots": 12,
+          "waveHeightMeters": 1.8,
+          "visibilityKm": 11,
+          "precipitationId": 0,
           "comments": "Mostly sunny, moderate waves."
         },
         "endSet": {
           "timestamp": "2024-10-04T09:00-07:00",
           "latitude": 46.124,
           "longitude": -122.455,
-          "weatherConditions": {
-            "windSpeedKnots": 15,
-            "waveHeightMeters": 2.2,
-            "visibilityKm": 10,
-            "precipitationId": 0
-          },
+          "windSpeedKnots": 15,
+          "waveHeightMeters": 2.2,
+          "visibilityKm": 10,
+          "precipitationId": 0,
           "comments": "Conditions remain stable."
         },
         "beginHaul": {
           "timestamp": "2024-10-04T10:00-07:00",
           "latitude": 46.125,
           "longitude": -122.454,
-          "weatherConditions": {
-            "windSpeedKnots": 18,
-            "waveHeightMeters": 2.8,
-            "visibilityKm": 8,
-            "precipitationId": 2
-          },
+          "windSpeedKnots": 18,
+          "waveHeightMeters": 2.8,
+          "visibilityKm": 8,
+          "precipitationId": 2,
           "comments": "Light rain, waves increasing."
         },
         "endHaul": {
           "timestamp": "2024-10-04T11:00-07:00",
           "latitude": 46.126,
           "longitude": -122.453,
-          "weatherConditions": {
-            "windSpeedKnots": 20,
-            "waveHeightMeters": 3.2,
-            "visibilityKm": 7,
-            "precipitationId": 4
-          },
+          "windSpeedKnots": 20,
+          "waveHeightMeters": 3.2,
+          "visibilityKm": 7,
+          "precipitationId": 4,
           "comments": "Moderate rain, reduced visibility."
         }
       },
@@ -324,48 +300,40 @@
           "timestamp": "2024-09-02T08:00-07:00",
           "latitude": 44.876,
           "longitude": -124.1235,
-          "weatherConditions": {
-            "windSpeedKnots": 12,
-            "waveHeightMeters": 1.5,
-            "visibilityKm": 11,
-            "precipitationId": 0
-          },
+          "windSpeedKnots": 12,
+          "waveHeightMeters": 1.5,
+          "visibilityKm": 11,
+          "precipitationId": 0,
           "comments": "Calm morning, clear sky."
         },
         "endSet": {
           "timestamp": "2024-09-02T09:00-07:00",
           "latitude": 44.877,
           "longitude": -124.1225,
-          "weatherConditions": {
-            "windSpeedKnots": 15,
-            "waveHeightMeters": 2,
-            "visibilityKm": 10,
-            "precipitationId": 1
-          },
+          "windSpeedKnots": 15,
+          "waveHeightMeters": 2,
+          "visibilityKm": 10,
+          "precipitationId": 1,
           "comments": "Slight increase in wind, light drizzle started."
         },
         "beginHaul": {
           "timestamp": "2024-09-02T10:00-07:00",
           "latitude": 44.878,
           "longitude": -124.1215,
-          "weatherConditions": {
-            "windSpeedKnots": 18,
-            "waveHeightMeters": 2.5,
-            "visibilityKm": 9,
-            "precipitationId": 2
-          },
+          "windSpeedKnots": 18,
+          "waveHeightMeters": 2.5,
+          "visibilityKm": 9,
+          "precipitationId": 2,
           "comments": "Moderate rain, waves increased."
         },
         "endHaul": {
           "timestamp": "2024-09-02T11:00-07:00",
           "latitude": 44.879,
           "longitude": -124.1205,
-          "weatherConditions": {
-            "windSpeedKnots": 20,
-            "waveHeightMeters": 3,
-            "visibilityKm": 8,
-            "precipitationId": 3
-          },
+          "windSpeedKnots": 20,
+          "waveHeightMeters": 3,
+          "visibilityKm": 8,
+          "precipitationId": 3,
           "comments": "Heavy rain, reduced visibility."
         }
       },
@@ -425,48 +393,40 @@
           "timestamp": "2024-09-03T07:30-07:00",
           "latitude": 45.234,
           "longitude": -123.6795,
-          "weatherConditions": {
-            "windSpeedKnots": 10,
-            "waveHeightMeters": 1.2,
-            "visibilityKm": 12,
-            "precipitationId": 1
-          },
+          "windSpeedKnots": 10,
+          "waveHeightMeters": 1.2,
+          "visibilityKm": 12,
+          "precipitationId": 1,
           "comments": "Clear morning, smooth seas."
         },
         "endSet": {
           "timestamp": "2024-09-03T08:30-07:00",
           "latitude": 45.234,
           "longitude": -123.6795,
-          "weatherConditions": {
-            "windSpeedKnots": 12,
-            "waveHeightMeters": 1.5,
-            "visibilityKm": 11,
-            "precipitationId": 1
-          },
+          "windSpeedKnots": 12,
+          "waveHeightMeters": 1.5,
+          "visibilityKm": 11,
+          "precipitationId": 1,
           "comments": "Conditions remain favorable."
         },
         "beginHaul": {
           "timestamp": "2024-09-03T09:30-07:00",
           "latitude": 45.234,
           "longitude": -123.6795,
-          "weatherConditions": {
-            "windSpeedKnots": 15,
-            "waveHeightMeters": 2,
-            "visibilityKm": 10,
-            "precipitationId": 1
-          },
+          "windSpeedKnots": 15,
+          "waveHeightMeters": 2,
+          "visibilityKm": 10,
+          "precipitationId": 1,
           "comments": "Wind picking up slightly."
         },
         "endHaul": {
           "timestamp": "2024-09-03T10:30-07:00",
           "latitude": 45.234,
           "longitude": -123.6795,
-          "weatherConditions": {
-            "windSpeedKnots": 18,
-            "waveHeightMeters": 2.3,
-            "visibilityKm": 9,
-            "precipitationId": 3
-          },
+          "windSpeedKnots": 18,
+          "waveHeightMeters": 2.3,
+          "visibilityKm": 9,
+          "precipitationId": 3,
           "comments": "Light rain, increased wind."
         }
       },
@@ -496,48 +456,40 @@
           "timestamp": "2024-09-04T08:00-07:00",
           "latitude": 45.678,
           "longitude": -122.3457,
-          "weatherConditions": {
-            "windSpeedKnots": 12,
-            "waveHeightMeters": 1.8,
-            "visibilityKm": 11,
-            "precipitationId": 0
-          },
+          "windSpeedKnots": 12,
+          "waveHeightMeters": 1.8,
+          "visibilityKm": 11,
+          "precipitationId": 0,
           "comments": "Mostly sunny, moderate waves."
         },
         "endSet": {
           "timestamp": "2024-09-04T09:00-07:00",
           "latitude": 45.679,
           "longitude": -122.3455,
-          "weatherConditions": {
-            "windSpeedKnots": 15,
-            "waveHeightMeters": 2.2,
-            "visibilityKm": 10,
-            "precipitationId": 0
-          },
+          "windSpeedKnots": 15,
+          "waveHeightMeters": 2.2,
+          "visibilityKm": 10,
+          "precipitationId": 0,
           "comments": "Conditions remain stable."
         },
         "beginHaul": {
           "timestamp": "2024-09-04T10:00-07:00",
           "latitude": 45.6795,
           "longitude": -122.345,
-          "weatherConditions": {
-            "windSpeedKnots": 18,
-            "waveHeightMeters": 2.8,
-            "visibilityKm": 8,
-            "precipitationId": 2
-          },
+          "windSpeedKnots": 18,
+          "waveHeightMeters": 2.8,
+          "visibilityKm": 8,
+          "precipitationId": 2,
           "comments": "Light rain, waves increasing."
         },
         "endHaul": {
           "timestamp": "2024-09-04T11:00-07:00",
           "latitude": 45.68,
           "longitude": -122.3445,
-          "weatherConditions": {
-            "windSpeedKnots": 20,
-            "waveHeightMeters": 3.2,
-            "visibilityKm": 7,
-            "precipitationId": 4
-          },
+          "windSpeedKnots": 20,
+          "waveHeightMeters": 3.2,
+          "visibilityKm": 7,
+          "precipitationId": 4,
           "comments": "Moderate rain, reduced visibility."
         }
       },
@@ -597,48 +549,40 @@
           "timestamp": "2024-09-11T08:00-07:00",
           "latitude": 45.123,
           "longitude": -123.457,
-          "weatherConditions": {
-            "windSpeedKnots": 15,
-            "waveHeightMeters": 2.5,
-            "visibilityKm": 10,
-            "precipitationId": 1
-          },
+          "windSpeedKnots": 15,
+          "waveHeightMeters": 2.5,
+          "visibilityKm": 10,
+          "precipitationId": 1,
           "comments": "Calm conditions, clear sky."
         },
         "endSet": {
           "timestamp": "2024-09-11T09:00-07:00",
           "latitude": 45.124,
           "longitude": -123.455,
-          "weatherConditions": {
-            "windSpeedKnots": 18,
-            "waveHeightMeters": 2.8,
-            "visibilityKm": 9,
-            "precipitationId": 2
-          },
+          "windSpeedKnots": 18,
+          "waveHeightMeters": 2.8,
+          "visibilityKm": 9,
+          "precipitationId": 2,
           "comments": "Slight increase in wind, light drizzle started."
         },
         "beginHaul": {
           "timestamp": "2024-09-11T10:00-07:00",
           "latitude": 45.125,
           "longitude": -123.454,
-          "weatherConditions": {
-            "windSpeedKnots": 20,
-            "waveHeightMeters": 3,
-            "visibilityKm": 8,
-            "precipitationId": 4
-          },
+          "windSpeedKnots": 20,
+          "waveHeightMeters": 3,
+          "visibilityKm": 8,
+          "precipitationId": 4,
           "comments": "Moderate rain, waves increased."
         },
         "endHaul": {
           "timestamp": "2024-09-11T11:00-07:00",
           "latitude": 45.126,
           "longitude": -123.453,
-          "weatherConditions": {
-            "windSpeedKnots": 22,
-            "waveHeightMeters": 3.5,
-            "visibilityKm": 7,
-            "precipitationId": 5
-          },
+          "windSpeedKnots": 22,
+          "waveHeightMeters": 3.5,
+          "visibilityKm": 7,
+          "precipitationId": 5,
           "comments": "Heavy rain, reduced visibility."
         }
       },
@@ -698,48 +642,40 @@
           "timestamp": "2024-09-12T07:30-07:00",
           "latitude": 45.5675,
           "longitude": -123.7895,
-          "weatherConditions": {
-            "windSpeedKnots": 10,
-            "waveHeightMeters": 1.2,
-            "visibilityKm": 12,
-            "precipitationId": 1
-          },
+          "windSpeedKnots": 10,
+          "waveHeightMeters": 1.2,
+          "visibilityKm": 12,
+          "precipitationId": 1,
           "comments": "Clear morning, smooth seas."
         },
         "endSet": {
           "timestamp": "2024-09-12T08:30-07:00",
           "latitude": 45.568,
           "longitude": -123.7885,
-          "weatherConditions": {
-            "windSpeedKnots": 12,
-            "waveHeightMeters": 1.5,
-            "visibilityKm": 11,
-            "precipitationId": 1
-          },
+          "windSpeedKnots": 12,
+          "waveHeightMeters": 1.5,
+          "visibilityKm": 11,
+          "precipitationId": 1,
           "comments": "Conditions remain favorable."
         },
         "beginHaul": {
           "timestamp": "2024-09-12T09:30-07:00",
           "latitude": 45.5685,
           "longitude": -123.788,
-          "weatherConditions": {
-            "windSpeedKnots": 15,
-            "waveHeightMeters": 2,
-            "visibilityKm": 10,
-            "precipitationId": 1
-          },
+          "windSpeedKnots": 15,
+          "waveHeightMeters": 2,
+          "visibilityKm": 10,
+          "precipitationId": 1,
           "comments": "Wind picking up slightly."
         },
         "endHaul": {
           "timestamp": "2024-09-12T10:30-07:00",
           "latitude": 45.569,
           "longitude": -123.7875,
-          "weatherConditions": {
-            "windSpeedKnots": 18,
-            "waveHeightMeters": 2.3,
-            "visibilityKm": 9,
-            "precipitationId": 3
-          },
+          "windSpeedKnots": 18,
+          "waveHeightMeters": 2.3,
+          "visibilityKm": 9,
+          "precipitationId": 3,
           "comments": "Light rain, increased wind."
         }
       },
@@ -769,48 +705,40 @@
           "timestamp": "2024-09-13T08:00-07:00",
           "latitude": 46.123,
           "longitude": -122.457,
-          "weatherConditions": {
-            "windSpeedKnots": 12,
-            "waveHeightMeters": 1.8,
-            "visibilityKm": 11,
-            "precipitationId": 0
-          },
+          "windSpeedKnots": 12,
+          "waveHeightMeters": 1.8,
+          "visibilityKm": 11,
+          "precipitationId": 0,
           "comments": "Mostly sunny, moderate waves."
         },
         "endSet": {
           "timestamp": "2024-09-13T09:00-07:00",
           "latitude": 46.124,
           "longitude": -122.455,
-          "weatherConditions": {
-            "windSpeedKnots": 15,
-            "waveHeightMeters": 2.2,
-            "visibilityKm": 10,
-            "precipitationId": 0
-          },
+          "windSpeedKnots": 15,
+          "waveHeightMeters": 2.2,
+          "visibilityKm": 10,
+          "precipitationId": 0,
           "comments": "Conditions remain stable."
         },
         "beginHaul": {
           "timestamp": "2024-09-13T10:00-07:00",
           "latitude": 46.125,
           "longitude": -122.454,
-          "weatherConditions": {
-            "windSpeedKnots": 18,
-            "waveHeightMeters": 2.8,
-            "visibilityKm": 8,
-            "precipitationId": 2
-          },
+          "windSpeedKnots": 18,
+          "waveHeightMeters": 2.8,
+          "visibilityKm": 8,
+          "precipitationId": 2,
           "comments": "Light rain, waves increasing."
         },
         "endHaul": {
           "timestamp": "2024-09-13T11:00-07:00",
           "latitude": 46.126,
           "longitude": -122.453,
-          "weatherConditions": {
-            "windSpeedKnots": 20,
-            "waveHeightMeters": 3.2,
-            "visibilityKm": 7,
-            "precipitationId": 4
-          },
+          "windSpeedKnots": 20,
+          "waveHeightMeters": 3.2,
+          "visibilityKm": 7,
+          "precipitationId": 4,
           "comments": "Moderate rain, reduced visibility."
         }
       },
@@ -870,48 +798,40 @@
           "timestamp": "2024-10-01T08:00-07:00",
           "latitude": 45.123,
           "longitude": -123.457,
-          "weatherConditions": {
-            "windSpeedKnots": 15,
-            "waveHeightMeters": 2.5,
-            "visibilityKm": 10,
-            "precipitationId": 1
-          },
+          "windSpeedKnots": 15,
+          "waveHeightMeters": 2.5,
+          "visibilityKm": 10,
+          "precipitationId": 1,
           "comments": "Calm conditions, clear sky."
         },
         "endSet": {
           "timestamp": "2024-10-01T09:00-07:00",
           "latitude": 45.124,
           "longitude": -123.455,
-          "weatherConditions": {
-            "windSpeedKnots": 18,
-            "waveHeightMeters": 2.8,
-            "visibilityKm": 9,
-            "precipitationId": 2
-          },
+          "windSpeedKnots": 18,
+          "waveHeightMeters": 2.8,
+          "visibilityKm": 9,
+          "precipitationId": 2,
           "comments": "Slight increase in wind, light drizzle started."
         },
         "beginHaul": {
           "timestamp": "2024-10-01T10:00-07:00",
           "latitude": 45.125,
           "longitude": -123.454,
-          "weatherConditions": {
-            "windSpeedKnots": 20,
-            "waveHeightMeters": 3,
-            "visibilityKm": 8,
-            "precipitationId": 4
-          },
+          "windSpeedKnots": 20,
+          "waveHeightMeters": 3,
+          "visibilityKm": 8,
+          "precipitationId": 4,
           "comments": "Moderate rain, waves increased."
         },
         "endHaul": {
           "timestamp": "2024-10-01T11:00-07:00",
           "latitude": 45.126,
           "longitude": -123.453,
-          "weatherConditions": {
-            "windSpeedKnots": 22,
-            "waveHeightMeters": 3.5,
-            "visibilityKm": 7,
-            "precipitationId": 5
-          },
+          "windSpeedKnots": 22,
+          "waveHeightMeters": 3.5,
+          "visibilityKm": 7,
+          "precipitationId": 5,
           "comments": "Heavy rain, reduced visibility."
         }
       },
@@ -971,12 +891,10 @@
           "timestamp": "2024-10-01T07:30-07:00",
           "latitude": 45.5675,
           "longitude": -123.7895,
-          "weatherConditions": {
-            "windSpeedKnots": 10,
-            "waveHeightMeters": 1.2,
-            "visibilityKm": 12,
-            "precipitationId": 1
-          },
+          "windSpeedKnots": 10,
+          "waveHeightMeters": 1.2,
+          "visibilityKm": 12,
+          "precipitationId": 1,
           "comments": "Clear morning, smooth seas."
         }
       }
