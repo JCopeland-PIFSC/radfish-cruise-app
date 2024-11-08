@@ -50,6 +50,10 @@ function CruiseDetailPage({ data }) {
     navigate("/cruises");
   };
 
+  const editStationToggle = () => {
+    return (editCruiseToggle || newStationToggle) ? true : false;
+  }
+
   const handleEnterNewStation = () => {
     setNewStationToggle(!newStationToggle);
   };
@@ -119,7 +123,7 @@ function CruiseDetailPage({ data }) {
       </Grid>
       <Grid row className="flex-justify margin-top-2">
         <h1 className="app-sec-header">Cruise Details</h1>
-        <div className="margin-top-05">
+        <div className="margin-top-05 margin-bottom-2 mobile-lg:margin-bottom-0">
           <Tag className={`padding-1 usa-tag--big ${setStatusColor(cruiseStatusId)}`}>{cruiseStatus}</Tag>
         </div>
         <Button
@@ -256,7 +260,7 @@ function CruiseDetailPage({ data }) {
       {newStationToggle && <StationNew handleNewStation={handleNewStation} />}
       {stations.length
         ? stations.map((station) => (
-          <StationSummary key={station.id} station={station} />
+          <StationSummary key={station.id} cruiseId={id} station={station} editStationToggle={editStationToggle} />
         ))
         : ""}
     </>
