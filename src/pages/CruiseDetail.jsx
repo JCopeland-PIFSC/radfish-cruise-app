@@ -96,18 +96,21 @@ function CruiseDetailPage({ data }) {
     }
 
     const timezone = getLocationTz(values.latitude, values.longitude);
-    const beginSetDateTime = generateTzDateTime(values.beginSetDate, values.beginSetTime, timezone);
+    const beginSetDateTime = generateTzDateTime(values.eventDate, values.eventTime, timezone);
     const newValues = structuredClone(InitializedStation);
     newValues.cruiseId = values.cruiseId;
     newValues.stationName = values.stationName;
-    newValues.events.beginSet.timestamp = beginSetDateTime;
-    newValues.events.beginSet.latitude = values.latitude;
-    newValues.events.beginSet.longitude = values.longitude;
-    newValues.events.beginSet.weatherConditions.windSpeedKnots = values.windSpeed;
-    newValues.events.beginSet.weatherConditions.waveHeightMeters = values.waveHeight;
-    newValues.events.beginSet.weatherConditions.visibilityKm = values.visibility;
-    newValues.events.beginSet.weatherConditions.precipitationId = values.precipitationId;
-    newValues.events.beginSet.comments = values.comments;
+    const newBeginSetValues = {
+      timestamp: beginSetDateTime,
+      latitude: values.latitude,
+      longitude: values.longitude,
+      windSpeedKnots: values.windSpeed,
+      waveHeightMeters: values.waveHeight,
+      visibilityKm: values.visibility,
+      precipitationId: values.precipitationId,
+      comments: values.comments
+    };
+    newValues.events.beginSet = newBeginSetValues;
 
     // process date time
     const newStation = await post(`${API_BASE_URL}/stations`, newValues);
@@ -277,12 +280,10 @@ const InitializedStation = {
       timestamp: null,
       latitude: null,
       longitude: null,
-      weatherConditions: {
-        windSpeedKnots: null,
-        waveHeightMeters: null,
-        visibilityKm: null,
-        precipitationId: null,
-      },
+      windSpeedKnots: null,
+      waveHeightMeters: null,
+      visibilityKm: null,
+      precipitationId: null,
       comments: null
     },
   }
