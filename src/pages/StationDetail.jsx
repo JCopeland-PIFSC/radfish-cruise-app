@@ -1,21 +1,69 @@
 import React, { useEffect, useState, useRef, useContext } from "react";
 import { useNavigate } from "react-router-dom";
-import { Grid, TextInput, Label, DatePicker, TextInputMask, Button, Form, Textarea, Select, Fieldset } from "@trussworks/react-uswds";
+import { Grid, TextInput, Label, DatePicker, TextInputMask, Button, Form, Textarea, Select } from "@trussworks/react-uswds";
+import { DescriptionListItem } from "../components/DescriptionListItem";
 import { CruiseContext } from "../CruiseContext";
+import { getLocationTz, generateTzDateTime, getTzDateTimeParts } from "../utils/dateTimeHelpers";
+import { listValueLookup } from "../utils/listLookup";
+import { put } from "../utils/requestMethods";
+
+const API_BASE_URL = "http://localhost:5000";
 
 export const StationDetailPage = ({ data }) => {
-  console.log('station data: ', data);
-  const { cruise, station: initialStation } = data;
+  const { cruiseName, station: initialStation } = data;
   const [station, setStation] = useState(initialStation);
+  const { id, cruiseId, stationName, events, catch: catches } = station;
+  const { beginSet, endSet, beginHaul, endHaul } = events;
   const { state } = useContext(CruiseContext);
   const { precipitation } = state;
   const [resetToggle, setResetToggle] = useState(false);
+  const [stationEditToggle, setStationEditToggle] = useState(false);
+  const [beginSetEditToggle, setBeginSetEditToggle] = useState(false);
+  const [endSetEditToggle, setEndSetEditToggle] = useState(false);
+  const [beginHaulEditToggle, setBeginHaulEditToggle] = useState(false);
+  const [endHaulEditToggle, setEndHaulEditToggle] = useState(false);
+
   const inputFocus = useRef(null);
   const navigate = useNavigate();
 
   const handleNavCruisesDetail = (cruiseId) => {
     return () => navigate(`/cruises/${cruiseId}`);
   };
+
+  const toggleEditBeginSet = () => {
+    setBeginSetEditToggle(!beginSetEditToggle)
+  };
+
+  const handleSaveEvent = (station, eventName, toggleFn) => {
+    return async (event) => {
+      event.preventDefault();
+      const formData = new FormData(event.target);
+      const values = {};
+
+      for (const [key, value] of formData.entries()) {
+        values[key] = value;
+      }
+
+      const timezone = getLocationTz(values.latitude, values.longitude);
+      const eventDateTime = generateTzDateTime(values.eventDate, values.eventTime, timezone);
+      const stationUpdates = structuredClone(station);
+      const newEventValues = {
+        timestamp: eventDateTime,
+        latitude: values.latitude,
+        longitude: values.longitude,
+        windSpeedKnots: values.windSpeed,
+        waveHeightMeters: values.waveHeight,
+        visibilityKm: values.visibility,
+        precipitationId: values.precipitationId,
+        comments: values.comments
+      };
+      stationUpdates.events[eventName] = newEventValues;
+
+      const updatedStation = await put(`${API_BASE_URL}/stations/${station.id}`, stationUpdates);
+      toggleFn();
+      setStation(updatedStation);
+    }
+  }
 
   useEffect(() => {
     if (inputFocus.current) {
@@ -27,88 +75,150 @@ export const StationDetailPage = ({ data }) => {
   return (
     <>
       <Grid row className="margin-top-2">
-        <Button className="margin-right-0" onClick={handleNavCruisesDetail(cruise.id)} >&lt; Cruise {cruise.cruiseName}</Button>
+        <Button className="margin-right-0" onClick={handleNavCruisesDetail(cruiseId)} >&lt; Cruise: {cruiseName}</Button>
       </Grid>
       <Grid row className="flex-justify margin-top-2">
-        <h1 className="app-sec-header">Station Details</h1>
+        <h1 className="app-sec-header">Station: {stationName.toUpperCase()}</h1>
+      </Grid>
+      <Grid row className="flex-justify">
+        <h1 className="app-sec-header">Event: Begin Set</h1>
+        <Button
+          className="margin-right-0"
+          onClick={toggleEditBeginSet}
+          secondary={beginSetEditToggle}
+        >
+          {beginSetEditToggle ? "Cancel Edit Begin Set" : "Edit Begin Set"}
+        </Button>
       </Grid>
       <div className="border padding-1 margin-y-2 radius-lg app-card">
-        <Form className="maxw-full" >
-          <Grid row gap>
-            <Grid col={true} tablet={{ col: 6 }}>
-              <Label htmlFor="station-name" className="text-bold margin-top-1" requiredMarker>Station Name:</Label>
-              <TextInput id="station-name" name="stationName" inputRef={inputFocus} required />
-            </Grid>
-          </Grid>
-          <Grid row className="margin-top-2">
-            <Grid col={12}>
-              <Fieldset legend="Begin Set" className="app-legend-bold-text top-margin-1">
+        {beginSetEditToggle
+          ?
+          <Form className="maxw-full" onSubmit={handleSaveEvent(station, "beginSet", () => setBeginSetEditToggle(!beginSetEditToggle))}>
+            <Grid row>
+              <Grid col={12}>
                 <Grid row gap>
                   <Grid col={12} tablet={{ col: true }}>
-                    <Label htmlFor="latitude" className="text-bold margin-top-1" hint=" (Decimal Deg)" requiredMarker>Latitude:</Label>
-                    <TextInput id="latitude" name="latitude" required />
+                    <Grid row>
+                      <Label htmlFor="begin-set-date" className="grid-col-4 text-bold margin-top-05" hint=" (MM/DD/YYYY)" requiredMarker>Begin Set Date:</Label>
+                      <DatePicker id="begin-set-date" name="eventDate" className="grid-col-8" defaultValue={getTzDateTimeParts(beginSet.timestamp).date} required />
+                    </Grid>
                   </Grid>
                   <Grid col={12} tablet={{ col: true }}>
-                    <Label htmlFor="longitude" className="text-bold margin-top-2 tablet:margin-top-1" hint=" (Decimal Deg)" requiredMarker>Longitude:</Label>
-                    <TextInput id="longitude" name="longitude" required />
+                    <Grid row>
+                      <Label htmlFor="begin-set-time" className="grid-col-4 text-bold margin-top-05" hint=" (24hr hh:mm)" requiredMarker>Begin Set Time:</Label>
+                      <TextInputMask id="begin-set-time" name="eventTime" type="text" className="grid-col-8" defaultValue={getTzDateTimeParts(beginSet.timestamp).time} aria-labelledby="time" aria-describedby="hint-time" mask="__:__" pattern="([01]\d|2[0-3]):[0-5]\d" />
+                    </Grid>
                   </Grid>
                 </Grid>
                 <Grid row gap>
                   <Grid col={12} tablet={{ col: true }}>
-                    <Label htmlFor="begin-set-date" className="text-bold margin-top-2" hint=" (MM/DD/YYYY)" requiredMarker>Begin Set Date:</Label>
-                    <DatePicker id="begin-set-date" name="beginSetDate" required />
+                    <Grid row>
+                      <Label htmlFor="latitude" className="grid-col-4 text-bold margin-top-05" hint=" (Decimal Deg)" requiredMarker>Latitude:</Label>
+                      <TextInput id="latitude" name="latitude" className="grid-col-8" defaultValue={beginSet.latitude} required />
+                    </Grid>
                   </Grid>
                   <Grid col={12} tablet={{ col: true }}>
-                    <Label htmlFor="begin-set-time" className="text-bold margin-top-2" hint=" (24hr 00:00 - 23:59)" requiredMarker>Begin Set Time:</Label>
-                    <TextInputMask id="begin-set-time" name="beginSetTime" type="text" aria-labelledby="time" aria-describedby="hint-time" mask="__:__" pattern="([01]\d|2[0-3]):[0-5]\d" />
-                  </Grid>
-                </Grid>
-                <Grid row gap>
-                  <Grid col={12} tablet={{ col: true }}>
-                    <Label htmlFor="wind-speed" className="text-bold margin-top-2" hint=" (Knots)" requiredMarker>Wind Speed:</Label>
-                    <TextInput id="wind-speed" name="windSpeed" required />
-                  </Grid>
-                  <Grid col={12} tablet={{ col: true }}>
-                    <Label htmlFor="wave-height" className="text-bold margin-top-2" hint=" (Meters)" requiredMarker>Wave Height:</Label>
-                    <TextInput id="wave-height" name="waveHeight" required />
+                    <Grid row>
+                      <Label htmlFor="longitude" className="grid-col-4 text-bold margin-top-05" hint=" (Decimal Deg)" requiredMarker>Longitude:</Label>
+                      <TextInput id="longitude" name="longitude" className="grid-col-8" defaultValue={beginSet.longitude} required />
+                    </Grid>
                   </Grid>
                 </Grid>
                 <Grid row gap>
                   <Grid col={12} tablet={{ col: true }}>
-                    <Label htmlFor="visibility" className="text-bold margin-top-2" hint=" (Km)" requiredMarker>Visibility:</Label>
-                    <TextInput id="visibility" name="visibility" required />
+                    <Grid row>
+                      <Label htmlFor="wind-speed" className="grid-col-4 text-bold margin-top-05" hint=" (Knots)" requiredMarker>Wind Speed:</Label>
+                      <TextInput id="wind-speed" name="windSpeed" className="grid-col-8" defaultValue={beginSet.windSpeedKnots} required />
+                    </Grid>
                   </Grid>
                   <Grid col={12} tablet={{ col: true }}>
-                    <Label htmlFor="precipitation-select" className="text-bold margin-top-2" requiredMarker>
-                      Precipitation:
-                    </Label>
-                    <Select
-                      id="precipitation-select"
-                      name="precipitationId"
-                      required
-                    >
-                      <option value={null}>- Select -</option>
-                      {precipitation.map((precip) => (
-                        <option key={precip.id} value={precip.id}>
-                          {precip.description}
-                        </option>
-                      ))}
-                    </Select>
+                    <Grid row>
+                      <Label htmlFor="wave-height" className="grid-col-4 text-bold margin-top-05" hint=" (Meters)" requiredMarker>Wave Height:</Label>
+                      <TextInput id="wave-height" name="waveHeight" className="grid-col-8" defaultValue={beginSet.waveHeightMeters} required />
+                    </Grid>
+                  </Grid>
+                </Grid>
+                <Grid row gap>
+                  <Grid col={12} tablet={{ col: true }}>
+                    <Grid row>
+                      <Label htmlFor="visibility" className="grid-col-4 text-bold margin-top-2" hint=" (Km)" requiredMarker>Visibility:</Label>
+                      <TextInput id="visibility" name="visibility" className="grid-col-8" defaultValue={beginSet.visibilityKm} required />
+                    </Grid>
+                  </Grid>
+                  <Grid col={12} tablet={{ col: true }}>
+                    <Grid row>
+                      <Label htmlFor="precipitation-select" className="grid-col-4 text-bold margin-top-2" requiredMarker>
+                        Precipitation:
+                      </Label>
+                      <Select
+                        id="precipitation-select"
+                        name="precipitationId"
+                        className="grid-col-8"
+                        defaultValue={beginSet.precipitationId}
+                        required
+                      >
+                        <option value={null}>- Select -</option>
+                        {precipitation.map((precip) => (
+                          <option key={precip.id} value={precip.id}>
+                            {precip.description}
+                          </option>
+                        ))}
+                      </Select>
+                    </Grid>
                   </Grid>
                 </Grid>
                 <Grid row gap>
                   <Grid col={12} >
                     <Label htmlFor="begin-set-comment" className="text-bold margin-top-2" >Comments:</Label>
-                    <Textarea id="begin-set-comment" name="beginSetComment" />
+                    <Textarea id="begin-set-comment" name="comments" defaultValue={beginSet.comments} />
                   </Grid>
                 </Grid>
-              </Fieldset>
+              </Grid>
+            </Grid>
+            <Grid row className="flex-column flex-align-end">
+              <Button type="submit" className="margin-right-0">Save Begin Set</Button>
+            </Grid>
+          </Form>
+          :
+          <Grid row>
+            <Grid col={12}>
+              <Grid row gap>
+                <Grid col={12} tablet={{ col: true }}>
+                  <DescriptionListItem term="Begin Set Time:" description={beginSet.timestamp} dtCol="2" ddCol="10" />
+                </Grid>
+              </Grid>
+              <Grid row gap>
+                <Grid col={12} tablet={{ col: true }}>
+                  <DescriptionListItem term="Latitude:" description={beginSet.latitude} />
+                </Grid>
+                <Grid col={12} tablet={{ col: true }}>
+                  <DescriptionListItem term="Longitude:" description={beginSet.longitude} />
+                </Grid>
+              </Grid>
+              <Grid row gap>
+                <Grid col={12} tablet={{ col: true }}>
+                  <DescriptionListItem term="Wind Speed:" description={beginSet.windSpeedKnots} />
+                </Grid>
+                <Grid col={12} tablet={{ col: true }}>
+                  <DescriptionListItem term="Wave Height:" description={beginSet.waveHeightMeters} />
+                </Grid>
+              </Grid>
+              <Grid row gap>
+                <Grid col={12} tablet={{ col: true }}>
+                  <DescriptionListItem term="Visibility:" description={beginSet.visibilityKm} />
+                </Grid>
+                <Grid col={12} tablet={{ col: true }}>
+                  <DescriptionListItem term="Precipitation:" description={listValueLookup(precipitation, beginSet.precipitationId, "description")} />
+                </Grid>
+              </Grid>
+              <Grid row gap>
+                <Grid col={12} >
+                  <DescriptionListItem dtCol="2" ddCol="10" term="Comments:" description={beginSet.comments} />
+                </Grid>
+              </Grid>
             </Grid>
           </Grid>
-          <Grid row className="flex-column flex-align-end">
-            <Button type="submit" >Add Station</Button>
-          </Grid>
-        </Form>
+        }
       </div>
     </>
   );
