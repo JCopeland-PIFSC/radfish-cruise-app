@@ -40,11 +40,11 @@ export const StationNew = ({ handleNewStation }) => {
               <Grid row gap>
                 <Grid col={12} tablet={{ col: true }}>
                   <Label htmlFor="begin-set-date" className="text-bold margin-top-2" hint=" (MM/DD/YYYY)" requiredMarker>Begin Set Date:</Label>
-                  <DatePicker id="begin-set-date" name="beginSetDate" required />
+                  <DatePicker id="begin-set-date" name="eventDate" required />
                 </Grid>
                 <Grid col={12} tablet={{ col: true }}>
                   <Label htmlFor="begin-set-time" className="text-bold margin-top-2" hint=" (24hr 00:00 - 23:59)" requiredMarker>Begin Set Time:</Label>
-                  <TextInputMask id="begin-set-time" name="beginSetTime" type="text" aria-labelledby="time" aria-describedby="hint-time" mask="__:__" pattern="([01]\d|2[0-3]):[0-5]\d" />
+                  <TextInputMask id="begin-set-time" name="eventTime" type="text" aria-labelledby="time" aria-describedby="hint-time" mask="__:__" pattern="([01]\d|2[0-3]):[0-5]\d" />
                 </Grid>
               </Grid>
               <Grid row gap>
@@ -82,8 +82,8 @@ export const StationNew = ({ handleNewStation }) => {
               </Grid>
               <Grid row gap>
                 <Grid col={12} >
-                  <Label htmlFor="begin-set-comment" className="text-bold margin-top-2" >Comments:</Label>
-                  <Textarea id="begin-set-comment" name="beginSetComment" />
+                  <Label htmlFor="begin-set-comments" className="text-bold margin-top-2" >Comments:</Label>
+                  <Textarea id="begin-set-comments" name="comments" />
                 </Grid>
               </Grid>
             </Fieldset>

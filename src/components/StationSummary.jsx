@@ -71,7 +71,7 @@ export const StationSummary = ({ cruiseId, station, editStationToggle }) => {
           disabled={editStationToggle()}
           className="margin-right-0"
           onClick={handleNavEditStation(cruiseId, id)}
-        >Edit Station
+        >Station Details
         </Button>
       </Grid>
     </div>

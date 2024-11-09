@@ -104,7 +104,7 @@ function App() {
 
     if (!cruise || !station) return <div>Loading...</div>;
 
-    return <StationDetailPage data={{ cruise, station }} />;
+    return <StationDetailPage data={{ cruiseName: cruise?.cruiseName, station }} />;
   }
 
   useEffect(() => {
