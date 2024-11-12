@@ -13,8 +13,6 @@ import { DatePicker } from "@nmfs-radfish/react-radfish";
 import { useNavigate } from "react-router-dom";
 import { post } from "../utils/requestMethods";
 
-const API_BASE_URL = "http://localhost:5000";
-
 const CruiseNewPage = () => {
   const navigate = useNavigate();
   const { dispatch, state } = useContext(CruiseContext);
@@ -35,7 +33,7 @@ const CruiseNewPage = () => {
       values[key] = value;
     }
 
-    const newCruise = await post(`${API_BASE_URL}/cruises`, values);
+    const newCruise = await post(`/api/cruises`, values);
     dispatch({ type: ACTIONS.SET_NEW_CRUISE, payload: newCruise });
     event.target.reset();
     setResetToggle(true);

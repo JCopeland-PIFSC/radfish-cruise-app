@@ -7,8 +7,6 @@ import { getLocationTz, generateTzDateTime } from "../utils/dateTimeHelpers";
 import { put } from "../utils/requestMethods";
 import { EventType } from "../utils/listLookup";
 
-const API_BASE_URL = "http://localhost:5000";
-
 const StationDetailPage = ({ data }) => {
   const { cruiseName, station: initialStation } = data;
   const [station, setStation] = useState(initialStation);
@@ -59,8 +57,8 @@ const StationDetailPage = ({ data }) => {
       };
       stationUpdates.events[eventName] = newEventValues;
 
-      const updatedStation = await put(`${API_BASE_URL}/stations/${station.id}`, stationUpdates);
-      toggleFn();
+      const updatedStation = await put(`/api/stations/${station.id}`, stationUpdates);
+      setActiveEventEdit(null);
       setStation(updatedStation);
     }
   }

@@ -21,8 +21,6 @@ import { setStatusColor } from "../utils/setStatusColor";
 import { generateTzDateTime, getLocationTz } from "../utils/dateTimeHelpers";
 import { post, put } from "../utils/requestMethods";
 
-const API_BASE_URL = "http://localhost:5000";
-
 const CruiseDetailPage = ({ data }) => {
   const { cruise: initialCruise, stations: initialStations } = data;
   const [cruise, setCruise] = useState(initialCruise);
@@ -80,7 +78,7 @@ const CruiseDetailPage = ({ data }) => {
       values[key] = value;
     }
 
-    const updatedCruise = await put(`${API_BASE_URL}/cruises/${id}`, values);
+    const updatedCruise = await put(`/api/cruises/${id}`, values);
     setEditCruiseToggle(!editCruiseToggle);
     setCruise(updatedCruise);
   };
@@ -113,7 +111,7 @@ const CruiseDetailPage = ({ data }) => {
     newValues.events.beginSet = newBeginSetValues;
 
     // process date time
-    const newStation = await post(`${API_BASE_URL}/stations`, newValues);
+    const newStation = await post(`/api/stations`, newValues);
     event.target.reset();
     setNewStationToggle(!newStationToggle);
     setStations([newStation, ...stations]);
