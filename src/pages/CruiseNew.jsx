@@ -15,7 +15,7 @@ import { post } from "../utils/requestMethods";
 
 const API_BASE_URL = "http://localhost:5000";
 
-function CruiseNewPage() {
+const CruiseNewPage = () => {
   const navigate = useNavigate();
   const { dispatch, state } = useContext(CruiseContext);
   const { ports } = state;

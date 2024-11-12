@@ -2,9 +2,9 @@ import React, { useContext } from "react";
 import { Grid } from "@trussworks/react-uswds";
 import { CruiseContext } from "../CruiseContext";
 import { listValueLookup } from "../utils/listLookup";
-import { DescriptionListItem } from "./DescriptionListItem";
+import DescriptionListItem from "./DescriptionListItem";
 
-export const EventView = ({ event }) => {
+const EventView = ({ event }) => {
   const { state } = useContext(CruiseContext);
   const { precipitation } = state;
   const {
@@ -66,3 +66,5 @@ export const EventView = ({ event }) => {
     </Grid>
   );
 };
+
+export default EventView;

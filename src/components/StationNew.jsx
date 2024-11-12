@@ -1,8 +1,19 @@
 import React, { useEffect, useState, useRef, useContext } from "react";
-import { Grid, TextInput, Label, DatePicker, TextInputMask, Button, Form, Textarea, Select, Fieldset } from "@trussworks/react-uswds";
+import {
+  Grid,
+  TextInput,
+  Label,
+  DatePicker,
+  TextInputMask,
+  Button,
+  Form,
+  Textarea,
+  Select,
+  Fieldset
+} from "@trussworks/react-uswds";
 import { CruiseContext } from "../CruiseContext";
 
-export const StationNew = ({ handleNewStation }) => {
+const StationNew = ({ handleNewStation }) => {
   const { state } = useContext(CruiseContext);
   const { precipitation } = state;
   const [resetToggle, setResetToggle] = useState(false);
@@ -96,3 +107,5 @@ export const StationNew = ({ handleNewStation }) => {
     </div>
   );
 };
+
+export default StationNew;

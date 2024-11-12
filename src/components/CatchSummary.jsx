@@ -2,9 +2,9 @@ import React, { useContext } from "react";
 import { Grid } from "@trussworks/react-uswds";
 import { CruiseContext } from "../CruiseContext";
 import { listValueLookup } from "../utils/listLookup";
-import { DescriptionListItem } from "./DescriptionListItem";
+import DescriptionListItem from "./DescriptionListItem";
 
-export const CatchSummary = ({ catchItem }) => {
+const CatchSummary = ({ catchItem }) => {
   const { speciesId, aggregateWeightKg } = catchItem;
   const { state } = useContext(CruiseContext);
   const { species } = state;
@@ -23,3 +23,5 @@ export const CatchSummary = ({ catchItem }) => {
     </Grid>
   );
 };
+
+export default CatchSummary;

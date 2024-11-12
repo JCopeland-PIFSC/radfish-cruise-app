@@ -11,10 +11,10 @@ import {
   DatePicker,
   Select
 } from "@trussworks/react-uswds";
-import { StationSummary } from "../components/StationSummary";
-import { StationNew } from "../components/StationNew";
+import StationSummary from "../components/StationSummary";
+import StationNew from "../components/StationNew";
+import DescriptionListItem from "../components/DescriptionListItem";
 import { CruiseContext } from "../CruiseContext";
-import { DescriptionListItem } from "../components/DescriptionListItem";
 import { useNavigate } from "react-router-dom";
 import { listValueLookup, CruiseStatus } from "../utils/listLookup";
 import { setStatusColor } from "../utils/setStatusColor";
@@ -23,7 +23,7 @@ import { post, put } from "../utils/requestMethods";
 
 const API_BASE_URL = "http://localhost:5000";
 
-function CruiseDetailPage({ data }) {
+const CruiseDetailPage = ({ data }) => {
   const { cruise: initialCruise, stations: initialStations } = data;
   const [cruise, setCruise] = useState(initialCruise);
   const {

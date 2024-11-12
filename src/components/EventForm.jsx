@@ -1,10 +1,20 @@
 import React, { useContext } from "react";
-import { Grid, TextInput, Label, DatePicker, TextInputMask, Button, Form, Textarea, Select } from "@trussworks/react-uswds";
+import {
+  Grid,
+  Form,
+  Label,
+  TextInput,
+  TextInputMask,
+  DatePicker,
+  Select,
+  Button,
+  Textarea
+} from "@trussworks/react-uswds";
 import { CruiseContext } from "../CruiseContext";
 import { camelToDash, camelToTitleCase } from "../utils/stringUtilities";
 import { getTzDateTimeParts } from "../utils/dateTimeHelpers";
 
-export const EventForm = ({ event, eventType, handleSaveEvent }) => {
+const EventForm = ({ event, handleSaveEvent, eventType }) => {
   const { state } = useContext(CruiseContext);
   const { precipitation } = state;
   const {
@@ -108,3 +118,5 @@ export const EventForm = ({ event, eventType, handleSaveEvent }) => {
     </Form >
   );
 };
+
+export default EventForm;

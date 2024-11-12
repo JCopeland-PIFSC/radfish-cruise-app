@@ -1,15 +1,15 @@
-import React, { useEffect, useState, useRef, useContext } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import { Grid, TextInput, Label, DatePicker, TextInputMask, Button, Form, Textarea, Select } from "@trussworks/react-uswds";
-import { DescriptionListItem } from "../components/DescriptionListItem";
-import { CruiseContext } from "../CruiseContext";
-import { getLocationTz, generateTzDateTime, getTzDateTimeParts } from "../utils/dateTimeHelpers";
-import { listValueLookup } from "../utils/listLookup";
+import { Grid, Button, } from "@trussworks/react-uswds";
+import EventView from "../components/EventView";
+import EventForm from "../components/EventForm";
+import { getLocationTz, generateTzDateTime } from "../utils/dateTimeHelpers";
 import { put } from "../utils/requestMethods";
+import { EventType } from "../utils/listLookup";
 
 const API_BASE_URL = "http://localhost:5000";
 
-export const StationDetailPage = ({ data }) => {
+const StationDetailPage = ({ data }) => {
   const { cruiseName, station: initialStation } = data;
   const [station, setStation] = useState(initialStation);
   const { id, cruiseId, stationName, events, catch: catches } = station;
@@ -223,3 +223,5 @@ export const StationDetailPage = ({ data }) => {
     </>
   );
 };
+
+export default StationDetailPage;

@@ -21,7 +21,7 @@ import { get } from "./utils/requestMethods";
 import CruiseListPage from "./pages/CruiseList";
 import CruiseNewPage from "./pages/CruiseNew";
 import CruiseDetailPage from "./pages/CruiseDetail";
-import { StationDetailPage } from "./pages/StationDetail";
+import StationDetailPage from "./pages/StationDetail";
 
 const API_BASE_URL = "http://localhost:5000";
 

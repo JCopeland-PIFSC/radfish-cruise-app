@@ -1,11 +1,11 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { Button, Grid, Link } from "@trussworks/react-uswds";
-import { CatchSummary } from "./CatchSummary";
+import { Button, Grid } from "@trussworks/react-uswds";
+import CatchSummary from "./CatchSummary";
 import { getSoakTime, displayTzDateTime } from "../utils/dateTimeHelpers";
-import { DescriptionListItem } from "./DescriptionListItem";
+import DescriptionListItem from "./DescriptionListItem";
 
-export const StationSummary = ({ cruiseId, station, editStationToggle }) => {
+const StationSummary = ({ cruiseId, station, editStationToggle }) => {
   const { id, stationName, events, catch: catchList } = station;
   const { latitude, longitude } = events.beginSet;
   const navigate = useNavigate();
@@ -77,3 +77,5 @@ export const StationSummary = ({ cruiseId, station, editStationToggle }) => {
     </div>
   );
 };
+
+export default StationSummary;
