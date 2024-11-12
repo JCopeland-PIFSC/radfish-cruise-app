@@ -95,7 +95,7 @@ const EventForm = ({ event, handleSaveEvent, eventType }) => {
                   required
                 >
                   <option value={null}>- Select -</option>
-                  {precipitation.map((id, description) => (
+                  {precipitation.map(({ id, description }) => (
                     <option key={id} value={id}>
                       {description}
                     </option>
