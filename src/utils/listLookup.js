@@ -12,3 +12,10 @@ export const CruiseStatus = {
   REJECTED: "4",
   ACCEPTED: "5",
 };
+
+export const EventType = {
+  BEGIN_SET: "beginSet",
+  END_SET: "endSet",
+  BEGIN_HAUL: "beginHaul",
+  END_HAUL: "endHaul",
+};
