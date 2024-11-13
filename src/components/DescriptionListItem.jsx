@@ -1,7 +1,7 @@
 import React from "react";
 import { Grid } from "@trussworks/react-uswds";
 
-export const DescriptionListItem = ({
+const DescriptionListItem = ({
   term,
   description,
   dtCol = "4",
@@ -19,3 +19,5 @@ export const DescriptionListItem = ({
     </Grid>
   );
 };
+
+export default DescriptionListItem;

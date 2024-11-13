@@ -2,6 +2,9 @@ import { parseISO, differenceInMinutes, parse } from "date-fns";
 import { tz } from "@date-fns/tz";
 import tz_lookup from "@photostructure/tz-lookup";
 
+const TS_REGEX =
+  /^(\d{4}-\d{2}-\d{2})T(\d{2}:\d{2})(:(\d{2}(?:\.\d{3})?))?([+-]\d{2}:\d{2})$/;
+
 /**
  *
  * @param {string} begTime - DateTime string in format yyyy-MM-dd'T'HH:mmXXX, e.g., "2024-10-02T09:00-07:00"
@@ -52,13 +55,9 @@ export function generateTzDateTime(date, time, timezone) {
 export function displayTzDateTime(timestamp) {
   if (!timestamp) return "";
 
-  const regex =
-    /^(\d{4}-\d{2}-\d{2})T(\d{2}:\d{2})(:(\d{2}(?:\.\d{3})?))?([+-]\d{2}:\d{2})$/;
-  const match = timestamp.match(regex);
+  const match = timestamp.match(TS_REGEX);
 
-  if (!match) {
-    return "";
-  }
+  if (!match) return "";
 
   const date = match[1]; // "YYYY-MM-DD"
   const time = match[2]; // "HH:mm"
@@ -66,4 +65,24 @@ export function displayTzDateTime(timestamp) {
   const offset = match[5]; // "+HH:MM" or "-HH:MM"
 
   return `${date} ${time} ${offset}`;
+}
+
+export function getTzDateTimeParts(timestamp) {
+  const res = {
+    date: "",
+    time: "",
+    offset: "",
+  };
+
+  if (!timestamp) return res;
+
+  const match = timestamp.match(TS_REGEX);
+
+  if (!match) return res;
+
+  res.date = match[1];
+  res.time = match[2];
+  res.offset = match[5];
+
+  return res;
 }

@@ -7,7 +7,7 @@ import { CruiseContext } from "../CruiseContext";
 import { listValueLookup } from "../utils/listLookup";
 import { setStatusColor } from "../utils/setStatusColor";
 
-function CruiseListPage() {
+const CruiseListPage = () => {
   const navigate = useNavigate();
   const { state } = useContext(CruiseContext);
   const { ports, cruiseStatuses, cruises, cruisesLoading } = state;
