@@ -12,27 +12,32 @@ const StationDetailPage = ({ data }) => {
   const [station, setStation] = useState(initialStation);
   const { id, cruiseId, stationName, events, catch: catches } = station;
   const { beginSet, endSet, beginHaul, endHaul } = events;
-  const { state } = useContext(CruiseContext);
-  const { precipitation } = state;
-  const [resetToggle, setResetToggle] = useState(false);
-  const [stationEditToggle, setStationEditToggle] = useState(false);
-  const [beginSetEditToggle, setBeginSetEditToggle] = useState(false);
-  const [endSetEditToggle, setEndSetEditToggle] = useState(false);
-  const [beginHaulEditToggle, setBeginHaulEditToggle] = useState(false);
-  const [endHaulEditToggle, setEndHaulEditToggle] = useState(false);
-
+  const [activeAction, setActiveAction] = useState(null);
   const inputFocus = useRef(null);
   const navigate = useNavigate();
 
   const handleNavCruisesDetail = (cruiseId) => {
-    return () => navigate(`/cruises/${cruiseId}`);
+    navigate(`/cruises/${cruiseId}`);
   };
 
-  const toggleEditBeginSet = () => {
-    setBeginSetEditToggle(!beginSetEditToggle)
-  };
+  const handleNewEvent = (eventType) => {
+    const stationNewEvent = structuredClone(station);
+    stationNewEvent.events[eventType] = {};
+    setStation(stationNewEvent);
+    setActiveAction(eventType);
+  }
 
-  const handleSaveEvent = (station, eventName, toggleFn) => {
+  const handleCancelEvent = (eventType) => {
+    const eventObj = station.events[eventType];
+    if (Object.keys(eventObj).length === 0) {
+      const stationCancelEvent = structuredClone(station);
+      stationCancelEvent.events[eventType] = null;
+      setStation(stationCancelEvent);
+    }
+    setActiveAction(null);
+  }
+
+  const handleSaveEvent = (eventType) => {
     return async (event) => {
       event.preventDefault();
       const formData = new FormData(event.target);
@@ -55,10 +60,10 @@ const StationDetailPage = ({ data }) => {
         precipitationId: values.precipitationId,
         comments: values.comments
       };
-      stationUpdates.events[eventName] = newEventValues;
+      stationUpdates.events[eventType] = newEventValues;
 
       const updatedStation = await put(`/api/stations/${station.id}`, stationUpdates);
-      setActiveEventEdit(null);
+      setActiveAction(null);
       setStation(updatedStation);
     }
   }
@@ -67,157 +72,194 @@ const StationDetailPage = ({ data }) => {
     if (inputFocus.current) {
       inputFocus.current.focus();
     }
-    setResetToggle(false);
-  }, [resetToggle]);
+    setActiveAction(null)
+  }, []);
 
   return (
     <>
+      {/* Station Header */}
       <Grid row className="margin-top-2">
-        <Button className="margin-right-0" onClick={handleNavCruisesDetail(cruiseId)} >&lt; Cruise: {cruiseName}</Button>
+        <Button className="margin-right-0" onClick={() => handleNavCruisesDetail(cruiseId)} >&lt; Cruise: {cruiseName}</Button>
       </Grid>
       <Grid row className="flex-justify margin-top-2">
         <h1 className="app-sec-header">Station: {stationName.toUpperCase()}</h1>
       </Grid>
+      {/* Begin Set Event */}
       <Grid row className="flex-justify">
         <h1 className="app-sec-header">Event: Begin Set</h1>
-        <Button
-          className="margin-right-0"
-          onClick={toggleEditBeginSet}
-          secondary={beginSetEditToggle}
-        >
-          {beginSetEditToggle ? "Cancel Edit Begin Set" : "Edit Begin Set"}
-        </Button>
+        {
+          activeAction === EventType.BEGIN_SET
+            ? <Button
+              className="margin-right-0"
+              onClick={() => handleCancelEvent(EventType.BEGIN_SET)}
+              secondary
+            >
+              Cancel Edit Begin Set
+            </Button>
+            : <Button
+              className="margin-right-0"
+              onClick={() => setActiveAction(EventType.BEGIN_SET)}
+              disabled={activeAction !== null && activeAction !== EventType.BEGIN_SET}
+            >
+              Edit Begin Set
+            </Button>
+        }
       </Grid>
       <div className="border padding-1 margin-y-2 radius-lg app-card">
-        {beginSetEditToggle
+        {activeAction === EventType.BEGIN_SET
           ?
-          <Form className="maxw-full" onSubmit={handleSaveEvent(station, "beginSet", () => setBeginSetEditToggle(!beginSetEditToggle))}>
-            <Grid row>
-              <Grid col={12}>
-                <Grid row gap>
-                  <Grid col={12} tablet={{ col: true }}>
-                    <Grid row>
-                      <Label htmlFor="begin-set-date" className="grid-col-4 text-bold margin-top-05" hint=" (MM/DD/YYYY)" requiredMarker>Begin Set Date:</Label>
-                      <DatePicker id="begin-set-date" name="eventDate" className="grid-col-8" defaultValue={getTzDateTimeParts(beginSet.timestamp).date} required />
-                    </Grid>
-                  </Grid>
-                  <Grid col={12} tablet={{ col: true }}>
-                    <Grid row>
-                      <Label htmlFor="begin-set-time" className="grid-col-4 text-bold margin-top-05" hint=" (24hr hh:mm)" requiredMarker>Begin Set Time:</Label>
-                      <TextInputMask id="begin-set-time" name="eventTime" type="text" className="grid-col-8" defaultValue={getTzDateTimeParts(beginSet.timestamp).time} aria-labelledby="time" aria-describedby="hint-time" mask="__:__" pattern="([01]\d|2[0-3]):[0-5]\d" />
-                    </Grid>
-                  </Grid>
-                </Grid>
-                <Grid row gap>
-                  <Grid col={12} tablet={{ col: true }}>
-                    <Grid row>
-                      <Label htmlFor="latitude" className="grid-col-4 text-bold margin-top-05" hint=" (Decimal Deg)" requiredMarker>Latitude:</Label>
-                      <TextInput id="latitude" name="latitude" className="grid-col-8" defaultValue={beginSet.latitude} required />
-                    </Grid>
-                  </Grid>
-                  <Grid col={12} tablet={{ col: true }}>
-                    <Grid row>
-                      <Label htmlFor="longitude" className="grid-col-4 text-bold margin-top-05" hint=" (Decimal Deg)" requiredMarker>Longitude:</Label>
-                      <TextInput id="longitude" name="longitude" className="grid-col-8" defaultValue={beginSet.longitude} required />
-                    </Grid>
-                  </Grid>
-                </Grid>
-                <Grid row gap>
-                  <Grid col={12} tablet={{ col: true }}>
-                    <Grid row>
-                      <Label htmlFor="wind-speed" className="grid-col-4 text-bold margin-top-05" hint=" (Knots)" requiredMarker>Wind Speed:</Label>
-                      <TextInput id="wind-speed" name="windSpeed" className="grid-col-8" defaultValue={beginSet.windSpeedKnots} required />
-                    </Grid>
-                  </Grid>
-                  <Grid col={12} tablet={{ col: true }}>
-                    <Grid row>
-                      <Label htmlFor="wave-height" className="grid-col-4 text-bold margin-top-05" hint=" (Meters)" requiredMarker>Wave Height:</Label>
-                      <TextInput id="wave-height" name="waveHeight" className="grid-col-8" defaultValue={beginSet.waveHeightMeters} required />
-                    </Grid>
-                  </Grid>
-                </Grid>
-                <Grid row gap>
-                  <Grid col={12} tablet={{ col: true }}>
-                    <Grid row>
-                      <Label htmlFor="visibility" className="grid-col-4 text-bold margin-top-2" hint=" (Km)" requiredMarker>Visibility:</Label>
-                      <TextInput id="visibility" name="visibility" className="grid-col-8" defaultValue={beginSet.visibilityKm} required />
-                    </Grid>
-                  </Grid>
-                  <Grid col={12} tablet={{ col: true }}>
-                    <Grid row>
-                      <Label htmlFor="precipitation-select" className="grid-col-4 text-bold margin-top-2" requiredMarker>
-                        Precipitation:
-                      </Label>
-                      <Select
-                        id="precipitation-select"
-                        name="precipitationId"
-                        className="grid-col-8"
-                        defaultValue={beginSet.precipitationId}
-                        required
-                      >
-                        <option value={null}>- Select -</option>
-                        {precipitation.map((precip) => (
-                          <option key={precip.id} value={precip.id}>
-                            {precip.description}
-                          </option>
-                        ))}
-                      </Select>
-                    </Grid>
-                  </Grid>
-                </Grid>
-                <Grid row gap>
-                  <Grid col={12} >
-                    <Label htmlFor="begin-set-comment" className="text-bold margin-top-2" >Comments:</Label>
-                    <Textarea id="begin-set-comment" name="comments" defaultValue={beginSet.comments} />
-                  </Grid>
-                </Grid>
-              </Grid>
-            </Grid>
-            <Grid row className="flex-column flex-align-end">
-              <Button type="submit" className="margin-right-0">Save Begin Set</Button>
-            </Grid>
-          </Form>
-          :
-          <Grid row>
-            <Grid col={12}>
-              <Grid row gap>
-                <Grid col={12} tablet={{ col: true }}>
-                  <DescriptionListItem term="Begin Set Time:" description={beginSet.timestamp} dtCol="2" ddCol="10" />
-                </Grid>
-              </Grid>
-              <Grid row gap>
-                <Grid col={12} tablet={{ col: true }}>
-                  <DescriptionListItem term="Latitude:" description={beginSet.latitude} />
-                </Grid>
-                <Grid col={12} tablet={{ col: true }}>
-                  <DescriptionListItem term="Longitude:" description={beginSet.longitude} />
-                </Grid>
-              </Grid>
-              <Grid row gap>
-                <Grid col={12} tablet={{ col: true }}>
-                  <DescriptionListItem term="Wind Speed:" description={beginSet.windSpeedKnots} />
-                </Grid>
-                <Grid col={12} tablet={{ col: true }}>
-                  <DescriptionListItem term="Wave Height:" description={beginSet.waveHeightMeters} />
-                </Grid>
-              </Grid>
-              <Grid row gap>
-                <Grid col={12} tablet={{ col: true }}>
-                  <DescriptionListItem term="Visibility:" description={beginSet.visibilityKm} />
-                </Grid>
-                <Grid col={12} tablet={{ col: true }}>
-                  <DescriptionListItem term="Precipitation:" description={listValueLookup(precipitation, beginSet.precipitationId, "description")} />
-                </Grid>
-              </Grid>
-              <Grid row gap>
-                <Grid col={12} >
-                  <DescriptionListItem dtCol="2" ddCol="10" term="Comments:" description={beginSet.comments} />
-                </Grid>
-              </Grid>
-            </Grid>
-          </Grid>
+          <EventForm
+            event={beginSet}
+            eventType={EventType.BEGIN_SET}
+            handleSaveEvent={
+              handleSaveEvent(EventType.BEGIN_SET)} /> :
+          <EventView event={beginSet} />
         }
       </div>
+      {/* End Set Event */}
+      {
+        endSet
+          ? <>
+            <Grid row className="flex-justify">
+              <h1 className="app-sec-header">Event: End Set</h1>
+              {
+                activeAction === EventType.END_SET
+                  ? <Button
+                    className="margin-right-0"
+                    onClick={() => handleCancelEvent(EventType.END_SET)}
+                    secondary
+                  >
+                    Cancel Edit End Set
+                  </Button>
+                  : <Button
+                    className="margin-right-0"
+                    onClick={() => setActiveAction(EventType.END_SET)}
+                    disabled={activeAction !== null && activeAction !== EventType.END_SET}
+                  >
+                    Edit End Set
+                  </Button>
+              }
+            </Grid>
+            <div className="border padding-1 margin-y-2 radius-lg app-card">
+              {activeAction === EventType.END_SET
+                ?
+                <EventForm
+                  event={endSet}
+                  eventType={EventType.END_SET}
+                  handleSaveEvent={
+                    handleSaveEvent(EventType.END_SET)} />
+                :
+                <EventView event={endSet} />
+              }
+            </div>
+          </>
+          : <>
+            <Grid row className="flex-justify margin-bottom-2">
+              <h1 className="app-sec-header">Event: End Set</h1>
+              <Button
+                className="margin-right-0"
+                onClick={() => handleNewEvent(EventType.END_SET)}
+                disabled={activeAction !== null}
+              >Add End Set</Button>
+            </Grid>
+          </>
+      }
+      {/* Begin Haul Event */}
+      {
+        beginHaul
+          ? <>
+            <Grid row className="flex-justify">
+              <h1 className="app-sec-header">Event: Begin Haul</h1>
+              {
+                activeAction === EventType.BEGIN_HAUL
+                  ? <Button
+                    className="margin-right-0"
+                    onClick={() => handleCancelEvent(EventType.BEGIN_HAUL)}
+                    secondary
+                  >
+                    Cancel Edit Begin Haul
+                  </Button>
+                  : <Button
+                    className="margin-right-0"
+                    onClick={() => setActiveAction(EventType.BEGIN_HAUL)}
+                    disabled={activeAction !== null && activeAction !== EventType.BEGIN_HAUL}
+                  >
+                    Edit Begin Haul
+                  </Button>
+              }
+            </Grid>
+            <div className="border padding-1 margin-y-2 radius-lg app-card">
+              {activeAction === EventType.BEGIN_HAUL
+                ?
+                <EventForm
+                  event={beginHaul}
+                  eventType={EventType.BEGIN_HAUL}
+                  handleSaveEvent={
+                    handleSaveEvent(EventType.BEGIN_HAUL)} />
+                :
+                <EventView event={beginHaul} />
+              }
+            </div>
+          </>
+          : <>
+            <Grid row className="flex-justify margin-bottom-2">
+              <h1 className="app-sec-header">Event: Begin Haul</h1>
+              <Button
+                className="margin-right-0"
+                onClick={() => handleNewEvent(EventType.BEGIN_HAUL)}
+                disabled={activeAction !== null}
+              >Add Begin Haul</Button>
+            </Grid>
+          </>
+      }
+      {/* End Haul Event */}
+      {
+        endHaul
+          ? <>
+            <Grid row className="flex-justify">
+              <h1 className="app-sec-header">Event: End Haul</h1>
+              {
+                activeAction === EventType.END_HAUL
+                  ? <Button
+                    className="margin-right-0"
+                    onClick={() => handleCancelEvent(EventType.END_HAUL)}
+                    secondary
+                  >
+                    Cancel Edit End Haul
+                  </Button>
+                  : <Button
+                    className="margin-right-0"
+                    onClick={() => setActiveAction(EventType.END_HAUL)}
+                    disabled={activeAction !== null && activeAction !== EventType.END_HAUL}
+                  >
+                    Edit End Haul
+                  </Button>
+              }
+            </Grid>
+            <div className="border padding-1 margin-y-2 radius-lg app-card">
+              {activeAction === EventType.END_HAUL
+                ?
+                <EventForm
+                  event={endHaul}
+                  eventType={EventType.END_HAUL}
+                  handleSaveEvent={
+                    handleSaveEvent(EventType.END_HAUL)} />
+                :
+                <EventView event={endHaul} />
+              }
+            </div>
+          </>
+          : <>
+            <Grid row className="flex-justify">
+              <h1 className="app-sec-header">Event: End Haul</h1>
+              <Button
+                className="margin-right-0"
+                onClick={() => handleNewEvent(EventType.END_HAUL)}
+                disabled={activeAction !== null}
+              >Add End Haul</Button>
+            </Grid>
+          </>
+      }
     </>
   );
 };

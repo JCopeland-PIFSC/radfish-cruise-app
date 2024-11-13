@@ -37,8 +37,7 @@ const CruiseDetailPage = ({ data }) => {
   const navigate = useNavigate();
   const { state } = useContext(CruiseContext);
   const { ports, cruiseStatuses } = state;
-  const [newStationToggle, setNewStationToggle] = useState(false);
-  const [editCruiseToggle, setEditCruiseToggle] = useState(false);
+  const [activeAction, setActiveAction] = useState(null);
   const cruiseStatus = listValueLookup(cruiseStatuses, cruiseStatusId);
   const departurePort = listValueLookup(ports, departurePortId);
   const returnPort = listValueLookup(ports, returnPortId);
@@ -48,16 +47,9 @@ const CruiseDetailPage = ({ data }) => {
     navigate("/cruises");
   };
 
-  const editStationToggle = () => {
-    return (editCruiseToggle || newStationToggle) ? true : false;
-  }
-
-  const handleEnterNewStation = () => {
-    setNewStationToggle(!newStationToggle);
-  };
-
-  const handleEditCruise = () => {
-    setEditCruiseToggle(!editCruiseToggle);
+  const CruiseAction = {
+    NEW: "NEW",
+    EDIT: "EDIT",
   };
 
   const handleSaveCruise = async (event) => {
@@ -79,7 +71,7 @@ const CruiseDetailPage = ({ data }) => {
     }
 
     const updatedCruise = await put(`/api/cruises/${id}`, values);
-    setEditCruiseToggle(!editCruiseToggle);
+    setActiveAction(null);
     setCruise(updatedCruise);
   };
 
@@ -113,7 +105,7 @@ const CruiseDetailPage = ({ data }) => {
     // process date time
     const newStation = await post(`/api/stations`, newValues);
     event.target.reset();
-    setNewStationToggle(!newStationToggle);
+    setActiveAction(null);
     setStations([newStation, ...stations]);
   }
 
@@ -127,17 +119,26 @@ const CruiseDetailPage = ({ data }) => {
         <div className="margin-top-05 margin-bottom-2 mobile-lg:margin-bottom-0">
           <Tag className={`padding-1 usa-tag--big ${setStatusColor(cruiseStatusId)}`}>{cruiseStatus}</Tag>
         </div>
-        <Button
-          disabled={cruiseStatusIdStr === CruiseStatus.SUBMITTED || cruiseStatusIdStr === CruiseStatus.ACCEPTED || newStationToggle}
-          onClick={cruiseStatusIdStr !== CruiseStatus.SUBMITTED && cruiseStatusIdStr !== CruiseStatus.ACCEPTED ? handleEditCruise : undefined}
-          secondary={editCruiseToggle}
-          className="margin-right-0"
-        >
-          {cruiseStatusIdStr === CruiseStatus.SUBMITTED || cruiseStatusIdStr === CruiseStatus.ACCEPTED ? "Edit Cruise" : editCruiseToggle ? "Cancel Edit Cruise" : "Edit Cruise"}
-        </Button>
+        {
+          activeAction === CruiseAction.EDIT
+            ? <Button
+              className="margin-right-0"
+              onClick={() => setActiveAction(null)}
+              secondary
+            >
+              "Cancel Edit Cruise"
+            </Button>
+            : <Button
+              className="margin-right-0"
+              onClick={() => setActiveAction(CruiseAction.EDIT)}
+              disabled={activeAction !== null && activeAction !== CruiseAction.EDIT}
+            >
+              Edit Cruise
+            </Button>
+        }
       </Grid>
       <div className="border radius-lg padding-1 margin-y-2 app-card">
-        {editCruiseToggle
+        {activeAction !== null && activeAction === CruiseAction.EDIT
           ?
           <Form className="maxw-full" onSubmit={handleSaveCruise}>
             <Grid row gap>
@@ -249,19 +250,32 @@ const CruiseDetailPage = ({ data }) => {
       </div>
       <Grid row className="flex-justify margin-bottom-1">
         <h2 className="app-sec-header">Stations</h2>
-        <Button
-          disabled={cruiseStatusIdStr === CruiseStatus.SUBMITTED || cruiseStatusIdStr === CruiseStatus.ACCEPTED || editCruiseToggle}
-          onClick={cruiseStatusIdStr !== CruiseStatus.SUBMITTED && cruiseStatusIdStr !== CruiseStatus.ACCEPTED ? handleEnterNewStation : undefined}
-          secondary={newStationToggle}
-          className="margin-right-0"
-        >
-          {cruiseStatusIdStr === CruiseStatus.SUBMITTED || cruiseStatusIdStr === CruiseStatus.ACCEPTED ? "New Station" : newStationToggle ? "Cancel New Station" : "New Station"}
-        </Button>
+        {
+          activeAction === CruiseAction.NEW
+            ? <Button
+              className="margin-right-0"
+              onClick={() => setActiveAction(null)}
+              secondary
+            >
+              Cancel New Station
+            </Button>
+            : <Button
+              className="margin-right-0"
+              onClick={() => setActiveAction(CruiseAction.NEW)}
+              disabled={activeAction !== null && activeAction !== CruiseAction.NEW}
+            >
+              New Station
+            </Button>
+        }
       </Grid>
-      {newStationToggle && <StationNew handleNewStation={handleNewStation} />}
+      {activeAction === CruiseAction.NEW && <StationNew handleNewStation={handleNewStation} />}
       {stations.length
         ? stations.map((station) => (
-          <StationSummary key={station.id} cruiseId={id} station={station} editStationToggle={editStationToggle} />
+          <StationSummary
+            key={station.id}
+            cruiseId={id}
+            station={station}
+            activeAction={activeAction} />
         ))
         : ""}
     </>

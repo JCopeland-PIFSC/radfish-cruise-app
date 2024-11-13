@@ -16,15 +16,13 @@ import { CruiseContext } from "../CruiseContext";
 const StationNew = ({ handleNewStation }) => {
   const { state } = useContext(CruiseContext);
   const { precipitation } = state;
-  const [resetToggle, setResetToggle] = useState(false);
   const inputFocus = useRef(null);
 
   useEffect(() => {
     if (inputFocus.current) {
       inputFocus.current.focus();
     }
-    setResetToggle(false);
-  }, [resetToggle]);
+  }, []);
 
   return (
     <div className="border padding-1 margin-y-2 radius-lg app-card">

@@ -5,7 +5,7 @@ import CatchSummary from "./CatchSummary";
 import { getSoakTime, displayTzDateTime } from "../utils/dateTimeHelpers";
 import DescriptionListItem from "./DescriptionListItem";
 
-const StationSummary = ({ cruiseId, station, editStationToggle }) => {
+const StationSummary = ({ cruiseId, station, activeAction }) => {
   const { id, stationName, events, catch: catchList } = station;
   const { latitude, longitude } = events.beginSet;
   const navigate = useNavigate();
@@ -68,7 +68,7 @@ const StationSummary = ({ cruiseId, station, editStationToggle }) => {
       </Grid>
       <Grid row className="margin-top-2">
         <Button
-          disabled={editStationToggle()}
+          disabled={activeAction !== null}
           className="margin-right-0"
           onClick={handleNavEditStation(cruiseId, id)}
         >Station Details
