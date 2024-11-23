@@ -153,12 +153,12 @@ class DatabaseManager {
 
         // Log results based on whether records were added
         if (bulkAdd.length > 0) {
-          console.log("Core tables seeded successfully.");
+          console.log(`Table "${metadataName}" initialized.`);
         } else {
-          console.log("No records added during bulkAdd.");
+          console.log(`No records added during bulkAdd to "${metadataName}.`);
         }
       } else {
-        console.log("Metadata table already has records.");
+        console.log(`Table "${metadataName}" already has records.`);
       }
     } catch (error) {
       // Log the error and rethrow it
@@ -330,7 +330,7 @@ class DatabaseManager {
   async clearTableData(tableName) {
     try {
       await this.db.table(tableName).clear();
-      console.log(`Table "${tableName}" cleared successfully.`);
+      console.log(`Table "${tableName}" cleared.`);
     } catch (error) {
       throw new Error(`Failed to clear table "${tableName}": ${error.message}`);
     }
