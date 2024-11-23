@@ -49,53 +49,67 @@ function App() {
     const [cruise, setCruise] = useState(null);
     const [stations, setStations] = useState(null);
 
-    useEffect(() => {
-      const load = async () => {
-        let cruiseRes;
-        // Redirect to Cruises List view (/cruises) if cruiseId is not found.
-        try {
-          cruiseRes = await fetchCruiseDetails(id);
-        } catch (error) {
-          window.location.href = '/cruises';
+  useEffect(() => {
+    const controller = new AbortController();
+    const { signal } = controller;
+    // Validate and Initialize Core Tables
+    const initializeCoreTables = async () => {
+      const emptyCoreTablesList = await dbManager.getEmptyCoreTablesList();
+
+      if (isOffline) {
+        console.log('Offline');
+        if (!emptyCoreTablesList || !emptyCoreTablesList.length) {
+          // App cannot be used because it is not initialized
+          setCoreTablesReady(false);
+        } else {
+          setCoreTablesReady(true);
         }
+      } else {
+        console.log('Online');
+        const updateCoreTablesList = await dbManager.getUpdateCoreTablesList();
 
-        const stationsRes = await fetchCruiseStations(id);
-        setCruise(cruiseRes);
-        setStations(stationsRes);
-      };
+        if (updateCoreTablesList && updateCoreTablesList.length) {
+          try {
+            const now = new Date();
+            const tablePromises = updateCoreTablesList.map(async (tableName) => {
+              if (signal.aborted) return; // Abort if the signal is triggered.
+              try {
+                // Fetch data for each table
+                const fetchedTable = await get(`/api/${tableName}`);
+                await dbManager.db.transaction('rw', [tableName, dbManager.tablesMetadata], async () => {
+                  // Update the table with fetched data.
+                  await dbManager.db.table(tableName).clear();
+                  await dbManager.db.table(tableName).bulkAdd(fetchedTable);
+                  // Update the metadata for the table
+                  await dbManager.db.table(dbManager.tablesMetadata).update(tableName, { lastUpdate: now });
+                });
+              } catch (error) {
+                if (!signal.aborted) console.error(`Error processing table ${tableName}:`, error);
+              }
+            });
 
-      load();
-    }, [id]);
-
-    if (!cruise || !stations) return <div>Loading...</div>;
-
-    return <CruiseDetailPage data={{ cruise, stations }} />;
-  }
-
-  function StationLoaderWrapper() {
-    const { cruiseId, stationId } = useParams();
-    const [cruise, setCruise] = useState(null);
-    const [station, setStation] = useState(null);
-
-    useEffect(() => {
-      const load = async () => {
-        let cruiseRes;
-        let stationRes;
-        // Redirect to Cruises List view (/cruises) if cruiseId is not found.
-        try {
-          cruiseRes = await fetchCruiseDetails(cruiseId);
-        } catch (error) {
-          window.location.href = '/cruises';
+            // Wait for all table promises to complete
+            await Promise.all(tablePromises);
+            if (!signal.aborted) {
+              // Successfully finished updating tables
+              setCoreTablesReady(true);
+            }
+          } catch (error) {
+            if (!signal.aborted) {
+              console.error("Error initializing tables:", error);
+              setCoreTablesReady(false);
+            }
+          }
         }
-        // Redirect to parent Cruise if Station is not found
-        try {
-          stationRes = await fetchStation(stationId);
-        } catch (error) {
-          window.location.href = `/cruises/${cruiseId}`
-        }
-        setCruise(cruiseRes);
-        setStation(stationRes);
-      };
+      }
+    };
+
+    initializeCoreTables();
+
+    return () => {
+      controller.abort();
+    };
+  }, [isOffline]);
 
       load();
     }, [cruiseId, stationId]);
