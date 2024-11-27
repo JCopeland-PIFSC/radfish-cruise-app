@@ -1,34 +1,44 @@
-import { useMutation, useQueryClient, useQuery } from "@tanstack/react-query";
+import {
+  useMutation,
+  useQueryClient,
+  useQuery,
+  useQueries,
+} from "@tanstack/react-query";
 import DatabaseManager from "../utils/DatabaseManager";
+import {
+  userDataKey,
+  cruiseTableName,
+  stationTableName,
+} from "./useLoadCruisesAndStations";
 
 const HOUR_MS = 1000 * 60 * 60;
 
 export const useGetCruises = () => {
   const dbManager = DatabaseManager.getInstance();
   return useQuery({
-    queryKey: ["userData", "cruises"],
-    queryFn: dbManager.getTableRecords("cruises", "-startDate"),
+    queryKey: [userDataKey, cruiseTableName],
+    queryFn: dbManager.getTableRecords(cruiseTableName, "-startDate"),
     staleTime: HOUR_MS * 1,
     cacheTime: HOUR_MS * 24,
   });
 };
 
-export const useSaveCruise = () => {
+export const useAddCruise = () => {
   const dbManager = DatabaseManager.getInstance();
   const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: async (newCruise) => {
-      const id = await dbManager.db.transaction("rw", "cruises", async () => {
-        await dbManager.db.table("cruises").add(newCruise);
+      await dbManager.db.transaction("rw", cruiseTableName, async () => {
+        await dbManager.db.table(cruiseTableName).add(newCruise);
       });
-      return { ...newCruise, id };
+      return newCruise;
     },
     onSuccess: (newCruise) => {
-      queryClient.setQueryData(["userData", "cruises"], (oldData = []) => [
-        newCruise,
-        ...oldData,
-      ]);
+      queryClient.setQueryData(
+        [userDataKey, cruiseTableName],
+        (oldData = []) => [newCruise, ...oldData],
+      );
     },
   });
 };
@@ -39,16 +49,61 @@ export const useUpdateCruise = () => {
 
   return useMutation({
     mutationFn: async ({ id, updates }) => {
-      await dbManager.db.transaction("rw", "cruises", async () => {
-        await dbManager.db.table(["userData", "cruises"]).update(id, updates);
+      await dbManager.db.transaction("rw", cruiseTableName, async () => {
+        await dbManager.db.table(cruiseTableName).update(id, updates);
       });
       return { id, updates };
     },
     onSuccess: ({ id, updates }) => {
-      queryClient.setQueryData("cruises", (oldData = []) =>
-        oldData.map((cruise) =>
-          cruise.id === id ? { ...cruise, ...updates } : cruise,
-        ),
+      queryClient.setQueryData(
+        [userDataKey, cruiseTableName, id],
+        (oldData = {}) => ({
+          ...oldData,
+          ...updates,
+        }),
+      );
+      queryClient.invalidateQueries([userDataKey, cruiseTableName]);
+    },
+  });
+};
+
+export const useGetCruiseById = (cruiseId) => {
+  const dbManager = DatabaseManager.getInstance();
+  return useQuery({
+    queryKey: [userDataKey, cruiseTableName, cruiseId],
+    queryFn: async () =>
+      await dbManager.getTableRecords(cruiseTableName, { id: cruiseId }),
+    select: (data) => data?.[0] || null,
+    staleTime: HOUR_MS * 1,
+    cacheTime: HOUR_MS * 24,
+  });
+};
+
+export const useGetStationsByCruiseId = (cruiseId) => {
+  const dbManager = DatabaseManager.getInstance();
+  return useQuery({
+    queryKey: [userDataKey, stationTableName, cruiseId],
+    queryFn: dbManager.getTableRecords(stationTableName, { cruiseId }),
+    staleTime: HOUR_MS * 1,
+    cacheTime: HOUR_MS * 24,
+  });
+};
+
+export const useAddStation = () => {
+  const dbManager = DatabaseManager.getInstance();
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async ({ cruiseId, newStation }) => {
+      await dbManager.db.transaction("rw", cruiseTableName, async () => {
+        await dbManager.db.table(stationTableName).add(newStation);
+      });
+      return newStation;
+    },
+    onSuccess: (newStation) => {
+      queryClient.setQueryData(
+        [userDataKey, stationTableName, cruiseId],
+        (oldData = []) => [newStation, ...oldData],
       );
     },
   });
