@@ -7,9 +7,8 @@ import {
   Link,
   useParams,
 } from "react-router-dom";
-import { useContext, useEffect, useState } from "react";
-import { CruiseContext, ACTIONS } from "./CruiseContext";
-import { Application } from "@nmfs-radfish/react-radfish";
+import { useState } from "react";
+import { Application, useOfflineStatus } from "@nmfs-radfish/react-radfish";
 import {
   GridContainer,
   Title,
@@ -17,132 +16,48 @@ import {
   PrimaryNav,
   Header,
 } from "@trussworks/react-uswds";
-import { get } from "./utils/requestMethods";
+import CoreStatusPage from "./pages/CoreStatus";
 import CruiseListPage from "./pages/CruiseList";
 import CruiseNewPage from "./pages/CruiseNew";
 import CruiseDetailPage from "./pages/CruiseDetail";
 import StationDetailPage from "./pages/StationDetail";
-
+import DatabaseManager from "./utils/DatabaseManager";
+import { useInitializeAndCacheCoreTables } from "./hooks/useInitializeAndCacheCoreTables";
+import { useLoadCruisesAndStations } from "./hooks/useLoadCruisesAndStations";
 function App() {
   const [isExpanded, setExpanded] = useState(false);
-  const { dispatch } = useContext(CruiseContext);
 
-  async function fetchList(actionType, endpoint, queryParams) {
-    const responseData = await get(endpoint, queryParams);
-    dispatch({ type: actionType, payload: responseData });
-  }
+  // hooks
+  const { isOffline } = useOfflineStatus();
+  const dbManager = DatabaseManager.getInstance();
+  const {
+    data,
+    isReady,
+    isLoading,
+    isError,
+    error,
+  } = useInitializeAndCacheCoreTables(isOffline);
+  const {
+    loading: cruisesLoading,
+    warning: cruisesWarning,
+    error: cruisesError,
+    cruises,
+    stations,
+  } = useLoadCruisesAndStations(isReady, isOffline);
 
-  async function fetchCruiseDetails(id) {
-    return await get(`/api/cruises/${id}`);
-  }
-
-  async function fetchCruiseStations(id) {
-    return await get(`/api/stations`, { cruiseId: id, _sort: "-events.beginSet.timestamp", });
-  }
-
-  async function fetchStation(id) {
-    return await get(`/api/stations/${id}`);
-  }
-
-  function CruiseLoaderWrapper() {
-    const { id } = useParams();
-    const [cruise, setCruise] = useState(null);
-    const [stations, setStations] = useState(null);
-
-  useEffect(() => {
-    const controller = new AbortController();
-    const { signal } = controller;
-    // Validate and Initialize Core Tables
-    const initializeCoreTables = async () => {
-      const emptyCoreTablesList = await dbManager.getEmptyCoreTablesList();
-
-      if (isOffline) {
-        console.log('Offline');
-        if (!emptyCoreTablesList || !emptyCoreTablesList.length) {
-          // App cannot be used because it is not initialized
-          setCoreTablesReady(false);
-        } else {
-          setCoreTablesReady(true);
-        }
-      } else {
-        console.log('Online');
-        const updateCoreTablesList = await dbManager.getUpdateCoreTablesList();
-
-        if (updateCoreTablesList && updateCoreTablesList.length) {
-          try {
-            const now = new Date();
-            const tablePromises = updateCoreTablesList.map(async (tableName) => {
-              if (signal.aborted) return; // Abort if the signal is triggered.
-              try {
-                // Fetch data for each table
-                const fetchedTable = await get(`/api/${tableName}`);
-                await dbManager.db.transaction('rw', [tableName, dbManager.tablesMetadata], async () => {
-                  // Update the table with fetched data.
-                  await dbManager.db.table(tableName).clear();
-                  await dbManager.db.table(tableName).bulkAdd(fetchedTable);
-                  // Update the metadata for the table
-                  await dbManager.db.table(dbManager.tablesMetadata).update(tableName, { lastUpdate: now });
-                });
-              } catch (error) {
-                if (!signal.aborted) console.error(`Error processing table ${tableName}:`, error);
-              }
-            });
-
-            // Wait for all table promises to complete
-            await Promise.all(tablePromises);
-            if (!signal.aborted) {
-              // Successfully finished updating tables
-              setCoreTablesReady(true);
-            }
-          } catch (error) {
-            if (!signal.aborted) {
-              console.error("Error initializing tables:", error);
-              setCoreTablesReady(false);
-            }
-          }
-        }
-      }
-    };
-
-    initializeCoreTables();
-
-    return () => {
-      controller.abort();
-    };
-  }, [isOffline]);
-
-      load();
-    }, [cruiseId, stationId]);
-
-    if (!cruise || !station) return <div>Loading...</div>;
-
-    return <StationDetailPage data={{ cruiseName: cruise?.cruiseName, station }} />;
-  }
-
-  useEffect(() => {
-    // Fetch lists asynchronously
-    fetchList(ACTIONS.SET_PORTS_LIST, `/api/ports`, {
-      _sort: "name",
-    });
-    fetchList(
-      ACTIONS.SET_CRUISE_STATUSES_LIST,
-      `/api/cruiseStatuses`,
-    );
-    fetchList(ACTIONS.SET_CRUISES_LIST, `/api/cruises`, {
-      _sort: "-startDate",
-    });
-    fetchList(ACTIONS.SET_SPECIES_LIST, `/api/species`, {
-      _sort: "name",
-    });
-    fetchList(ACTIONS.SET_SAMPLE_TYPES_LIST, `/api/sampleTypes`);
-    fetchList(ACTIONS.SET_PRECIPITATION_LIST, `/api/precipitation`);
-  }, [dispatch]);
+  // Statuses for the status page
+  const statuses = {
+    "Network Status": isOffline ? "red" : "green",
+    "Core Tables Initialized": isReady ? "green" : "yellow",
+    "Cruises & Stations Loaded": cruisesLoading
+      ? "yellow"
+      : cruisesError
+        ? "red"
+        : "green",
+  };
 
   return (
     <Application>
-      <a className="usa-skipnav" href="#main-content">
-        Skip to main content
-      </a>
       <main id="main-content">
         <BrowserRouter>
           <Header
@@ -174,24 +89,32 @@ function App() {
               ></PrimaryNav>
             </div>
           </Header>
-          {/* <div className="display-flex flex-justify-center"> */}
-          <GridContainer containerSize="tablet-lg">
-            <Routes>
-              <Route path="/" element={<Navigate to="/cruises" />} />
-              <Route path="/cruises" element={<CruiseListPage />} />
-              <Route path="/cruises/new" element={<CruiseNewPage />} />
-              <Route path="/cruises/:id" element={<CruiseLoaderWrapper />} />
-              <Route path="/cruises/:cruiseId/station/:stationId" element={<StationLoaderWrapper />} />
-
-              {/* Catch-all route for unknown paths */}
-              <Route path="*" element={<Navigate to="/cruises" />} />
-            </Routes>
-          </GridContainer>
-          {/* </div> */}
+          <div className="display-flex flex-justify-center">
+            <GridContainer containerSize="tablet-lg">
+              <Routes>
+                <Route
+                  path="/"
+                  element={
+                    <CoreStatusPage
+                      statuses={statuses}
+                      coreLoading={isLoading}
+                      coreError={isError}
+                      coreErrorMessage={error?.message}
+                      additionalWarning={cruisesWarning &&
+                        "Cruises or stations are missing. Please connect to the network if you suspect data is incomplete."}
+                    />
+                  }
+                />
+                <Route path="/cruises" element={<CruiseListPage />} />
+                <Route path="/cruises/new" element={<CruiseNewPage />} />
+                <Route path="*" element={<Navigate to="/" />} />
+              </Routes>
+            </GridContainer>
+          </div>
         </BrowserRouter>
       </main>
     </Application>
   );
-}
+};
 
 export default App;
