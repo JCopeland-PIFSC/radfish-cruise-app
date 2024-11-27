@@ -1,4 +1,3 @@
-import React, { useContext } from "react";
 import {
   Grid,
   Form,
@@ -10,13 +9,10 @@ import {
   Button,
   Textarea
 } from "@trussworks/react-uswds";
-import { CruiseContext } from "../CruiseContext";
 import { camelToDash, camelToTitleCase } from "../utils/stringUtilities";
 import { getTzDateTimeParts } from "../utils/dateTimeHelpers";
 
 const EventForm = ({ event, handleSaveEvent, eventType }) => {
-  const { state } = useContext(CruiseContext);
-  const { precipitation } = state;
   const {
     timestamp,
     latitude,

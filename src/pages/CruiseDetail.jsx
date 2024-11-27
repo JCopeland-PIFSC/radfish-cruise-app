@@ -1,5 +1,5 @@
 import "../index.css";
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import {
   Button,
   Grid,
@@ -14,8 +14,7 @@ import {
 import StationSummary from "../components/StationSummary";
 import StationNew from "../components/StationNew";
 import DescriptionListItem from "../components/DescriptionListItem";
-import { CruiseContext } from "../CruiseContext";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { listValueLookup, CruiseStatus } from "../utils/listLookup";
 import { setStatusColor } from "../utils/setStatusColor";
 import { generateTzDateTime, getLocationTz } from "../utils/dateTimeHelpers";

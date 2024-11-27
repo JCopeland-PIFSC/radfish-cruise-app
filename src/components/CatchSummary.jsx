@@ -1,6 +1,5 @@
 import React, { useContext } from "react";
 import { Grid } from "@trussworks/react-uswds";
-import { CruiseContext } from "../CruiseContext";
 import { listValueLookup } from "../utils/listLookup";
 import DescriptionListItem from "./DescriptionListItem";
 

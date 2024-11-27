@@ -1,13 +1,20 @@
 import { useQuery } from "@tanstack/react-query";
 import DatabaseManager from "../utils/DatabaseManager";
+import { coreDataKey } from "./useInitializeAndCacheCoreTables";
 
 const HOUR_MS = 1000 * 60 * 60;
+
+const portsTableName = "ports";
+const cruiseStatusesTableName = "cruiseStatuses";
+const sampleTypesTableName = "sampleTypes";
+const precipitationTableName = "precipitation";
+const speciesTableName = "species";
 
 export const usePortsList = () => {
   const dbManager = DatabaseManager.getInstance();
   return useQuery({
-    queryKey: ["coreTableData", "ports"],
-    queryFn: () => dbManager.getTableRecords("ports", "name"),
+    queryKey: [coreDataKey, portsTableName],
+    queryFn: () => dbManager.getTableRecords(portsTableName, "name"),
     staleTime: HOUR_MS * 1,
     cacheTime: HOUR_MS * 24,
   });
@@ -16,8 +23,8 @@ export const usePortsList = () => {
 export const useCruiseStatusesList = () => {
   const dbManager = DatabaseManager.getInstance();
   return useQuery({
-    queryKey: ["coreTableData", "cruiseStatuses"],
-    queryFn: () => dbManager.getTableRecords("cruiseStatuses"),
+    queryKey: [coreDataKey, cruiseStatusesTableName],
+    queryFn: () => dbManager.getTableRecords(cruiseStatusesTableName),
     staleTime: HOUR_MS * 1,
     cacheTime: HOUR_MS * 24,
   });
@@ -26,8 +33,8 @@ export const useCruiseStatusesList = () => {
 export const useSampleTypesList = () => {
   const dbManager = DatabaseManager.getInstance();
   return useQuery({
-    queryKey: ["coreTableData", "sampleTypes"],
-    queryFn: () => dbManager.getTableRecords("sampleTypes"),
+    queryKey: [coreDataKey, sampleTypesTableName],
+    queryFn: () => dbManager.getTableRecords(sampleTypesTableName),
     staleTime: HOUR_MS * 1,
     cacheTime: HOUR_MS * 24,
   });
@@ -36,8 +43,8 @@ export const useSampleTypesList = () => {
 export const usePrecipitationList = () => {
   const dbManager = DatabaseManager.getInstance();
   return useQuery({
-    queryKey: ["coreTableData", "precipitation"],
-    queryFn: () => dbManager.getTableRecords("precipitation"),
+    queryKey: [coreDataKey, precipitationTableName],
+    queryFn: () => dbManager.getTableRecords(precipitationTableName),
     staleTime: HOUR_MS * 1,
     cacheTime: HOUR_MS * 24,
   });
@@ -46,8 +53,8 @@ export const usePrecipitationList = () => {
 export const useSpeciesList = () => {
   const dbManager = DatabaseManager.getInstance();
   return useQuery({
-    queryKey: ["coreTableData", "species"],
-    queryFn: () => dbManager.getTableRecords("species", "name"),
+    queryKey: [coreDataKey, speciesTableName],
+    queryFn: () => dbManager.getTableRecords(speciesTableName, "name"),
     staleTime: HOUR_MS * 1,
     cacheTime: HOUR_MS * 24,
   });
