@@ -11,8 +11,8 @@ const offlineStorageConfig = {
     precipitation: "id, description",
     sampleTypes: "id, name",
     cruiseStatuses: "id, name",
-    cruises: "++id, cruiseName, startDate",
-    stations: "++id, cruiseId, stationName",
+    cruises: "id, cruiseName, startDate",
+    stations: "id, cruiseId, stationName",
   },
 };
 
