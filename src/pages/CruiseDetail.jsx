@@ -19,10 +19,45 @@ import { listValueLookup, CruiseStatus } from "../utils/listLookup";
 import { setStatusColor } from "../utils/setStatusColor";
 import { generateTzDateTime, getLocationTz } from "../utils/dateTimeHelpers";
 import { post, put } from "../utils/requestMethods";
+import { usePortsList, useCruiseStatusesList } from "../hooks/useCoreTables";
+import { useGetCruiseById, useGetStationsByCruiseId, useUpdateCruise } from "../hooks/useCruises";
 
-const CruiseDetailPage = ({ data }) => {
-  const { cruise: initialCruise, stations: initialStations } = data;
-  const [cruise, setCruise] = useState(initialCruise);
+const CruiseAction = {
+  NEW: "NEW",
+  EDIT: "EDIT",
+};
+
+const CruiseDetailPage = () => {
+  const { cruiseId } = useParams();
+  const navigate = useNavigate();
+  const {
+    data: ports,
+    isError: portsError,
+    error: errorPorts } = usePortsList();
+  const {
+    data: cruiseStatuses,
+    isError: cruiseStatusesError,
+    error: errorCruiseStatuses } = useCruiseStatusesList();
+  const {
+    data: cruise,
+    isLoading: cruiseLoading,
+    isError: cruiseError,
+    error: errorCruise
+  } = useGetCruiseById(cruiseId);
+  const {
+    data: stations,
+    isLoading: stationsLoading,
+    isError: stationsError,
+    error: errorStations
+  } = useGetCruiseById(cruiseId);
+
+  const [activeAction, setActiveAction] = useState(null);
+  const { mutateAsync: updateCruise } = useUpdateCruise();
+
+  if (cruiseLoading || stationsLoading) return <div>Loading Cruise Data...</div>;
+  if (portsError || cruiseStatusesError) return <div>Error Loading List Data: {portsError ? errorPorts.message : errorCruiseStatuses.message}</div>;
+  if (cruiseError) return <div>Error Loading Cruise Data: {errorCruise.message}</div>;
+
   const {
     id,
     cruiseName,
@@ -33,22 +68,12 @@ const CruiseDetailPage = ({ data }) => {
     departurePortId,
     returnPortId,
   } = cruise;
-  const navigate = useNavigate();
-  const { state } = useContext(CruiseContext);
-  const { ports, cruiseStatuses } = state;
-  const [activeAction, setActiveAction] = useState(null);
   const cruiseStatus = listValueLookup(cruiseStatuses, cruiseStatusId);
   const departurePort = listValueLookup(ports, departurePortId);
   const returnPort = listValueLookup(ports, returnPortId);
-  const [stations, setStations] = useState(initialStations);
-  const cruiseStatusIdStr = cruiseStatusId.toString();
+
   const handleNavCruisesList = () => {
     navigate("/cruises");
-  };
-
-  const CruiseAction = {
-    NEW: "NEW",
-    EDIT: "EDIT",
   };
 
   const handleSaveCruise = async (event) => {
@@ -69,9 +94,12 @@ const CruiseDetailPage = ({ data }) => {
       values[key] = value;
     }
 
-    const updatedCruise = await put(`/api/cruises/${id}`, values);
-    setActiveAction(null);
-    setCruise(updatedCruise);
+    try {
+      await updateCruise({ id, updates: values });
+      setActiveAction(null);
+    } catch (error) {
+      console.error("Failed to update cruise: ", error);
+    }
   };
 
   const handleNewStation = async (event) => {
@@ -105,7 +133,6 @@ const CruiseDetailPage = ({ data }) => {
     const newStation = await post(`/api/stations`, newValues);
     event.target.reset();
     setActiveAction(null);
-    setStations([newStation, ...stations]);
   }
 
   return (
@@ -125,7 +152,7 @@ const CruiseDetailPage = ({ data }) => {
               onClick={() => setActiveAction(null)}
               secondary
             >
-              "Cancel Edit Cruise"
+              Cancel Edit Cruise
             </Button>
             : <Button
               className="margin-right-0"
