@@ -13,19 +13,17 @@ const CruiseListPage = () => {
 
   const {
     data: ports,
-    isLoading: portsLoading,
     isError: portsError,
     errorPorts } = usePortsList();
   const {
     data: cruiseStatuses,
-    isLoading: cruiseStatusesLoading,
     isError: cruiseStatusesError,
     errorCruiseStatuses } = useCruiseStatusesList();
   const { data: cruises, isLoading: cruisesLoading, isError: cruisesError, errorCruises } = useGetCruises();
 
   if (cruisesLoading) return <div>Loading Cruises...</div>;
   if (portsError || cruiseStatusesError) return <div>Error Loading List Data: {portsError ? errorPorts.message : errorCruiseStatuses.message}</div>;
-  if (cruisesError) return <div>Error Loading Cruise Data: {errorCruises.message}</div>;
+  if (cruisesError) return <div>Error Loading Cruise Data: {errorCruises?.message}</div>;
 
   const handleNavNewCruise = () => {
     navigate("/cruises/new");

@@ -11,7 +11,7 @@ import {
 import { DatePicker } from "@nmfs-radfish/react-radfish";
 import { useNavigate } from "react-router-dom";
 import { usePortsList } from "../hooks/useCoreTables";
-import { useSaveCruise } from "../hooks/useCruises";
+import { useAddCruise } from "../hooks/useCruises";
 
 const CruiseNewPage = () => {
   const {
@@ -19,7 +19,7 @@ const CruiseNewPage = () => {
     isLoading: portsLoading,
     isError: portsError,
     errorPorts } = usePortsList();
-  const { mutateAsync: addCruise } = useSaveCruise();
+  const { mutateAsync: addCruise } = useAddCruise();
   const navigate = useNavigate();
   const [resetToggle, setResetToggle] = useState(false);
   const inputFocus = useRef(null);
@@ -47,7 +47,7 @@ const CruiseNewPage = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     const formData = new FormData(event.target);
-    const values = { cruiseStatusId: 1, returnPort: null, endDate: null };
+    const values = { id: crypto.randomUUID(), cruiseStatusId: 1, returnPort: null, endDate: null };
 
     for (const [key, value] of formData.entries()) {
       values[key] = value;
