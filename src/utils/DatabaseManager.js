@@ -203,7 +203,7 @@ class DatabaseManager {
    * @returns {Promise<Array>} A promise that resolves to an array of records from the core tables.
    * @throws {Error} Throws an error if the records cannot be fetched from the `tablesMetadata` table.
    */
-  async getCoreTablesRecords() {
+  async getCoreMetadataRecords() {
     try {
       return await Promise.all(
         this.coreTablesNamesList.map(async (tableName) => {
@@ -228,8 +228,8 @@ class DatabaseManager {
    */
   async getEmptyCoreTablesList() {
     try {
-      const coreTableRecords = await this.getCoreTablesRecords();
-      return coreTableRecords
+      const coreMetadataRecords = await this.getCoreMetadataRecords();
+      return coreMetadataRecords
         .map((tableRecord, index) => {
           if (!tableRecord) return this.coreTablesNamesList[index];
           const { lastUpdate } = tableRecord;
@@ -254,8 +254,8 @@ class DatabaseManager {
    */
   async getUpdateCoreTablesList() {
     try {
-      const coreTableRecords = await this.getCoreTablesRecords();
-      return coreTableRecords
+      const coreMetadataRecords = await this.getCoreMetadataRecords();
+      return coreMetadataRecords
         .map((tableRecord, index) => {
           if (!tableRecord) return this.coreTablesNamesList[index];
           const { lastUpdate, updateThreshold } = tableRecord;
@@ -271,7 +271,7 @@ class DatabaseManager {
   }
 
   /**
-   * Retrieves all records from a specified table, optionally filtering, sorting, and returning the results.
+   * Retrieves all records from a specified table, optionally filtering and sorting the results.
    *
    * This method interacts with the IndexedDB through the Dexie.js library to fetch data from a table.
    * If a `where` parameter is provided, the records will be filtered according to the specified condition.
@@ -280,17 +280,29 @@ class DatabaseManager {
    * If no `where` or `sort` parameter is provided, all records are returned unsorted.
    *
    * @param {string} name - The name of the table to retrieve data from. Should be a valid table name.
-   * @param {Object} [where] - The filtering condition. A key-value pair where the key is the field to filter on and the value is the condition to match.
-   * @param {string} [sort] - The field by which to sort the results. If it starts with a '-', the sorting will be descending.
+   * @param {Object|string} [whereOrSort] - Either the filtering condition (as an object) or the sorting field (as a string).
+   * @param {string} [sort] - The field by which to sort the results, only used if `whereOrSort` is an object.
+   *                          If it starts with a '-', the sorting will be descending.
    * @returns {Promise<Array>} A promise that resolves to an array of records from the table.
-   * @throws {Error} Throws an error if the table name is invalid, there is an issue with fetching data, or if the filtering condition is invalid.
+   * @throws {Error} Throws an error if the table name is invalid, there is an issue with fetching data,
+   *                 or if the filtering condition is invalid.
    */
-  async getTableRecords(name, where, sort) {
+  async getTableRecords(name, whereOrSort, sort) {
     if (!this.isValidTableName(name)) throw new Error("Invalid table name");
+
+    let where = null;
+
+    // Determine if the second parameter is `where` or `sort`
+    if (typeof whereOrSort === "string") {
+      sort = whereOrSort;
+    } else if (typeof whereOrSort === "object" && whereOrSort !== null) {
+      where = whereOrSort;
+    }
 
     try {
       let query = this.db.table(name);
 
+      // Apply the where and/or sort conditions
       query = this.applyWhereCondition(query, where);
       query = this.applySorting(query, sort);
 
