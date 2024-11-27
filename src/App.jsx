@@ -107,6 +107,7 @@ function App() {
                 />
                 <Route path="/cruises" element={<CruiseListPage />} />
                 <Route path="/cruises/new" element={<CruiseNewPage />} />
+                <Route path="/cruises/:cruiseId" element={<CruiseDetailPage />} />
                 <Route path="*" element={<Navigate to="/" />} />
               </Routes>
             </GridContainer>
