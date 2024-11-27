@@ -5,13 +5,14 @@ import { get } from "../utils/requestMethods";
 
 const HOUR_MS = 1000 * 60 * 60;
 
+export const userDataKey = "userData";
+export const cruiseTableName = "cruises";
+export const stationTableName = "stations";
+
 export const useLoadCruisesAndStations = (coreTablesReady, isOffline) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [warning, setWarning] = useState(false); // Warn if cruises/stations are missing and offline
-
-  const cruiseTableName = "cruises";
-  const stationTableName = "stations";
 
   const dbManager = DatabaseManager.getInstance();
 
@@ -77,13 +78,13 @@ export const useLoadCruisesAndStations = (coreTablesReady, isOffline) => {
   const queries = useQueries({
     queries: [
       {
-        queryKey: ["userData", "cruises"],
+        queryKey: [userDataKey, cruiseTableName],
         queryFn: () => dbManager.getTableRecords(cruiseTableName, "-startDate"),
         staleTime: HOUR_MS,
         enabled: coreTablesReady,
       },
       {
-        queryKey: ["userData", "stations"],
+        queryKey: [userDataKey, stationTableName],
         queryFn: () => dbManager.getTableRecords(stationTableName),
         staleTime: HOUR_MS,
         enabled: coreTablesReady,

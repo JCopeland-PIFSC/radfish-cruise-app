@@ -1,9 +1,10 @@
 import { useState, useEffect } from "react";
-import { useQueries, useQuery } from "@tanstack/react-query";
+import { useQueries } from "@tanstack/react-query";
 import DatabaseManager from "../utils/DatabaseManager";
 import { get } from "../utils/requestMethods";
 
 const HOUR_MS = 1000 * 60 * 60;
+export const coreDataKey = "coreTableData";
 
 export const useInitializeAndCacheCoreTables = (isOffline) => {
   const [isReady, setIsReady] = useState(false);
@@ -20,6 +21,7 @@ export const useInitializeAndCacheCoreTables = (isOffline) => {
   // Step 1: Initialize core tables
   useEffect(() => {
     const initialize = async () => {
+      // Set Loading and Error state for database updates.
       setIsLoading(true);
       setIsError(false);
 
@@ -71,7 +73,7 @@ export const useInitializeAndCacheCoreTables = (isOffline) => {
       );
 
     return {
-      queryKey: ["coreTableData", tableName],
+      queryKey: [coreDataKey, tableName],
       queryFn,
       enabled: coreTablesReady, // Only fetch if core tables are ready
       staleTime: HOUR_MS,
