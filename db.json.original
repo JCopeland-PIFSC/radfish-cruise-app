@@ -1,7 +1,7 @@
 {
   "cruises": [
     {
-      "id": 1,
+      "id": "4ba87656-03c8-48e4-9048-5fd6423ee911",
       "cruiseName": "CRUISE001",
       "cruiseStatusId": 5,
       "vesselName": "RADFish Research Vessel",
@@ -11,7 +11,7 @@
       "returnPortId": 1
     },
     {
-      "id": 2,
+      "id": "e5f0cdd2-92c8-4491-b683-1283292b201b",
       "cruiseName": "CRUISE002",
       "cruiseStatusId": 4,
       "vesselName": "RADFish Research Vessel",
@@ -21,7 +21,7 @@
       "returnPortId": 3
     },
     {
-      "id": 3,
+      "id": "8377bbfb-a43d-493d-9563-31765959d8f8",
       "cruiseName": "CRUISE003",
       "cruiseStatusId": 3,
       "vesselName": "RADFish Research Vessel",
@@ -31,7 +31,7 @@
       "returnPortId": 1
     },
     {
-      "id": 4,
+      "id": "64587ae6-9721-49a4-b39d-9d1dccbcc621",
       "cruiseName": "CRUISE004",
       "cruiseStatusId": 1,
       "vesselName": "RADFish Research Vessel",
@@ -43,8 +43,8 @@
   ],
   "stations": [
     {
-      "id": 1,
-      "cruiseId": 1,
+      "id": "44300c7a-bdcf-4eda-86c9-09edaeedd967",
+      "cruiseId": "4ba87656-03c8-48e4-9048-5fd6423ee911",
       "stationName": "STATION001",
       "events": {
         "beginSet": {
@@ -136,8 +136,8 @@
       ]
     },
     {
-      "id": 2,
-      "cruiseId": 1,
+      "id": "ebb427a5-f533-4d8f-bf49-77a4580f28b3",
+      "cruiseId": "4ba87656-03c8-48e4-9048-5fd6423ee911",
       "stationName": "STATION002",
       "events": {
         "beginSet": {
@@ -199,8 +199,8 @@
       ]
     },
     {
-      "id": 3,
-      "cruiseId": 1,
+      "id": "1542a8f2-1c94-4c0a-bac2-d66bde947914",
+      "cruiseId": "4ba87656-03c8-48e4-9048-5fd6423ee911",
       "stationName": "STATION003",
       "events": {
         "beginSet": {
@@ -292,8 +292,8 @@
       ]
     },
     {
-      "id": 4,
-      "cruiseId": 2,
+      "id": "c14970e4-5fb9-4cbc-b964-14286fae2cd2",
+      "cruiseId": "e5f0cdd2-92c8-4491-b683-1283292b201b",
       "stationName": "STATION004",
       "events": {
         "beginSet": {
@@ -385,8 +385,8 @@
       ]
     },
     {
-      "id": 5,
-      "cruiseId": 2,
+      "id": "f441ceee-2ce6-4be4-9791-4f55d869be7a",
+      "cruiseId": "e5f0cdd2-92c8-4491-b683-1283292b201b",
       "stationName": "STATION005",
       "events": {
         "beginSet": {
@@ -448,8 +448,8 @@
       ]
     },
     {
-      "id": 6,
-      "cruiseId": 2,
+      "id": "0cd27449-4582-4a8f-85b9-e900eebc2db0",
+      "cruiseId": "e5f0cdd2-92c8-4491-b683-1283292b201b",
       "stationName": "STATION006",
       "events": {
         "beginSet": {
@@ -541,8 +541,8 @@
       ]
     },
     {
-      "id": 7,
-      "cruiseId": 3,
+      "id": "0f12587a-deb0-4c59-8fd6-e52008ba57b1",
+      "cruiseId": "8377bbfb-a43d-493d-9563-31765959d8f8",
       "stationName": "STATION007",
       "events": {
         "beginSet": {
@@ -634,8 +634,8 @@
       ]
     },
     {
-      "id": 8,
-      "cruiseId": 3,
+      "id": "9854996f-2b0e-45a1-aa6e-947cb51ff281",
+      "cruiseId": "8377bbfb-a43d-493d-9563-31765959d8f8",
       "stationName": "STATION008",
       "events": {
         "beginSet": {
@@ -697,8 +697,8 @@
       ]
     },
     {
-      "id": 9,
-      "cruiseId": 3,
+      "id": "44c42c80-7fce-4ed7-bafd-50a2569982f8",
+      "cruiseId": "8377bbfb-a43d-493d-9563-31765959d8f8",
       "stationName": "STATION009",
       "events": {
         "beginSet": {
@@ -790,8 +790,8 @@
       ]
     },
     {
-      "id": 10,
-      "cruiseId": 4,
+      "id": "16b39b73-5ced-4121-9faf-9cfa15d2af4b",
+      "cruiseId": "64587ae6-9721-49a4-b39d-9d1dccbcc621",
       "stationName": "STATION010",
       "events": {
         "beginSet": {
@@ -883,8 +883,8 @@
       ]
     },
     {
-      "id": 11,
-      "cruiseId": 4,
+      "id": "0b3ef606-bbb3-46be-8f9c-9d258897ccbe",
+      "cruiseId": "64587ae6-9721-49a4-b39d-9d1dccbcc621",
       "stationName": "STATION011",
       "events": {
         "beginSet": {
