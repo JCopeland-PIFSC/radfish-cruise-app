@@ -11,6 +11,7 @@ import {
 } from "@trussworks/react-uswds";
 import { camelToDash, camelToTitleCase } from "../utils/stringUtilities";
 import { getTzDateTimeParts } from "../utils/dateTimeHelpers";
+import { usePrecipitationList } from "../hooks/useCoreTables";
 
 const EventForm = ({ event, handleSaveEvent, eventType }) => {
   const {
@@ -22,9 +23,22 @@ const EventForm = ({ event, handleSaveEvent, eventType }) => {
     visibilityKm,
     precipitationId,
     comments } = event;
+  const {
+    data: precipitation,
+    isLoading: precipitationLoading,
+    isError: precipitationError,
+    error } = usePrecipitationList();
   const eventPrefix = camelToDash(eventType);
   const eventLabel = camelToTitleCase(eventType);
 
+  // Render loading/error states
+  if (precipitationLoading) {
+    return <div>Loading...</div>;
+  }
+
+  if (precipitationError) {
+    return <div>Error loading Species: {error.message}</div>;
+  }
   return (
     <Form id={`${eventPrefix}-form`} name={`${eventType}Form`} className="maxw-full" onSubmit={handleSaveEvent}>
       <Grid row>

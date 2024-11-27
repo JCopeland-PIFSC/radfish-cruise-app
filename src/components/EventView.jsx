@@ -2,6 +2,7 @@ import React, { useContext } from "react";
 import { Grid } from "@trussworks/react-uswds";
 import { listValueLookup } from "../utils/listLookup";
 import DescriptionListItem from "./DescriptionListItem";
+import { usePrecipitationList } from "../hooks/useCoreTables";
 
 const EventView = ({ event }) => {
   const {
@@ -13,7 +14,20 @@ const EventView = ({ event }) => {
     visibilityKm,
     precipitationId,
     comments } = event;
+  const {
+    data: precipitation,
+    isLoading: precipitationLoading,
+    isError: precipitationError,
+    error } = usePrecipitationList();
 
+  // Render loading/error states
+  if (precipitationLoading) {
+    return <div>Loading...</div>;
+  }
+
+  if (precipitationError) {
+    return <div>Error loading Species: {error.message}</div>;
+  }
   return (
     <Grid row>
       <Grid col={12}>

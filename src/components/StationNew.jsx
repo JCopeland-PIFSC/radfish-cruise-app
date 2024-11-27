@@ -27,6 +27,15 @@ const StationNew = ({ handleNewStation }) => {
     }
   }, []);
 
+  // Render loading/error states
+  if (precipitationLoading) {
+    return <div>Loading...</div>;
+  }
+
+  if (precipitationError) {
+    return <div>Error loading Species: {error.message}</div>;
+  }
+
   return (
     <div className="border padding-1 margin-y-2 radius-lg app-card">
       <Form className="maxw-full" onSubmit={handleNewStation}>
