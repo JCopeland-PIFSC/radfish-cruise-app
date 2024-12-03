@@ -1,17 +1,21 @@
 import React, { useEffect, useState, useRef } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { Grid, Button, } from "@trussworks/react-uswds";
 import EventView from "../components/EventView";
 import EventForm from "../components/EventForm";
 import { getLocationTz, generateTzDateTime } from "../utils/dateTimeHelpers";
 import { put } from "../utils/requestMethods";
 import { EventType } from "../utils/listLookup";
+import { useGetStationById } from "../hooks/useCruises";
 
-const StationDetailPage = ({ data }) => {
-  const { cruiseName, station: initialStation } = data;
-  const [station, setStation] = useState(initialStation);
-  const { id, cruiseId, stationName, events, catch: catches } = station;
-  const { beginSet, endSet, beginHaul, endHaul } = events;
+const StationDetailPage = () => {
+  const { cruiseId, stationId } = useParams();
+  const {
+    data: station,
+    isLoading: stationLoading,
+    isError: stationError,
+    error: errorStation
+  } = useGetStationById(stationId);
   const [activeAction, setActiveAction] = useState(null);
   const inputFocus = useRef(null);
   const navigate = useNavigate();
@@ -74,6 +78,11 @@ const StationDetailPage = ({ data }) => {
     }
     setActiveAction(null)
   }, []);
+
+  if (stationLoading) return <div>Loading Station Data...</div>;
+  if (stationError) return <div>Error Loading Station Data: {errorStation?.message}</div>;
+  const { events } = station;
+  const { beginSet, endSet, beginHaul, endHaul } = events;
 
   return (
     <>
