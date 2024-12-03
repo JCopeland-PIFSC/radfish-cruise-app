@@ -249,7 +249,7 @@ const CruiseDetailPage = () => {
             </Grid>
           </Form>
           : <>
-            <Grid row>
+            <Grid row gap>
               <Grid col={12} tablet={{ col: true }}>
                 <DescriptionListItem term="Cruise Name:" description={cruiseName} />
               </Grid>
