@@ -2,7 +2,7 @@ import React, { useContext } from "react";
 import { Grid } from "@trussworks/react-uswds";
 import { listValueLookup } from "../utils/listLookup";
 import DescriptionListItem from "./DescriptionListItem";
-import { usePrecipitationList } from "../hooks/useCoreTables";
+import { usePrecipitationList } from "../hooks/useListTables";
 
 const EventView = ({ event }) => {
   const {

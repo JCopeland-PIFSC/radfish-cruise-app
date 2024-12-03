@@ -2,7 +2,7 @@ import React, { useContext } from "react";
 import { Grid } from "@trussworks/react-uswds";
 import { listValueLookup } from "../utils/listLookup";
 import DescriptionListItem from "./DescriptionListItem";
-import { useSpeciesList } from "../hooks/useCoreTables";
+import { useSpeciesList } from "../hooks/useListTables";
 
 const CatchSummary = ({ catchItem }) => {
   const { speciesId, aggregateWeightKg } = catchItem;

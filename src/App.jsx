@@ -5,7 +5,6 @@ import {
   Route,
   Navigate,
   Link,
-  useParams,
 } from "react-router-dom";
 import { useState } from "react";
 import { Application, useOfflineStatus } from "@nmfs-radfish/react-radfish";
@@ -16,39 +15,34 @@ import {
   PrimaryNav,
   Header,
 } from "@trussworks/react-uswds";
-import CoreStatusPage from "./pages/CoreStatus";
+import AppInitStatusPage from "./pages/AppInitStatus";
 import CruiseListPage from "./pages/CruiseList";
 import CruiseNewPage from "./pages/CruiseNew";
 import CruiseDetailPage from "./pages/CruiseDetail";
 import StationDetailPage from "./pages/StationDetail";
-import DatabaseManager from "./utils/DatabaseManager";
-import { useInitializeAndCacheCoreTables } from "./hooks/useInitializeAndCacheCoreTables";
+import { useInitializeAndCacheListTables } from "./hooks/useInitializeAndCacheListTables";
 import { useLoadCruisesAndStations } from "./hooks/useLoadCruisesAndStations";
 function App() {
   const [isExpanded, setExpanded] = useState(false);
 
   // hooks
   const { isOffline } = useOfflineStatus();
-  const dbManager = DatabaseManager.getInstance();
   const {
-    data,
     isReady,
     isLoading,
     isError,
     error,
-  } = useInitializeAndCacheCoreTables(isOffline);
+  } = useInitializeAndCacheListTables(isOffline);
   const {
     loading: cruisesLoading,
     warning: cruisesWarning,
     error: cruisesError,
-    cruises,
-    stations,
   } = useLoadCruisesAndStations(isReady, isOffline);
 
   // Statuses for the status page
   const statuses = {
     "Network Status": isOffline ? "red" : "green",
-    "Core Tables Initialized": isReady ? "green" : "yellow",
+    "List Tables Initialized": isReady ? "green" : "yellow",
     "Cruises & Stations Loaded": cruisesLoading
       ? "yellow"
       : cruisesError
@@ -95,11 +89,11 @@ function App() {
                 <Route
                   path="/"
                   element={
-                    <CoreStatusPage
+                    <AppInitStatusPage
                       statuses={statuses}
-                      coreLoading={isLoading}
-                      coreError={isError}
-                      coreErrorMessage={error?.message}
+                      listsLoading={isLoading}
+                      listsError={isError}
+                      listsErrorMessage={error?.message}
                       additionalWarning={cruisesWarning &&
                         "Cruises or stations are missing. Please connect to the network if you suspect data is incomplete."}
                     />

@@ -5,7 +5,7 @@ import { Button, Grid, Icon, Tag } from "@trussworks/react-uswds";
 import { Table } from "@nmfs-radfish/react-radfish";
 import { listValueLookup } from "../utils/listLookup";
 import { setStatusColor } from "../utils/setStatusColor";
-import { usePortsList, useCruiseStatusesList } from "../hooks/useCoreTables";
+import { usePortsList, useCruiseStatusesList } from "../hooks/useListTables";
 import { useGetCruises } from "../hooks/useCruises";
 
 const CruiseListPage = () => {

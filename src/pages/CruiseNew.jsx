@@ -10,7 +10,7 @@ import {
 } from "@trussworks/react-uswds";
 import { DatePicker } from "@nmfs-radfish/react-radfish";
 import { useNavigate } from "react-router-dom";
-import { usePortsList } from "../hooks/useCoreTables";
+import { usePortsList } from "../hooks/useListTables";
 import { useAddCruise } from "../hooks/useCruises";
 
 const CruiseNewPage = () => {

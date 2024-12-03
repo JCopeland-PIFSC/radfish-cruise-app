@@ -23,7 +23,7 @@ const HOUR_MS = 1000 * 60 * 60;
 const DAY_MS = HOUR_MS * 24;
 const WEEK_MS = DAY_MS * 7;
 
-const coreMetadataSeed = [
+const listTablesMetadataSeed = [
   {
     tableName: "ports",
     lastUpdate: null,
@@ -54,7 +54,7 @@ const coreMetadataSeed = [
 const config = {
   offlineStorageConfig,
   tablesMetadata,
-  coreMetadataSeed,
+  listTablesMetadataSeed,
 };
 
 export default config;

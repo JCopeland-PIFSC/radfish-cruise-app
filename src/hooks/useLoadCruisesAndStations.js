@@ -9,7 +9,7 @@ export const userDataKey = "userData";
 export const cruiseTableName = "cruises";
 export const stationTableName = "stations";
 
-export const useLoadCruisesAndStations = (coreTablesReady, isOffline) => {
+export const useLoadCruisesAndStations = (listTablesReady, isOffline) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [warning, setWarning] = useState(false); // Warn if cruises/stations are missing and offline
@@ -37,7 +37,7 @@ export const useLoadCruisesAndStations = (coreTablesReady, isOffline) => {
 
   useEffect(() => {
     const initialize = async () => {
-      if (!coreTablesReady) {
+      if (!listTablesReady) {
         setLoading(false);
         return;
       }
@@ -72,7 +72,7 @@ export const useLoadCruisesAndStations = (coreTablesReady, isOffline) => {
     };
 
     initialize();
-  }, [coreTablesReady, isOffline, dbManager]);
+  }, [listTablesReady, isOffline, dbManager]);
 
   // React Query for caching
   const queries = useQueries({
@@ -81,13 +81,13 @@ export const useLoadCruisesAndStations = (coreTablesReady, isOffline) => {
         queryKey: [userDataKey, cruiseTableName],
         queryFn: () => dbManager.getTableRecords(cruiseTableName, "-startDate"),
         staleTime: HOUR_MS,
-        enabled: coreTablesReady,
+        enabled: listTablesReady,
       },
       {
         queryKey: [userDataKey, stationTableName],
         queryFn: () => dbManager.getTableRecords(stationTableName),
         staleTime: HOUR_MS,
-        enabled: coreTablesReady,
+        enabled: listTablesReady,
       },
     ],
   });

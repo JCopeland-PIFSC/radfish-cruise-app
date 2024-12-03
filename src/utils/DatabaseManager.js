@@ -8,7 +8,7 @@ class DatabaseManager {
    * Constructor to initialize the DatabaseManager instance.
    *
    * This constructor sets up the database connection, validates the required
-   * configuration properties, and initializes the necessary metadata and core tables.
+   * configuration properties, and initializes the necessary metadata and list tables.
    *
    * @param {Object} config - Configuration object for initializing the database.
    * @throws {Error} If required properties are missing from the config or if the singleton instance is already initialized.
@@ -30,8 +30,8 @@ class DatabaseManager {
     this.db = storageMethod.db;
     this.offlineStorageConfig = config.offlineStorageConfig;
     this.tablesMetadata = config.tablesMetadata;
-    this.coreMetadataSeed = config.coreMetadataSeed;
-    this.coreTablesNamesList = config.coreMetadataSeed.map(
+    this.listTablesMetadataSeed = config.listTablesMetadataSeed;
+    this.listTablesNamesList = config.listTablesMetadataSeed.map(
       (table) => table.tableName,
     );
 
@@ -55,7 +55,7 @@ class DatabaseManager {
     const requiredProperties = [
       "offlineStorageConfig",
       "tablesMetadata",
-      "coreMetadataSeed",
+      "listTablesMetadataSeed",
     ];
 
     const missingProperties = requiredProperties.filter(
@@ -82,12 +82,12 @@ class DatabaseManager {
       );
     }
 
-    // Validate coreMetadataSeed structure
+    // Validate listTablesMetadataSeed structure
     if (
-      !Array.isArray(config.coreMetadataSeed) ||
-      config.coreMetadataSeed.length === 0
+      !Array.isArray(config.listTablesMetadataSeed) ||
+      config.listTablesMetadataSeed.length === 0
     ) {
-      throw new Error("coreMetadataSeed must be a non-empty array.");
+      throw new Error("listTablesMetadataSeed must be a non-empty array.");
     }
   }
 
@@ -125,7 +125,7 @@ class DatabaseManager {
    * existing data in the table and bulk add the provided seed records. If the table is successfully seeded,
    * a success message is logged. If no records are added, a different message is logged.
    *
-   * @param {Array} seedRecords - The records to insert into the table if it is empty. Defaults to `coreMetadataSeed`.
+   * @param {Array} seedRecords - The records to insert into the table if it is empty. Defaults to `listTablesMetadataSeed`.
    * @param {string} metadataName - The name of the metadata table. Defaults to `tablesMetadata`.
    * @throws {Error} Will throw an error if the bulkAdd operation fails.
    * @returns {Promise<void>} A promise that resolves when the table has been initialized, or throws an error if it fails.
@@ -135,15 +135,15 @@ class DatabaseManager {
    * await initMetadataTable(customSeed, "customMetadata"); // Uses custom values
    */
   async initMetadataTable(
-    seedRecords = this.coreMetadataSeed,
+    seedRecords = this.listTablesMetadataSeed,
     metadataName = this.tablesMetadata,
   ) {
     try {
       // Check if the metadata table has any records
-      const hasCoreTables = await this.tableExistsHasRecords(metadataName);
+      const hasListTables = await this.tableExistsHasRecords(metadataName);
 
       // If the table doesn't have records, proceed with initialization
-      if (!hasCoreTables) {
+      if (!hasListTables) {
         await this.clearTableData(metadataName);
 
         // Bulk add the seed records
@@ -194,78 +194,80 @@ class DatabaseManager {
   }
 
   /**
-   * Retrieves the records for all core tables defined in `coreTablesNamesList`.
+   * Retrieves the records for all list tables defined in `listTablesNamesList`.
    *
-   * This method fetches records for each table listed in `coreTablesNamesList` from the
+   * This method fetches records for each table listed in `listTablesNamesList` from the
    * `tablesMetadata` table. It returns an array of records, with each entry corresponding
    * to a table in the list.
    *
-   * @returns {Promise<Array>} A promise that resolves to an array of records from the core tables.
+   * @returns {Promise<Array>} A promise that resolves to an array of records from the list tables.
    * @throws {Error} Throws an error if the records cannot be fetched from the `tablesMetadata` table.
    */
-  async getCoreMetadataRecords() {
+  async getListTablesMetadataRecords() {
     try {
       return await Promise.all(
-        this.coreTablesNamesList.map(async (tableName) => {
+        this.listTablesNamesList.map(async (tableName) => {
           return await this.db.table(this.tablesMetadata).get(tableName);
         }),
       );
     } catch (error) {
       throw new Error(
-        `Failed to fetch core table records for ${tableName}: ${error.message}`,
+        `Failed to fetch list table records for ${tableName}: ${error.message}`,
       );
     }
   }
 
   /**
-   * Retrieves a list of core table names that have not been initialized.
+   * Retrieves a list of list table names that have not been initialized.
    *
-   * This method checks the records of all core tables. It returns a list of table names that
+   * This method checks the records of all list tables. It returns a list of table names that
    * have not been initialized, which is determined by whether the `lastUpdate` field is null.
    *
-   * @returns {Promise<string[]>} A promise that resolves to a list of table names for core tables that have not been initialized.
-   * @throws {Error} Throws an error if there is an issue fetching the core table records.
+   * @returns {Promise<string[]>} A promise that resolves to a list of table names for list tables that have not been initialized.
+   * @throws {Error} Throws an error if there is an issue fetching the list table records.
    */
-  async getEmptyCoreTablesList() {
+  async getEmptyListTablesList() {
     try {
-      const coreMetadataRecords = await this.getCoreMetadataRecords();
-      return coreMetadataRecords
+      const listTablesMetadataRecords =
+        await this.getListTablesMetadataRecords();
+      return listTablesMetadataRecords
         .map((tableRecord, index) => {
-          if (!tableRecord) return this.coreTablesNamesList[index];
+          if (!tableRecord) return this.listTablesNamesList[index];
           const { lastUpdate } = tableRecord;
-          return lastUpdate === null ? this.coreTablesNamesList[index] : null;
+          return lastUpdate === null ? this.listTablesNamesList[index] : null;
         })
         .filter((tableName) => tableName !== null);
     } catch (error) {
-      throw new Error(`Failed to get empty core tables list: ${error.message}`);
+      throw new Error(`Failed to get empty list tables list: ${error.message}`);
     }
   }
 
   /**
-   * Retrieves a list of core table names that need to be updated.
+   * Retrieves a list of list table names that need to be updated.
    *
-   * This method checks the records of all core tables. It returns a list of table names for
-   * core tables that either have not been initialized (i.e., `lastUpdate` is null) or need to be
+   * This method checks the records of all list tables. It returns a list of table names for
+   * list tables that either have not been initialized (i.e., `lastUpdate` is null) or need to be
    * refreshed based on the `lastUpdate` and `updateThreshold` fields. The `updateNeeded` function
    * is used to determine if a table is outdated.
    *
-   * @returns {Promise<string[]>} A promise that resolves to a list of table names for core tables that need to be updated.
-   * @throws {Error} Throws an error if there is an issue fetching the core table records.
+   * @returns {Promise<string[]>} A promise that resolves to a list of table names for list tables that need to be updated.
+   * @throws {Error} Throws an error if there is an issue fetching the list table records.
    */
-  async getUpdateCoreTablesList() {
+  async getUpdateListTablesList() {
     try {
-      const coreMetadataRecords = await this.getCoreMetadataRecords();
-      return coreMetadataRecords
+      const listTablesMetadataRecords =
+        await this.getListTablesMetadataRecords();
+      return listTablesMetadataRecords
         .map((tableRecord, index) => {
-          if (!tableRecord) return this.coreTablesNamesList[index];
+          if (!tableRecord) return this.listTablesNamesList[index];
           const { lastUpdate, updateThreshold } = tableRecord;
           const willUpdate = updateNeeded(lastUpdate, updateThreshold);
-          return willUpdate ? this.coreTablesNamesList[index] : null;
+          return willUpdate ? this.listTablesNamesList[index] : null;
         })
         .filter((tableName) => tableName !== null);
     } catch (error) {
       throw new Error(
-        `Failed to get update core tables list: ${error.message}`,
+        `Failed to get update list tables list: ${error.message}`,
       );
     }
   }

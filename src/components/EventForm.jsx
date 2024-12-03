@@ -11,7 +11,7 @@ import {
 } from "@trussworks/react-uswds";
 import { camelToDash, camelToTitleCase } from "../utils/stringUtilities";
 import { getTzDateTimeParts } from "../utils/dateTimeHelpers";
-import { usePrecipitationList } from "../hooks/useCoreTables";
+import { usePrecipitationList } from "../hooks/useListTables";
 
 const EventForm = ({ event, handleSaveEvent, eventType }) => {
   const {

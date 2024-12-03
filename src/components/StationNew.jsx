@@ -11,7 +11,7 @@ import {
   Select,
   Fieldset
 } from "@trussworks/react-uswds";
-import { usePrecipitationList } from "../hooks/useCoreTables";
+import { usePrecipitationList } from "../hooks/useListTables";
 
 const StationNew = ({ handleNewStation }) => {
   const {

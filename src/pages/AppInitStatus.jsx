@@ -2,13 +2,13 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import { Button, GridContainer, Grid } from "@trussworks/react-uswds";
 
-const CoreStatusPage = ({ statuses, coreLoading, coreError, coreErrorMessage }) => {
+const AppInitStatusPage = ({ statuses, listsLoading, listsError, listsErrorMessage }) => {
   const navigate = useNavigate();
 
   // Determine if all statuses are "green"
   const allStatusesPass =
-    !coreLoading &&
-    !coreError &&
+    !listsLoading &&
+    !listsError &&
     Object.values(statuses).every((status) => status === "green");
 
   // Status Indicator Helper
@@ -60,18 +60,18 @@ const CoreStatusPage = ({ statuses, coreLoading, coreError, coreErrorMessage }) 
           </ul>
         </Grid>
       </Grid>
-      {coreLoading && (
+      {listsLoading && (
         <Grid row>
           <Grid col={12}>
-            <p>Initializing core tables...</p>
+            <p>Initializing lists tables...</p>
           </Grid>
         </Grid>
       )}
-      {coreError && (
+      {listsError && (
         <Grid row>
           <Grid col={12}>
             <p style={{ color: "red" }}>
-              Core table initialization failed: {coreErrorMessage || "Unknown error"}
+              List tables initialization failed: {listsErrorMessage || "Unknown error"}
             </p>
           </Grid>
         </Grid>
@@ -91,4 +91,4 @@ const CoreStatusPage = ({ statuses, coreLoading, coreError, coreErrorMessage }) 
   );
 };
 
-export default CoreStatusPage;
+export default AppInitStatusPage;

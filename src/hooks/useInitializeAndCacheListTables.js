@@ -4,21 +4,21 @@ import DatabaseManager from "../utils/DatabaseManager";
 import { get } from "../utils/requestMethods";
 
 const HOUR_MS = 1000 * 60 * 60;
-export const coreDataKey = "coreTableData";
+export const listDataKey = "listTableData";
 
-export const useInitializeAndCacheCoreTables = (isOffline) => {
+export const useInitializeAndCacheListTables = (isOffline) => {
   const [isReady, setIsReady] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [isError, setIsError] = useState(false);
   const [error, setError] = useState(null);
-  const [coreTablesReady, setCoreTablesReady] = useState(false);
+  const [listTablesReady, setListTablesReady] = useState(false);
 
   const sortByNameList = ["ports", "species", "sampleType"];
 
   const dbManager = DatabaseManager.getInstance();
-  const coreTableNames = dbManager.coreTablesNamesList;
+  const listTableNames = dbManager.listTablesNamesList;
 
-  // Step 1: Initialize core tables
+  // Step 1: Initialize list tables
   useEffect(() => {
     const initialize = async () => {
       // Set Loading and Error state for database updates.
@@ -26,12 +26,12 @@ export const useInitializeAndCacheCoreTables = (isOffline) => {
       setIsError(false);
 
       try {
-        const emptyTables = await dbManager.getEmptyCoreTablesList();
+        const emptyTables = await dbManager.getEmptyListTablesList();
         if (isOffline && emptyTables.length) {
           // Offline and tables are not initialized
-          throw new Error("Offline and core tables are uninitialized.");
+          throw new Error("Offline and list tables are uninitialized.");
         } else if (!isOffline) {
-          const updateTables = await dbManager.getUpdateCoreTablesList();
+          const updateTables = await dbManager.getUpdateListTablesList();
           if (updateTables.length) {
             const now = new Date();
             await Promise.all(
@@ -52,7 +52,7 @@ export const useInitializeAndCacheCoreTables = (isOffline) => {
             );
           }
         }
-        setCoreTablesReady(true);
+        setListTablesReady(true);
       } catch (err) {
         setIsError(true);
         setError(err);
@@ -64,8 +64,8 @@ export const useInitializeAndCacheCoreTables = (isOffline) => {
     initialize();
   }, [isOffline]);
 
-  // Step 2: Cache core tables into React Query
-  const coreTableQueries = coreTableNames.map((tableName) => {
+  // Step 2: Cache list tables into React Query
+  const listTablesQueries = listTableNames.map((tableName) => {
     const queryFn = () =>
       dbManager.getTableRecords(
         tableName,
@@ -73,20 +73,20 @@ export const useInitializeAndCacheCoreTables = (isOffline) => {
       );
 
     return {
-      queryKey: [coreDataKey, tableName],
+      queryKey: [listDataKey, tableName],
       queryFn,
-      enabled: coreTablesReady, // Only fetch if core tables are ready
+      enabled: listTablesReady, // Only fetch if list tables are ready
       staleTime: HOUR_MS,
     };
   });
 
-  const queries = useQueries({ queries: coreTableQueries });
+  const queries = useQueries({ queries: listTablesQueries });
 
   const cacheLoading = queries.some((query) => query.isLoading);
   const cacheError = queries.some((query) => query.isError);
   const cacheLoadError = queries.find((query) => query.isError)?.error || null;
   const data = queries.reduce((acc, query, index) => {
-    acc[coreTableNames[index]] = query.data || null;
+    acc[listTableNames[index]] = query.data || null;
     return acc;
   }, {});
 

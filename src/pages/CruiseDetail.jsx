@@ -19,7 +19,7 @@ import { listValueLookup, CruiseStatus } from "../utils/listLookup";
 import { setStatusColor } from "../utils/setStatusColor";
 import { generateTzDateTime, getLocationTz } from "../utils/dateTimeHelpers";
 import { post, put } from "../utils/requestMethods";
-import { usePortsList, useCruiseStatusesList } from "../hooks/useCoreTables";
+import { usePortsList, useCruiseStatusesList } from "../hooks/useListTables";
 import { useGetCruiseById, useGetStationsByCruiseId, useUpdateCruise } from "../hooks/useCruises";
 
 const CruiseAction = {

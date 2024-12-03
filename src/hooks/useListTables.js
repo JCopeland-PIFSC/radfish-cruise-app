@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import DatabaseManager from "../utils/DatabaseManager";
-import { coreDataKey } from "./useInitializeAndCacheCoreTables";
+import { listDataKey } from "./useInitializeAndCacheListTables";
 
 const HOUR_MS = 1000 * 60 * 60;
 
@@ -13,7 +13,7 @@ const speciesTableName = "species";
 export const usePortsList = () => {
   const dbManager = DatabaseManager.getInstance();
   return useQuery({
-    queryKey: [coreDataKey, portsTableName],
+    queryKey: [listDataKey, portsTableName],
     queryFn: () => dbManager.getTableRecords(portsTableName, "name"),
     staleTime: HOUR_MS * 1,
     cacheTime: HOUR_MS * 24,
@@ -23,7 +23,7 @@ export const usePortsList = () => {
 export const useCruiseStatusesList = () => {
   const dbManager = DatabaseManager.getInstance();
   return useQuery({
-    queryKey: [coreDataKey, cruiseStatusesTableName],
+    queryKey: [listDataKey, cruiseStatusesTableName],
     queryFn: () => dbManager.getTableRecords(cruiseStatusesTableName),
     staleTime: HOUR_MS * 1,
     cacheTime: HOUR_MS * 24,
@@ -33,7 +33,7 @@ export const useCruiseStatusesList = () => {
 export const useSampleTypesList = () => {
   const dbManager = DatabaseManager.getInstance();
   return useQuery({
-    queryKey: [coreDataKey, sampleTypesTableName],
+    queryKey: [listDataKey, sampleTypesTableName],
     queryFn: () => dbManager.getTableRecords(sampleTypesTableName),
     staleTime: HOUR_MS * 1,
     cacheTime: HOUR_MS * 24,
@@ -43,7 +43,7 @@ export const useSampleTypesList = () => {
 export const usePrecipitationList = () => {
   const dbManager = DatabaseManager.getInstance();
   return useQuery({
-    queryKey: [coreDataKey, precipitationTableName],
+    queryKey: [listDataKey, precipitationTableName],
     queryFn: () => dbManager.getTableRecords(precipitationTableName),
     staleTime: HOUR_MS * 1,
     cacheTime: HOUR_MS * 24,
@@ -53,7 +53,7 @@ export const usePrecipitationList = () => {
 export const useSpeciesList = () => {
   const dbManager = DatabaseManager.getInstance();
   return useQuery({
-    queryKey: [coreDataKey, speciesTableName],
+    queryKey: [listDataKey, speciesTableName],
     queryFn: () => dbManager.getTableRecords(speciesTableName, "name"),
     staleTime: HOUR_MS * 1,
     cacheTime: HOUR_MS * 24,
