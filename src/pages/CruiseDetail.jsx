@@ -20,7 +20,7 @@ import { setStatusColor } from "../utils/setStatusColor";
 import { generateTzDateTime, getLocationTz } from "../utils/dateTimeHelpers";
 import { post, put } from "../utils/requestMethods";
 import { usePortsList, useCruiseStatusesList } from "../hooks/useListTables";
-import { useGetCruiseById, useGetStationsByCruiseId, useUpdateCruise } from "../hooks/useCruises";
+import { useGetCruiseById, useGetStationsByCruiseId, useUpdateCruise, useAddStation } from "../hooks/useCruises";
 
 const CruiseAction = {
   NEW: "NEW",
@@ -49,10 +49,11 @@ const CruiseDetailPage = () => {
     isLoading: stationsLoading,
     isError: stationsError,
     error: errorStations
-  } = useGetCruiseById(cruiseId);
+  } = useGetStationsByCruiseId(cruiseId);
 
   const [activeAction, setActiveAction] = useState(null);
   const { mutateAsync: updateCruise } = useUpdateCruise();
+  const { mutateAsync: addStation } = useAddStation();
 
   if (cruiseLoading || stationsLoading) return <div>Loading Cruise Data...</div>;
   if (portsError || cruiseStatusesError) return <div>Error Loading List Data: {portsError ? errorPorts.message : errorCruiseStatuses.message}</div>;
@@ -95,7 +96,7 @@ const CruiseDetailPage = () => {
     }
 
     try {
-      await updateCruise({ id, updates: values });
+      await updateCruise({ cruiseId: id, updates: values });
       setActiveAction(null);
     } catch (error) {
       console.error("Failed to update cruise: ", error);
@@ -106,7 +107,8 @@ const CruiseDetailPage = () => {
     event.preventDefault();
 
     const formData = new FormData(event.target);
-    const values = { cruiseId: id };
+    const values = { id: crypto.randomUUID(), cruiseId: id };
+    console.log("values: ", values)
 
     for (const [key, value] of formData.entries()) {
       values[key] = value;
@@ -114,9 +116,10 @@ const CruiseDetailPage = () => {
 
     const timezone = getLocationTz(values.latitude, values.longitude);
     const beginSetDateTime = generateTzDateTime(values.eventDate, values.eventTime, timezone);
-    const newValues = structuredClone(InitializedStation);
-    newValues.cruiseId = values.cruiseId;
-    newValues.stationName = values.stationName;
+    const newStation = structuredClone(InitializedStation);
+    newStation.id = values.id;
+    newStation.cruiseId = values.cruiseId;
+    newStation.stationName = values.stationName;
     const newBeginSetValues = {
       timestamp: beginSetDateTime,
       latitude: values.latitude,
@@ -127,13 +130,17 @@ const CruiseDetailPage = () => {
       precipitationId: values.precipitationId,
       comments: values.comments
     };
-    newValues.events.beginSet = newBeginSetValues;
+    newStation.events.beginSet = newBeginSetValues;
 
     // process date time
-    const newStation = await post(`/api/stations`, newValues);
-    event.target.reset();
-    setActiveAction(null);
-  }
+    try {
+      await addStation({ cruiseId: newStation.cruiseId, newStation });
+      event.target.reset();
+      setActiveAction(null);
+    } catch (error) {
+      console.error("Failed to add new Station: ", error);
+    }
+  };
 
   return (
     <>
@@ -297,7 +304,7 @@ const CruiseDetailPage = () => {
       {activeAction === CruiseAction.NEW && <StationNew handleNewStation={handleNewStation} />}
       {stations.length
         ? stations.map((station) => (
-          <StationSummary
+          < StationSummary
             key={station.id}
             cruiseId={id}
             station={station}

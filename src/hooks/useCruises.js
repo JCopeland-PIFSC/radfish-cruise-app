@@ -24,7 +24,7 @@ export const useAddCruise = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async (newCruise) => {
+    mutationFn: async ({ newCruise }) => {
       await dbManager.db.transaction("rw", cruiseTableName, async () => {
         await dbManager.db.table(cruiseTableName).add(newCruise);
       });
@@ -44,15 +44,15 @@ export const useUpdateCruise = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async ({ id, updates }) => {
+    mutationFn: async ({ cruiseId, updates }) => {
       await dbManager.db.transaction("rw", cruiseTableName, async () => {
-        await dbManager.db.table(cruiseTableName).update(id, updates);
+        await dbManager.db.table(cruiseTableName).update(cruiseId, updates);
       });
-      return { id, updates };
+      return { cruiseId, updates };
     },
-    onSuccess: ({ id, updates }) => {
+    onSuccess: ({ cruiseId, updates }) => {
       queryClient.setQueryData(
-        [userDataKey, cruiseTableName, id],
+        [userDataKey, cruiseTableName, cruiseId],
         (oldData = {}) => ({
           ...oldData,
           ...updates,
@@ -104,12 +104,12 @@ export const useAddStation = () => {
 
   return useMutation({
     mutationFn: async ({ cruiseId, newStation }) => {
-      await dbManager.db.transaction("rw", cruiseTableName, async () => {
+      await dbManager.db.transaction("rw", stationTableName, async () => {
         await dbManager.db.table(stationTableName).add(newStation);
       });
-      return newStation;
+      return { cruiseId, newStation };
     },
-    onSuccess: (cruiseId, newStation) => {
+    onSuccess: ({ cruiseId, newStation }) => {
       queryClient.setQueryData(
         [userDataKey, stationTableName, cruiseId],
         (oldData = []) => [newStation, ...oldData],
@@ -123,21 +123,22 @@ export const useUpdateStation = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async ({ id, updates }) => {
+    mutationFn: async ({ cruiseId, stationId, updates }) => {
+      debugger;
       await dbManager.db.transaction("rw", stationTableName, async () => {
-        await dbManager.db.table(stationTableName).update(id, updates);
+        await dbManager.db.table(stationTableName).update(stationId, updates);
       });
-      return { id, updates };
+      return { cruiseId, stationId, updates };
     },
-    onSuccess: ({ id, updates }) => {
+    onSuccess: ({ cruiseId, stationId, updates }) => {
       queryClient.setQueryData(
-        [userDataKey, stationTableName, id],
+        [userDataKey, stationTableName, stationId],
         (oldData = {}) => ({
           ...oldData,
           ...updates,
         }),
       );
-      queryClient.invalidateQueries([userDataKey, stationTableName]);
+      queryClient.invalidateQueries([userDataKey, stationTableName, cruiseId]);
     },
   });
 };

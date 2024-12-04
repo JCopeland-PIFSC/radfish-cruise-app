@@ -54,7 +54,7 @@ const CruiseNewPage = () => {
     }
 
     try {
-      const newCruise = await addCruise(values);
+      const newCruise = await addCruise({ newCruise: values });
       event.target.reset();
       setResetToggle(true);
       navigate(`/cruises/${newCruise.id}`);
