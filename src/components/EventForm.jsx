@@ -1,4 +1,3 @@
-import React, { useContext } from "react";
 import {
   Grid,
   Form,
@@ -10,13 +9,11 @@ import {
   Button,
   Textarea
 } from "@trussworks/react-uswds";
-import { CruiseContext } from "../CruiseContext";
 import { camelToDash, camelToTitleCase } from "../utils/stringUtilities";
 import { getTzDateTimeParts } from "../utils/dateTimeHelpers";
+import { usePrecipitationList } from "../hooks/useListTables";
 
 const EventForm = ({ event, handleSaveEvent, eventType }) => {
-  const { state } = useContext(CruiseContext);
-  const { precipitation } = state;
   const {
     timestamp,
     latitude,
@@ -26,9 +23,22 @@ const EventForm = ({ event, handleSaveEvent, eventType }) => {
     visibilityKm,
     precipitationId,
     comments } = event;
+  const {
+    data: precipitation,
+    isLoading: precipitationLoading,
+    isError: precipitationError,
+    error } = usePrecipitationList();
   const eventPrefix = camelToDash(eventType);
   const eventLabel = camelToTitleCase(eventType);
 
+  // Render loading/error states
+  if (precipitationLoading) {
+    return <div>Loading...</div>;
+  }
+
+  if (precipitationError) {
+    return <div>Error loading Species: {error.message}</div>;
+  }
   return (
     <Form id={`${eventPrefix}-form`} name={`${eventType}Form`} className="maxw-full" onSubmit={handleSaveEvent}>
       <Grid row>

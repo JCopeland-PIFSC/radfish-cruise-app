@@ -1,18 +1,29 @@
 import "../index.css";
-import React, { useContext } from "react";
+import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Button, Grid, Icon, Tag } from "@trussworks/react-uswds";
 import { Table } from "@nmfs-radfish/react-radfish";
-import { CruiseContext } from "../CruiseContext";
 import { listValueLookup } from "../utils/listLookup";
 import { setStatusColor } from "../utils/setStatusColor";
+import { usePortsList, useCruiseStatusesList } from "../hooks/useListTables";
+import { useGetCruises } from "../hooks/useCruises";
 
 const CruiseListPage = () => {
   const navigate = useNavigate();
-  const { state } = useContext(CruiseContext);
-  const { ports, cruiseStatuses, cruises, cruisesLoading } = state;
 
-  if (cruisesLoading) return <div>Loading...</div>;
+  const {
+    data: ports,
+    isError: portsError,
+    errorPorts } = usePortsList();
+  const {
+    data: cruiseStatuses,
+    isError: cruiseStatusesError,
+    errorCruiseStatuses } = useCruiseStatusesList();
+  const { data: cruises, isLoading: cruisesLoading, isError: cruisesError, errorCruises } = useGetCruises();
+
+  if (cruisesLoading) return <div>Loading Cruises...</div>;
+  if (portsError || cruiseStatusesError) return <div>Error Loading List Data: {portsError ? errorPorts.message : errorCruiseStatuses.message}</div>;
+  if (cruisesError) return <div>Error Loading Cruise Data: {errorCruises?.message}</div>;
 
   const handleNavNewCruise = () => {
     navigate("/cruises/new");

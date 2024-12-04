@@ -17,7 +17,7 @@ npm run serve:json
 This should produce the following output letting you know it is running.
 
 ```bash
-JSON Server started on PORT :3000
+JSON Server started on PORT :5000
 Press CTRL-C to stop
 Watching db.json...
 

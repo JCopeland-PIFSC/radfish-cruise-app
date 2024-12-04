@@ -1,5 +1,5 @@
 import "../index.css";
-import React, { useContext, useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import {
   Form,
   Button,
@@ -8,17 +8,37 @@ import {
   TextInput,
   Select,
 } from "@trussworks/react-uswds";
-import { CruiseContext, ACTIONS } from "../CruiseContext";
 import { DatePicker } from "@nmfs-radfish/react-radfish";
 import { useNavigate } from "react-router-dom";
-import { post } from "../utils/requestMethods";
+import { usePortsList } from "../hooks/useListTables";
+import { useAddCruise } from "../hooks/useCruises";
 
 const CruiseNewPage = () => {
+  const {
+    data: ports,
+    isLoading: portsLoading,
+    isError: portsError,
+    errorPorts } = usePortsList();
+  const { mutateAsync: addCruise } = useAddCruise();
   const navigate = useNavigate();
-  const { dispatch, state } = useContext(CruiseContext);
-  const { ports } = state;
   const [resetToggle, setResetToggle] = useState(false);
   const inputFocus = useRef(null);
+
+  useEffect(() => {
+    if (inputFocus.current) {
+      inputFocus.current.focus();
+    }
+    setResetToggle(false);
+  }, [resetToggle]);
+
+  // Render loading/error states
+  if (portsLoading) {
+    return <div>Loading...</div>;
+  }
+
+  if (portsError) {
+    return <div>Error loading ports: {errorPorts.message}</div>;
+  }
 
   const handleNavCruisesList = () => {
     navigate("/cruises");
@@ -27,17 +47,20 @@ const CruiseNewPage = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     const formData = new FormData(event.target);
-    const values = { cruiseStatusId: 1, returnPort: null, endDate: null };
+    const values = { id: crypto.randomUUID(), cruiseStatusId: 1, returnPort: null, endDate: null };
 
     for (const [key, value] of formData.entries()) {
       values[key] = value;
     }
 
-    const newCruise = await post(`/api/cruises`, values);
-    dispatch({ type: ACTIONS.SET_NEW_CRUISE, payload: newCruise });
-    event.target.reset();
-    setResetToggle(true);
-    navigate(`/cruises/${newCruise.id}`);
+    try {
+      const newCruise = await addCruise({ newCruise: values });
+      event.target.reset();
+      setResetToggle(true);
+      navigate(`/cruises/${newCruise.id}`);
+    } catch (error) {
+      console.error("Failed to save cruise: ", error);
+    }
   };
 
   const handleReset = (event) => {
@@ -45,13 +68,6 @@ const CruiseNewPage = () => {
     event.target.reset();
     setResetToggle(true);
   };
-
-  useEffect(() => {
-    if (inputFocus.current) {
-      inputFocus.current.focus();
-    }
-    setResetToggle(false);
-  }, [resetToggle]);
 
   return (
     <>

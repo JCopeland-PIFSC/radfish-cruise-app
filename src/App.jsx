@@ -5,11 +5,9 @@ import {
   Route,
   Navigate,
   Link,
-  useParams,
 } from "react-router-dom";
-import { useContext, useEffect, useState } from "react";
-import { CruiseContext, ACTIONS } from "./CruiseContext";
-import { Application } from "@nmfs-radfish/react-radfish";
+import { useState } from "react";
+import { Application, useOfflineStatus } from "@nmfs-radfish/react-radfish";
 import {
   GridContainer,
   Title,
@@ -17,118 +15,43 @@ import {
   PrimaryNav,
   Header,
 } from "@trussworks/react-uswds";
-import { get } from "./utils/requestMethods";
+import AppInitStatusPage from "./pages/AppInitStatus";
 import CruiseListPage from "./pages/CruiseList";
 import CruiseNewPage from "./pages/CruiseNew";
 import CruiseDetailPage from "./pages/CruiseDetail";
 import StationDetailPage from "./pages/StationDetail";
-
+import { useInitializeAndCacheListTables } from "./hooks/useInitializeAndCacheListTables";
+import { useLoadCruisesAndStations } from "./hooks/useLoadCruisesAndStations";
 function App() {
   const [isExpanded, setExpanded] = useState(false);
-  const { dispatch } = useContext(CruiseContext);
 
-  async function fetchList(actionType, endpoint, queryParams) {
-    const responseData = await get(endpoint, queryParams);
-    dispatch({ type: actionType, payload: responseData });
-  }
+  // hooks
+  const { isOffline } = useOfflineStatus();
+  const {
+    isReady,
+    isLoading,
+    isError,
+    error,
+  } = useInitializeAndCacheListTables(isOffline);
+  const {
+    loading: cruisesLoading,
+    warning: cruisesWarning,
+    error: cruisesError,
+  } = useLoadCruisesAndStations(isReady, isOffline);
 
-  async function fetchCruiseDetails(id) {
-    return await get(`/api/cruises/${id}`);
-  }
-
-  async function fetchCruiseStations(id) {
-    return await get(`/api/stations`, { cruiseId: id, _sort: "-events.beginSet.timestamp", });
-  }
-
-  async function fetchStation(id) {
-    return await get(`/api/stations/${id}`);
-  }
-
-  function CruiseLoaderWrapper() {
-    const { id } = useParams();
-    const [cruise, setCruise] = useState(null);
-    const [stations, setStations] = useState(null);
-
-    useEffect(() => {
-      const load = async () => {
-        let cruiseRes;
-        // Redirect to Cruises List view (/cruises) if cruiseId is not found.
-        try {
-          cruiseRes = await fetchCruiseDetails(id);
-        } catch (error) {
-          window.location.href = '/cruises';
-        }
-
-        const stationsRes = await fetchCruiseStations(id);
-        setCruise(cruiseRes);
-        setStations(stationsRes);
-      };
-
-      load();
-    }, [id]);
-
-    if (!cruise || !stations) return <div>Loading...</div>;
-
-    return <CruiseDetailPage data={{ cruise, stations }} />;
-  }
-
-  function StationLoaderWrapper() {
-    const { cruiseId, stationId } = useParams();
-    const [cruise, setCruise] = useState(null);
-    const [station, setStation] = useState(null);
-
-    useEffect(() => {
-      const load = async () => {
-        let cruiseRes;
-        let stationRes;
-        // Redirect to Cruises List view (/cruises) if cruiseId is not found.
-        try {
-          cruiseRes = await fetchCruiseDetails(cruiseId);
-        } catch (error) {
-          window.location.href = '/cruises';
-        }
-        // Redirect to parent Cruise if Station is not found
-        try {
-          stationRes = await fetchStation(stationId);
-        } catch (error) {
-          window.location.href = `/cruises/${cruiseId}`
-        }
-        setCruise(cruiseRes);
-        setStation(stationRes);
-      };
-
-      load();
-    }, [cruiseId, stationId]);
-
-    if (!cruise || !station) return <div>Loading...</div>;
-
-    return <StationDetailPage data={{ cruiseName: cruise?.cruiseName, station }} />;
-  }
-
-  useEffect(() => {
-    // Fetch lists asynchronously
-    fetchList(ACTIONS.SET_PORTS_LIST, `/api/ports`, {
-      _sort: "name",
-    });
-    fetchList(
-      ACTIONS.SET_CRUISE_STATUSES_LIST,
-      `/api/cruiseStatuses`,
-    );
-    fetchList(ACTIONS.SET_CRUISES_LIST, `/api/cruises`, {
-      _sort: "-startDate",
-    });
-    fetchList(ACTIONS.SET_SPECIES_LIST, `/api/species`, {
-      _sort: "name",
-    });
-    fetchList(ACTIONS.SET_SAMPLE_TYPES_LIST, `/api/sampleTypes`);
-    fetchList(ACTIONS.SET_PRECIPITATION_LIST, `/api/precipitation`);
-  }, [dispatch]);
+  // Statuses for the status page
+  const statuses = {
+    "Network Status": isOffline ? "red" : "green",
+    "List Tables Initialized": isReady ? "green" : "yellow",
+    "Cruises & Stations Loaded": cruisesLoading
+      ? "yellow"
+      : cruisesError
+        ? "red"
+        : "green",
+  };
 
   return (
     <Application>
-      <a className="usa-skipnav" href="#main-content">
-        Skip to main content
-      </a>
       <main id="main-content">
         <BrowserRouter>
           <Header
@@ -160,24 +83,34 @@ function App() {
               ></PrimaryNav>
             </div>
           </Header>
-          {/* <div className="display-flex flex-justify-center"> */}
-          <GridContainer containerSize="tablet-lg">
-            <Routes>
-              <Route path="/" element={<Navigate to="/cruises" />} />
-              <Route path="/cruises" element={<CruiseListPage />} />
-              <Route path="/cruises/new" element={<CruiseNewPage />} />
-              <Route path="/cruises/:id" element={<CruiseLoaderWrapper />} />
-              <Route path="/cruises/:cruiseId/station/:stationId" element={<StationLoaderWrapper />} />
-
-              {/* Catch-all route for unknown paths */}
-              <Route path="*" element={<Navigate to="/cruises" />} />
-            </Routes>
-          </GridContainer>
-          {/* </div> */}
+          <div className="display-flex flex-justify-center">
+            <GridContainer containerSize="tablet-lg">
+              <Routes>
+                <Route
+                  path="/"
+                  element={
+                    <AppInitStatusPage
+                      statuses={statuses}
+                      listsLoading={isLoading}
+                      listsError={isError}
+                      listsErrorMessage={error?.message}
+                      additionalWarning={cruisesWarning &&
+                        "Cruises or stations are missing. Please connect to the network if you suspect data is incomplete."}
+                    />
+                  }
+                />
+                <Route path="/cruises" element={<CruiseListPage />} />
+                <Route path="/cruises/new" element={<CruiseNewPage />} />
+                <Route path="/cruises/:cruiseId" element={<CruiseDetailPage />} />
+                <Route path="/cruises/:cruiseId/station/:stationId" element={<StationDetailPage />} />
+                <Route path="*" element={<Navigate to="/" />} />
+              </Routes>
+            </GridContainer>
+          </div>
         </BrowserRouter>
       </main>
     </Application>
   );
-}
+};
 
 export default App;

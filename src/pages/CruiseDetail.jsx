@@ -1,5 +1,5 @@
 import "../index.css";
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import {
   Button,
   Grid,
@@ -14,16 +14,51 @@ import {
 import StationSummary from "../components/StationSummary";
 import StationNew from "../components/StationNew";
 import DescriptionListItem from "../components/DescriptionListItem";
-import { CruiseContext } from "../CruiseContext";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { listValueLookup, CruiseStatus } from "../utils/listLookup";
 import { setStatusColor } from "../utils/setStatusColor";
 import { generateTzDateTime, getLocationTz } from "../utils/dateTimeHelpers";
 import { post, put } from "../utils/requestMethods";
+import { usePortsList, useCruiseStatusesList } from "../hooks/useListTables";
+import { useGetCruiseById, useGetStationsByCruiseId, useUpdateCruise, useAddStation } from "../hooks/useCruises";
 
-const CruiseDetailPage = ({ data }) => {
-  const { cruise: initialCruise, stations: initialStations } = data;
-  const [cruise, setCruise] = useState(initialCruise);
+const CruiseAction = {
+  NEW: "NEW",
+  EDIT: "EDIT",
+};
+
+const CruiseDetailPage = () => {
+  const { cruiseId } = useParams();
+  const navigate = useNavigate();
+  const {
+    data: ports,
+    isError: portsError,
+    error: errorPorts } = usePortsList();
+  const {
+    data: cruiseStatuses,
+    isError: cruiseStatusesError,
+    error: errorCruiseStatuses } = useCruiseStatusesList();
+  const {
+    data: cruise,
+    isLoading: cruiseLoading,
+    isError: cruiseError,
+    error: errorCruise
+  } = useGetCruiseById(cruiseId);
+  const {
+    data: stations,
+    isLoading: stationsLoading,
+    isError: stationsError,
+    error: errorStations
+  } = useGetStationsByCruiseId(cruiseId);
+
+  const [activeAction, setActiveAction] = useState(null);
+  const { mutateAsync: updateCruise } = useUpdateCruise();
+  const { mutateAsync: addStation } = useAddStation();
+
+  if (cruiseLoading || stationsLoading) return <div>Loading Cruise Data...</div>;
+  if (portsError || cruiseStatusesError) return <div>Error Loading List Data: {portsError ? errorPorts.message : errorCruiseStatuses.message}</div>;
+  if (cruiseError) return <div>Error Loading Cruise Data: {errorCruise.message}</div>;
+
   const {
     id,
     cruiseName,
@@ -34,22 +69,12 @@ const CruiseDetailPage = ({ data }) => {
     departurePortId,
     returnPortId,
   } = cruise;
-  const navigate = useNavigate();
-  const { state } = useContext(CruiseContext);
-  const { ports, cruiseStatuses } = state;
-  const [activeAction, setActiveAction] = useState(null);
   const cruiseStatus = listValueLookup(cruiseStatuses, cruiseStatusId);
   const departurePort = listValueLookup(ports, departurePortId);
   const returnPort = listValueLookup(ports, returnPortId);
-  const [stations, setStations] = useState(initialStations);
-  const cruiseStatusIdStr = cruiseStatusId.toString();
+
   const handleNavCruisesList = () => {
     navigate("/cruises");
-  };
-
-  const CruiseAction = {
-    NEW: "NEW",
-    EDIT: "EDIT",
   };
 
   const handleSaveCruise = async (event) => {
@@ -70,16 +95,20 @@ const CruiseDetailPage = ({ data }) => {
       values[key] = value;
     }
 
-    const updatedCruise = await put(`/api/cruises/${id}`, values);
-    setActiveAction(null);
-    setCruise(updatedCruise);
+    try {
+      await updateCruise({ cruiseId: id, updates: values });
+      setActiveAction(null);
+    } catch (error) {
+      console.error("Failed to update cruise: ", error);
+    }
   };
 
   const handleNewStation = async (event) => {
     event.preventDefault();
 
     const formData = new FormData(event.target);
-    const values = { cruiseId: id };
+    const values = { id: crypto.randomUUID(), cruiseId: id };
+    console.log("values: ", values)
 
     for (const [key, value] of formData.entries()) {
       values[key] = value;
@@ -87,9 +116,10 @@ const CruiseDetailPage = ({ data }) => {
 
     const timezone = getLocationTz(values.latitude, values.longitude);
     const beginSetDateTime = generateTzDateTime(values.eventDate, values.eventTime, timezone);
-    const newValues = structuredClone(InitializedStation);
-    newValues.cruiseId = values.cruiseId;
-    newValues.stationName = values.stationName;
+    const newStation = structuredClone(InitializedStation);
+    newStation.id = values.id;
+    newStation.cruiseId = values.cruiseId;
+    newStation.stationName = values.stationName;
     const newBeginSetValues = {
       timestamp: beginSetDateTime,
       latitude: values.latitude,
@@ -100,14 +130,17 @@ const CruiseDetailPage = ({ data }) => {
       precipitationId: values.precipitationId,
       comments: values.comments
     };
-    newValues.events.beginSet = newBeginSetValues;
+    newStation.events.beginSet = newBeginSetValues;
 
     // process date time
-    const newStation = await post(`/api/stations`, newValues);
-    event.target.reset();
-    setActiveAction(null);
-    setStations([newStation, ...stations]);
-  }
+    try {
+      await addStation({ cruiseId: newStation.cruiseId, newStation });
+      event.target.reset();
+      setActiveAction(null);
+    } catch (error) {
+      console.error("Failed to add new Station: ", error);
+    }
+  };
 
   return (
     <>
@@ -126,7 +159,7 @@ const CruiseDetailPage = ({ data }) => {
               onClick={() => setActiveAction(null)}
               secondary
             >
-              "Cancel Edit Cruise"
+              Cancel Edit Cruise
             </Button>
             : <Button
               className="margin-right-0"
@@ -223,7 +256,7 @@ const CruiseDetailPage = ({ data }) => {
             </Grid>
           </Form>
           : <>
-            <Grid row>
+            <Grid row gap>
               <Grid col={12} tablet={{ col: true }}>
                 <DescriptionListItem term="Cruise Name:" description={cruiseName} />
               </Grid>
@@ -271,7 +304,7 @@ const CruiseDetailPage = ({ data }) => {
       {activeAction === CruiseAction.NEW && <StationNew handleNewStation={handleNewStation} />}
       {stations.length
         ? stations.map((station) => (
-          <StationSummary
+          < StationSummary
             key={station.id}
             cruiseId={id}
             station={station}

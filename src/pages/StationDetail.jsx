@@ -1,20 +1,40 @@
 import React, { useEffect, useState, useRef } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { Grid, Button, } from "@trussworks/react-uswds";
 import EventView from "../components/EventView";
 import EventForm from "../components/EventForm";
 import { getLocationTz, generateTzDateTime } from "../utils/dateTimeHelpers";
 import { put } from "../utils/requestMethods";
 import { EventType } from "../utils/listLookup";
+import { useGetCruiseById, useGetStationById, useUpdateStation } from "../hooks/useCruises";
 
-const StationDetailPage = ({ data }) => {
-  const { cruiseName, station: initialStation } = data;
-  const [station, setStation] = useState(initialStation);
-  const { id, cruiseId, stationName, events, catch: catches } = station;
-  const { beginSet, endSet, beginHaul, endHaul } = events;
+const StationDetailPage = () => {
+  const { cruiseId, stationId } = useParams();
+  const { data: cruise, } = useGetCruiseById(cruiseId);
+  const {
+    data: station,
+    isLoading: stationLoading,
+    isError: stationError,
+    error: errorStation
+  } = useGetStationById(stationId);
+  const { mutateAsync: updateStation } = useUpdateStation();
   const [activeAction, setActiveAction] = useState(null);
   const inputFocus = useRef(null);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (inputFocus.current) {
+      inputFocus.current.focus();
+    }
+    setActiveAction(null)
+  }, []);
+
+  if (stationLoading) return <div>Loading Station Data...</div>;
+  if (stationError) return <div>Error Loading Station Data: {errorStation?.message}</div>;
+
+  const { cruiseName, } = cruise;
+  const { id, stationName, events, catch: catches } = station;
+  const { beginSet, endSet, beginHaul, endHaul } = events;
 
   const handleNavCruisesDetail = (cruiseId) => {
     navigate(`/cruises/${cruiseId}`);
@@ -62,24 +82,21 @@ const StationDetailPage = ({ data }) => {
       };
       stationUpdates.events[eventType] = newEventValues;
 
-      const updatedStation = await put(`/api/stations/${station.id}`, stationUpdates);
-      setActiveAction(null);
-      setStation(updatedStation);
+      try {
+        debugger;
+        await updateStation({ cruiseId, stationId: id, updates: stationUpdates })
+        setActiveAction(null);
+      } catch (error) {
+        console.error("Failed to update station: ", error);
+      }
     }
-  }
-
-  useEffect(() => {
-    if (inputFocus.current) {
-      inputFocus.current.focus();
-    }
-    setActiveAction(null)
-  }, []);
+  };
 
   return (
     <>
       {/* Station Header */}
       <Grid row className="margin-top-2">
-        <Button className="margin-right-0" onClick={() => handleNavCruisesDetail(cruiseId)} >&lt; Cruise: {cruiseName}</Button>
+        <Button className="margin-right-0" onClick={() => handleNavCruisesDetail(cruiseId)} >&lt; Cruise: {cruiseName || ""}</Button>
       </Grid>
       <Grid row className="flex-justify margin-top-2">
         <h1 className="app-sec-header">Station: {stationName.toUpperCase()}</h1>

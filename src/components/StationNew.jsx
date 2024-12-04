@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef, useContext } from "react";
+import React, { useEffect, useRef } from "react";
 import {
   Grid,
   TextInput,
@@ -11,11 +11,14 @@ import {
   Select,
   Fieldset
 } from "@trussworks/react-uswds";
-import { CruiseContext } from "../CruiseContext";
+import { usePrecipitationList } from "../hooks/useListTables";
 
 const StationNew = ({ handleNewStation }) => {
-  const { state } = useContext(CruiseContext);
-  const { precipitation } = state;
+  const {
+    data: precipitation,
+    isLoading: precipitationLoading,
+    isError: precipitationError,
+    error } = usePrecipitationList();
   const inputFocus = useRef(null);
 
   useEffect(() => {
@@ -23,6 +26,15 @@ const StationNew = ({ handleNewStation }) => {
       inputFocus.current.focus();
     }
   }, []);
+
+  // Render loading/error states
+  if (precipitationLoading) {
+    return <div>Loading...</div>;
+  }
+
+  if (precipitationError) {
+    return <div>Error loading Species: {error.message}</div>;
+  }
 
   return (
     <div className="border padding-1 margin-y-2 radius-lg app-card">

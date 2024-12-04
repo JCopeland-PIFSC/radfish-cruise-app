@@ -18,7 +18,7 @@ export default defineConfig({
       filename: "service-worker.js",
       manifest: {
         short_name: "RADFish",
-        name: "RADFish React Boilerplate",
+        name: "RADFish Cruise Application",
         icons: [
           {
             src: "icons/radfish-144.ico",
