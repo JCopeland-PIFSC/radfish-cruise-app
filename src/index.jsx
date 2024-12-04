@@ -5,6 +5,7 @@ import App from "./App";
 import { Application } from "@nmfs-radfish/radfish";
 import { OfflineStorageWrapper } from "@nmfs-radfish/react-radfish";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import dbConfig from "./db/dbConfig.js";
 import DatabaseManager from "./utils/DatabaseManager.js";
 
@@ -36,6 +37,7 @@ app.on("ready", async () => {
         <OfflineStorageWrapper config={dbConfig.offlineStorageConfig}>
           <App />
         </OfflineStorageWrapper>
+        <ReactQueryDevtools initialIsOpen={false} />
       </QueryClientProvider>
     </React.StrictMode>,
   );
