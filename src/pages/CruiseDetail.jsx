@@ -108,7 +108,6 @@ const CruiseDetailPage = () => {
 
     const formData = new FormData(event.target);
     const values = { id: crypto.randomUUID(), cruiseId: id };
-    console.log("values: ", values)
 
     for (const [key, value] of formData.entries()) {
       values[key] = value;
