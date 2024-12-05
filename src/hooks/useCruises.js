@@ -124,7 +124,6 @@ export const useUpdateStation = () => {
 
   return useMutation({
     mutationFn: async ({ cruiseId, stationId, updates }) => {
-      debugger;
       await dbManager.db.transaction("rw", stationTableName, async () => {
         await dbManager.db.table(stationTableName).update(stationId, updates);
       });

@@ -83,7 +83,6 @@ const StationDetailPage = () => {
       stationUpdates.events[eventType] = newEventValues;
 
       try {
-        debugger;
         await updateStation({ cruiseId, stationId: id, updates: stationUpdates })
         setActiveAction(null);
       } catch (error) {
