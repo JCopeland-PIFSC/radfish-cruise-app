@@ -83,7 +83,7 @@ function App() {
               ></PrimaryNav>
             </div>
           </Header>
-          <div className="display-flex flex-justify-center">
+          <div className="flex-justify-center">
             <GridContainer containerSize="tablet-lg">
               <Routes>
                 <Route

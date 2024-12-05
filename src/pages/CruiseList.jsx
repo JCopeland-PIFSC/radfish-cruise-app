@@ -84,8 +84,8 @@ const CruiseListPage = () => {
           New Cruise
         </Button>
       </Grid>
-      <Grid row>
-        <Table columns={columns} data={cruises} className="margin-top-0" bordered striped scrollable />
+      <Grid row className="margin-top-2">
+        <Table columns={columns} data={cruises} className="margin-top-0" bordered striped />
       </Grid>
     </>
   );
