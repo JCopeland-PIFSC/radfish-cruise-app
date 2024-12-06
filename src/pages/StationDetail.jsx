@@ -4,9 +4,10 @@ import { Grid, Button, } from "@trussworks/react-uswds";
 import EventView from "../components/EventView";
 import EventForm from "../components/EventForm";
 import { getLocationTz, generateTzDateTime } from "../utils/dateTimeHelpers";
-import { put } from "../utils/requestMethods";
 import { EventType } from "../utils/listLookup";
 import { useGetCruiseById, useGetStationById, useUpdateStation } from "../hooks/useCruises";
+import EventHeader from "../components/EventHeader";
+import { camelToTitleCase } from "../utils/stringUtilities";
 
 const StationDetailPage = () => {
   const { cruiseId, stationId } = useParams();
@@ -21,6 +22,8 @@ const StationDetailPage = () => {
   const [activeAction, setActiveAction] = useState(null);
   const inputFocus = useRef(null);
   const navigate = useNavigate();
+  const [newEvent, setNewEvent] = useState({ endSet: null, beginHaul: null, endHaul: null });
+  const [addEvent, setAddEvent] = useState(null);
 
   useEffect(() => {
     if (inputFocus.current) {
@@ -28,6 +31,24 @@ const StationDetailPage = () => {
     }
     setActiveAction(null)
   }, []);
+
+  useEffect(() => {
+    if (station) {
+      const { endSet: newEndSet, beginHaul: newBeginHaul, endHaul: newEndHaul } = newEvent;
+      const { events } = station;
+      const { endSet, beginHaul, endHaul } = events;
+
+      if (!endSet && newEndSet === null) {
+        setAddEvent(EventType.END_SET)
+      } else if (!beginHaul && newBeginHaul === null) {
+        setAddEvent(EventType.BEGIN_HAUL)
+      } else if (!endHaul && newEndHaul === null) {
+        setAddEvent(EventType.END_HAUL)
+      } else {
+        setAddEvent(null)
+      }
+    }
+  }, [station, newEvent])
 
   if (stationLoading) return <div>Loading Station Data...</div>;
   if (stationError) return <div>Error Loading Station Data: {errorStation?.message}</div>;
@@ -41,18 +62,13 @@ const StationDetailPage = () => {
   };
 
   const handleNewEvent = (eventType) => {
-    const stationNewEvent = structuredClone(station);
-    stationNewEvent.events[eventType] = {};
-    setStation(stationNewEvent);
+    setNewEvent({ ...newEvent, [eventType]: {} })
     setActiveAction(eventType);
   }
 
   const handleCancelEvent = (eventType) => {
-    const eventObj = station.events[eventType];
-    if (Object.keys(eventObj).length === 0) {
-      const stationCancelEvent = structuredClone(station);
-      stationCancelEvent.events[eventType] = null;
-      setStation(stationCancelEvent);
+    if (!station.events[eventType]) {
+      setNewEvent({ ...newEvent, [eventType]: null })
     }
     setActiveAction(null);
   }
@@ -101,180 +117,90 @@ const StationDetailPage = () => {
         <h1 className="app-sec-header">Station: {stationName.toUpperCase()}</h1>
       </Grid>
       {/* Begin Set Event */}
-      <Grid row className="flex-justify">
-        <h1 className="app-sec-header">Event: Begin Set</h1>
-        {
-          activeAction === EventType.BEGIN_SET
-            ? <Button
-              className="margin-right-0"
-              onClick={() => handleCancelEvent(EventType.BEGIN_SET)}
-              secondary
-            >
-              Cancel Edit Begin Set
-            </Button>
-            : <Button
-              className="margin-right-0"
-              onClick={() => setActiveAction(EventType.BEGIN_SET)}
-              disabled={activeAction !== null && activeAction !== EventType.BEGIN_SET}
-            >
-              Edit Begin Set
-            </Button>
-        }
-      </Grid>
       <div className="border padding-1 margin-y-2 radius-lg app-card">
+        <EventHeader
+          eventType={EventType.BEGIN_SET}
+          activeAction={activeAction}
+          handleSetAction={setActiveAction}
+          handleCancelEvent={handleCancelEvent} />
         {activeAction === EventType.BEGIN_SET
-          ?
-          <EventForm
+          ? <EventForm
             event={beginSet}
             eventType={EventType.BEGIN_SET}
             handleSaveEvent={
-              handleSaveEvent(EventType.BEGIN_SET)} /> :
-          <EventView event={beginSet} />
+              handleSaveEvent(EventType.BEGIN_SET)} />
+          : <EventView event={beginSet} />
         }
       </div>
       {/* End Set Event */}
       {
-        endSet
-          ? <>
-            <Grid row className="flex-justify">
-              <h1 className="app-sec-header">Event: End Set</h1>
-              {
-                activeAction === EventType.END_SET
-                  ? <Button
-                    className="margin-right-0"
-                    onClick={() => handleCancelEvent(EventType.END_SET)}
-                    secondary
-                  >
-                    Cancel Edit End Set
-                  </Button>
-                  : <Button
-                    className="margin-right-0"
-                    onClick={() => setActiveAction(EventType.END_SET)}
-                    disabled={activeAction !== null && activeAction !== EventType.END_SET}
-                  >
-                    Edit End Set
-                  </Button>
-              }
-            </Grid>
-            <div className="border padding-1 margin-y-2 radius-lg app-card">
-              {activeAction === EventType.END_SET
-                ?
-                <EventForm
-                  event={endSet}
-                  eventType={EventType.END_SET}
-                  handleSaveEvent={
-                    handleSaveEvent(EventType.END_SET)} />
-                :
-                <EventView event={endSet} />
-              }
-            </div>
-          </>
-          : <>
-            <Grid row className="flex-justify margin-bottom-2">
-              <h1 className="app-sec-header">Event: End Set</h1>
-              <Button
-                className="margin-right-0"
-                onClick={() => handleNewEvent(EventType.END_SET)}
-                disabled={activeAction !== null}
-              >Add End Set</Button>
-            </Grid>
-          </>
+        (endSet || newEvent[EventType.END_SET]) &&
+        <div className="border padding-1 margin-y-2 radius-lg app-card">
+          <EventHeader
+            eventType={EventType.END_SET}
+            activeAction={activeAction}
+            handleSetAction={setActiveAction}
+            handleCancelEvent={handleCancelEvent} />
+          {activeAction === EventType.END_SET
+            ? <EventForm
+              event={endSet || newEvent[EventType.END_SET]}
+              eventType={EventType.END_SET}
+              handleSaveEvent={
+                handleSaveEvent(EventType.END_SET)} />
+            :
+            <EventView event={endSet} />
+          }
+        </div>
       }
       {/* Begin Haul Event */}
       {
-        beginHaul
-          ? <>
-            <Grid row className="flex-justify">
-              <h1 className="app-sec-header">Event: Begin Haul</h1>
-              {
-                activeAction === EventType.BEGIN_HAUL
-                  ? <Button
-                    className="margin-right-0"
-                    onClick={() => handleCancelEvent(EventType.BEGIN_HAUL)}
-                    secondary
-                  >
-                    Cancel Edit Begin Haul
-                  </Button>
-                  : <Button
-                    className="margin-right-0"
-                    onClick={() => setActiveAction(EventType.BEGIN_HAUL)}
-                    disabled={activeAction !== null && activeAction !== EventType.BEGIN_HAUL}
-                  >
-                    Edit Begin Haul
-                  </Button>
-              }
-            </Grid>
-            <div className="border padding-1 margin-y-2 radius-lg app-card">
-              {activeAction === EventType.BEGIN_HAUL
-                ?
-                <EventForm
-                  event={beginHaul}
-                  eventType={EventType.BEGIN_HAUL}
-                  handleSaveEvent={
-                    handleSaveEvent(EventType.BEGIN_HAUL)} />
-                :
-                <EventView event={beginHaul} />
-              }
-            </div>
-          </>
-          : <>
-            <Grid row className="flex-justify margin-bottom-2">
-              <h1 className="app-sec-header">Event: Begin Haul</h1>
-              <Button
-                className="margin-right-0"
-                onClick={() => handleNewEvent(EventType.BEGIN_HAUL)}
-                disabled={activeAction !== null}
-              >Add Begin Haul</Button>
-            </Grid>
-          </>
+        (beginHaul || newEvent[EventType.BEGIN_HAUL]) &&
+        <div className="border padding-1 margin-y-2 radius-lg app-card">
+          <EventHeader
+            eventType={EventType.BEGIN_HAUL}
+            activeAction={activeAction}
+            handleSetAction={setActiveAction}
+            handleCancelEvent={handleCancelEvent} />
+          {activeAction === EventType.BEGIN_HAUL
+            ? <EventForm
+              event={beginHaul || newEvent[EventType.BEGIN_HAUL]}
+              eventType={EventType.BEGIN_HAUL}
+              handleSaveEvent={
+                handleSaveEvent(EventType.BEGIN_HAUL)} />
+            :
+            <EventView event={beginHaul} />
+          }
+        </div>
       }
       {/* End Haul Event */}
       {
-        endHaul
-          ? <>
-            <Grid row className="flex-justify">
-              <h1 className="app-sec-header">Event: End Haul</h1>
-              {
-                activeAction === EventType.END_HAUL
-                  ? <Button
-                    className="margin-right-0"
-                    onClick={() => handleCancelEvent(EventType.END_HAUL)}
-                    secondary
-                  >
-                    Cancel Edit End Haul
-                  </Button>
-                  : <Button
-                    className="margin-right-0"
-                    onClick={() => setActiveAction(EventType.END_HAUL)}
-                    disabled={activeAction !== null && activeAction !== EventType.END_HAUL}
-                  >
-                    Edit End Haul
-                  </Button>
-              }
-            </Grid>
-            <div className="border padding-1 margin-y-2 radius-lg app-card">
-              {activeAction === EventType.END_HAUL
-                ?
-                <EventForm
-                  event={endHaul}
-                  eventType={EventType.END_HAUL}
-                  handleSaveEvent={
-                    handleSaveEvent(EventType.END_HAUL)} />
-                :
-                <EventView event={endHaul} />
-              }
-            </div>
-          </>
-          : <>
-            <Grid row className="flex-justify">
-              <h1 className="app-sec-header">Event: End Haul</h1>
-              <Button
-                className="margin-right-0"
-                onClick={() => handleNewEvent(EventType.END_HAUL)}
-                disabled={activeAction !== null}
-              >Add End Haul</Button>
-            </Grid>
-          </>
+        (endHaul || newEvent[EventType.END_HAUL]) &&
+        <div className="border padding-1 margin-y-2 radius-lg app-card">
+          <EventHeader
+            eventType={EventType.END_HAUL}
+            activeAction={activeAction}
+            handleSetAction={setActiveAction}
+            handleCancelEvent={handleCancelEvent} />
+          {activeAction === EventType.END_HAUL
+            ? <EventForm
+              event={endHaul || newEvent[EventType.END_HAUL]}
+              eventType={EventType.END_HAUL}
+              handleSaveEvent={
+                handleSaveEvent(EventType.END_HAUL)} />
+            :
+            <EventView event={endHaul} />
+          }
+        </div>
+      }
+
+      {addEvent &&
+        <Grid row className="flex-justify-end margin-bottom-2">
+          <Button
+            className="margin-right-0"
+            onClick={() => handleNewEvent(addEvent)}
+            disabled={activeAction !== null}
+          >Add {camelToTitleCase(addEvent)}</Button>
+        </Grid>
       }
     </>
   );

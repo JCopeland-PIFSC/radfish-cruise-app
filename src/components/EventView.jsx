@@ -1,10 +1,11 @@
 import React, { useContext } from "react";
-import { Grid } from "@trussworks/react-uswds";
+import { Grid, Button } from "@trussworks/react-uswds";
 import { listValueLookup } from "../utils/listLookup";
 import DescriptionListItem from "./DescriptionListItem";
 import { usePrecipitationList } from "../hooks/useListTables";
 
 const EventView = ({ event }) => {
+  if (!event) event = {};
   const {
     timestamp,
     latitude,
@@ -16,17 +17,12 @@ const EventView = ({ event }) => {
     comments } = event;
   const {
     data: precipitation,
-    isLoading: precipitationLoading,
     isError: precipitationError,
     error } = usePrecipitationList();
 
   // Render loading/error states
-  if (precipitationLoading) {
-    return <div>Loading...</div>;
-  }
-
   if (precipitationError) {
-    return <div>Error loading Species: {error.message}</div>;
+    return <div>Error loading Precipitation: {error.message}</div>;
   }
   return (
     <Grid row>
