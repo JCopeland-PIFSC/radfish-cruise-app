@@ -151,25 +151,28 @@ const CruiseDetailPage = () => {
         <div className="margin-top-05 margin-bottom-2 mobile-lg:margin-bottom-0">
           <Tag className={`padding-1 usa-tag--big ${setStatusColor(cruiseStatusId)}`}>{cruiseStatus}</Tag>
         </div>
-        {
-          activeAction === CruiseAction.EDIT
-            ? <Button
-              className="margin-right-0"
-              onClick={() => setActiveAction(null)}
-              secondary
-            >
-              Cancel Edit Cruise
-            </Button>
-            : <Button
-              className="margin-right-0"
-              onClick={() => setActiveAction(CruiseAction.EDIT)}
-              disabled={activeAction !== null && activeAction !== CruiseAction.EDIT}
-            >
-              Edit Cruise
-            </Button>
-        }
       </Grid>
       <div className="border radius-lg padding-1 margin-y-2 app-card">
+        <Grid row className="flex-justify-end margin-bottom-1">
+          {
+            activeAction === CruiseAction.EDIT
+              ? <Button
+                className="margin-right-0"
+                onClick={() => setActiveAction(null)}
+                secondary
+              >
+                Cancel Edit Cruise
+              </Button>
+              : <Button
+                className="margin-right-0"
+                onClick={() => setActiveAction(CruiseAction.EDIT)}
+                disabled={activeAction !== null && activeAction !== CruiseAction.EDIT}
+              >
+                Edit Cruise
+              </Button>
+          }
+
+        </Grid>
         {activeAction !== null && activeAction === CruiseAction.EDIT
           ?
           <Form className="maxw-full" onSubmit={handleSaveCruise}>
