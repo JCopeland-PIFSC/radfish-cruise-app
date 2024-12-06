@@ -52,7 +52,7 @@ const StationSummary = ({ cruiseId, station, activeAction }) => {
           />
         </Grid>
       </Grid>
-      <Grid row>
+      {/* <Grid row>
         <Grid row className="width-full">
           <h3 className="app-sec-header">Catch Summary</h3>
         </Grid>
@@ -65,7 +65,7 @@ const StationSummary = ({ cruiseId, station, activeAction }) => {
               : ""}
           </div>
         </Grid>
-      </Grid>
+      </Grid> */}
       <Grid row className="margin-top-2">
         <Button
           disabled={activeAction !== null}
