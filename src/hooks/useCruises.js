@@ -5,6 +5,7 @@ import {
   cruiseTableName,
   stationTableName,
 } from "./useLoadCruisesAndStations";
+import { useOfflineStorage } from "@nmfs-radfish/react-radfish";
 
 const HOUR_MS = 1000 * 60 * 60;
 
@@ -20,15 +21,13 @@ export const useGetCruises = () => {
 };
 
 export const useAddCruise = () => {
-  const dbManager = DatabaseManager.getInstance();
   const queryClient = useQueryClient();
+  const { create, findOne } = useOfflineStorage();
 
   return useMutation({
     mutationFn: async ({ newCruise }) => {
-      await dbManager.db.transaction("rw", cruiseTableName, async () => {
-        await dbManager.db.table(cruiseTableName).add(newCruise);
-      });
-      return newCruise;
+      await create(cruiseTableName, newCruise);
+      return await findOne(cruiseTableName, { id: newCruise.id });
     },
     onSuccess: (newCruise) => {
       queryClient.setQueryData(
