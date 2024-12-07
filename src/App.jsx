@@ -22,7 +22,7 @@ import CruiseDetailPage from "./pages/CruiseDetail";
 import StationDetailPage from "./pages/StationDetail";
 import { useInitializeAndCacheListTables } from "./hooks/useInitializeAndCacheListTables";
 import { useLoadCruisesAndStations } from "./hooks/useLoadCruisesAndStations";
-function App() {
+function App({ application }) {
   const [isExpanded, setExpanded] = useState(false);
 
   // hooks
@@ -51,7 +51,7 @@ function App() {
   };
 
   return (
-    <Application>
+    <Application application={application}>
       <main id="main-content">
         <BrowserRouter>
           <Header
