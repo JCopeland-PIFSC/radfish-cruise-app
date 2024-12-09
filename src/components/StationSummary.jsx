@@ -2,8 +2,9 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import { Button, Grid } from "@trussworks/react-uswds";
 import CatchSummary from "./CatchSummary";
-import { getSoakTime, displayTzDateTime } from "../utils/dateTimeHelpers";
+import AppCard from "./AppCard";
 import DescriptionListItem from "./DescriptionListItem";
+import { getSoakTime, displayTzDateTime } from "../utils/dateTimeHelpers";
 
 const StationSummary = ({ cruiseId, station, activeAction }) => {
   const { id, stationName, events, catch: catchList } = station;
@@ -15,7 +16,7 @@ const StationSummary = ({ cruiseId, station, activeAction }) => {
   };
 
   return (
-    <div className="border padding-1 margin-y-2 radius-lg app-card">
+    <AppCard>
       <Grid row>
         <Grid col={12} tablet={{ col: true }}>
           <DescriptionListItem term="Station Name:" description={stationName} />
@@ -72,7 +73,7 @@ const StationSummary = ({ cruiseId, station, activeAction }) => {
         >Station Details
         </Button>
       </Grid>
-    </div>
+    </AppCard>
   );
 };
 

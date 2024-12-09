@@ -3,11 +3,12 @@ import { useNavigate, useParams } from "react-router-dom";
 import { Grid, Button, } from "@trussworks/react-uswds";
 import EventView from "../components/EventView";
 import EventForm from "../components/EventForm";
+import HeaderWithEdit from "../components/HeaderWithEdit";
+import AppCard from "../components/AppCard";
 import { getLocationTz, generateTzDateTime } from "../utils/dateTimeHelpers";
 import { EventType } from "../utils/listLookup";
 import { useGetCruiseById, useGetStationById, useUpdateStation } from "../hooks/useCruises";
-import EventHeader from "../components/EventHeader";
-import { camelToTitleCase } from "../utils/stringUtilities";
+import { camelStrToTitle } from "../utils/stringUtilities";
 
 const StationDetailPage = () => {
   const { cruiseId, stationId } = useParams();
@@ -24,6 +25,7 @@ const StationDetailPage = () => {
   const navigate = useNavigate();
   const [newEvent, setNewEvent] = useState({ endSet: null, beginHaul: null, endHaul: null });
   const [addEvent, setAddEvent] = useState(null);
+  const [showAddCatch, setShowAddCatch] = useState(false);
 
   useEffect(() => {
     if (inputFocus.current) {
@@ -45,10 +47,11 @@ const StationDetailPage = () => {
       } else if (!endHaul && newEndHaul === null) {
         setAddEvent(EventType.END_HAUL)
       } else {
-        setAddEvent(null)
+        setAddEvent(null);
+        setShowAddCatch(true);
       }
     }
-  }, [station, newEvent])
+  }, [station, newEvent, showAddCatch])
 
   if (stationLoading) return <div>Loading Station Data...</div>;
   if (stationError) return <div>Error Loading Station Data: {errorStation?.message}</div>;
@@ -61,16 +64,22 @@ const StationDetailPage = () => {
     navigate(`/cruises/${cruiseId}`);
   };
 
+  const handleNavCatchDetail = (cruiseId, stationId) => {
+    navigate(`/cruises/${cruiseId}/station/${stationId}/catch`);
+  }
+
   const handleNewEvent = (eventType) => {
     setNewEvent({ ...newEvent, [eventType]: {} })
     setActiveAction(eventType);
   }
 
   const handleCancelEvent = (eventType) => {
-    if (!station.events[eventType]) {
-      setNewEvent({ ...newEvent, [eventType]: null })
+    return () => {
+      if (!station.events[eventType]) {
+        setNewEvent({ ...newEvent, [eventType]: null })
+      }
+      setActiveAction(null);
     }
-    setActiveAction(null);
   }
 
   const handleSaveEvent = (eventType) => {
@@ -117,12 +126,13 @@ const StationDetailPage = () => {
         <h1 className="app-sec-header">Station: {stationName.toUpperCase()}</h1>
       </Grid>
       {/* Begin Set Event */}
-      <div className="border padding-1 margin-y-2 radius-lg app-card">
-        <EventHeader
+      <AppCard>
+        <HeaderWithEdit
+          title={`Event: ${camelStrToTitle(EventType.BEGIN_SET)}`}
           eventType={EventType.BEGIN_SET}
           activeAction={activeAction}
-          handleSetAction={setActiveAction}
-          handleCancelEvent={handleCancelEvent} />
+          handleSetAction={() => setActiveAction(EventType.BEGIN_SET)}
+          handleCancelAction={handleCancelEvent(EventType.BEGIN_SET)} />
         {activeAction === EventType.BEGIN_SET
           ? <EventForm
             event={beginSet}
@@ -131,16 +141,17 @@ const StationDetailPage = () => {
               handleSaveEvent(EventType.BEGIN_SET)} />
           : <EventView event={beginSet} />
         }
-      </div>
+      </AppCard>
       {/* End Set Event */}
       {
         (endSet || newEvent[EventType.END_SET]) &&
-        <div className="border padding-1 margin-y-2 radius-lg app-card">
-          <EventHeader
+        <AppCard>
+          <HeaderWithEdit
+            title={`Event: ${camelStrToTitle(EventType.END_SET)}`}
             eventType={EventType.END_SET}
             activeAction={activeAction}
-            handleSetAction={setActiveAction}
-            handleCancelEvent={handleCancelEvent} />
+            handleSetAction={() => setActiveAction(EventType.END_SET)}
+            handleCancelAction={handleCancelEvent(EventType.END_SET)} />
           {activeAction === EventType.END_SET
             ? <EventForm
               event={endSet || newEvent[EventType.END_SET]}
@@ -150,17 +161,18 @@ const StationDetailPage = () => {
             :
             <EventView event={endSet} />
           }
-        </div>
+        </AppCard>
       }
       {/* Begin Haul Event */}
       {
         (beginHaul || newEvent[EventType.BEGIN_HAUL]) &&
-        <div className="border padding-1 margin-y-2 radius-lg app-card">
-          <EventHeader
+        <AppCard>
+          <HeaderWithEdit
+            title={`Event: ${camelStrToTitle(EventType.BEGIN_HAUL)}`}
             eventType={EventType.BEGIN_HAUL}
             activeAction={activeAction}
-            handleSetAction={setActiveAction}
-            handleCancelEvent={handleCancelEvent} />
+            handleSetAction={() => setActiveAction(EventType.BEGIN_HAUL)}
+            handleCancelAction={handleCancelEvent(EventType.BEGIN_HAUL)} />
           {activeAction === EventType.BEGIN_HAUL
             ? <EventForm
               event={beginHaul || newEvent[EventType.BEGIN_HAUL]}
@@ -170,17 +182,18 @@ const StationDetailPage = () => {
             :
             <EventView event={beginHaul} />
           }
-        </div>
+        </AppCard>
       }
       {/* End Haul Event */}
       {
         (endHaul || newEvent[EventType.END_HAUL]) &&
-        <div className="border padding-1 margin-y-2 radius-lg app-card">
-          <EventHeader
+        <AppCard>
+          <HeaderWithEdit
+            title={`Event: ${camelStrToTitle(EventType.END_HAUL)}`}
             eventType={EventType.END_HAUL}
             activeAction={activeAction}
-            handleSetAction={setActiveAction}
-            handleCancelEvent={handleCancelEvent} />
+            handleSetAction={() => setActiveAction(EventType.END_HAUL)}
+            handleCancelAction={handleCancelEvent(EventType.END_HAUL)} />
           {activeAction === EventType.END_HAUL
             ? <EventForm
               event={endHaul || newEvent[EventType.END_HAUL]}
@@ -190,16 +203,23 @@ const StationDetailPage = () => {
             :
             <EventView event={endHaul} />
           }
-        </div>
+        </AppCard>
       }
-
       {addEvent &&
         <Grid row className="flex-justify-end margin-bottom-2">
           <Button
             className="margin-right-0"
             onClick={() => handleNewEvent(addEvent)}
             disabled={activeAction !== null}
-          >Add {camelToTitleCase(addEvent)}</Button>
+          >Add {camelStrToTitle(addEvent)}</Button>
+        </Grid>
+      }
+      {showAddCatch &&
+        <Grid row className="flex-justify-end margin-bottom-2">
+          <Button
+            className="margin-right-0"
+            onClick={() => handleNavCatchDetail(cruiseId, stationId)}
+          >Add Catch</Button>
         </Grid>
       }
     </>
