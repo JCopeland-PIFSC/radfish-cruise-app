@@ -52,20 +52,18 @@ const StationSummary = ({ cruiseId, station, activeAction }) => {
           />
         </Grid>
       </Grid>
-      {/* <Grid row>
+      <Grid row>
         <Grid row className="width-full">
           <h3 className="app-sec-header">Catch Summary</h3>
         </Grid>
         <Grid col>
-          <div className="border padding-1 radius-md app-card">
-            {catchList && catchList.length
-              ? catchList.map((catchItem, idx) => (
-                <CatchSummary key={idx} catchItem={catchItem} />
-              ))
-              : ""}
-          </div>
+          {catchList && catchList.length
+            ? catchList.map((catchItem, idx) => (
+              <CatchSummary key={idx} catchItem={catchItem} />
+            ))
+            : "No Catches Reported"}
         </Grid>
-      </Grid> */}
+      </Grid>
       <Grid row className="margin-top-2">
         <Button
           disabled={activeAction !== null}

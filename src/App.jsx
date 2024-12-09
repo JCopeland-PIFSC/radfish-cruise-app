@@ -20,6 +20,7 @@ import CruiseListPage from "./pages/CruiseList";
 import CruiseNewPage from "./pages/CruiseNew";
 import CruiseDetailPage from "./pages/CruiseDetail";
 import StationDetailPage from "./pages/StationDetail";
+import CatchDetailPage from "./pages/CatchDetail";
 import { useInitializeAndCacheListTables } from "./hooks/useInitializeAndCacheListTables";
 import { useLoadCruisesAndStations } from "./hooks/useLoadCruisesAndStations";
 function App({ application }) {
@@ -103,6 +104,7 @@ function App({ application }) {
                 <Route path="/cruises/new" element={<CruiseNewPage />} />
                 <Route path="/cruises/:cruiseId" element={<CruiseDetailPage />} />
                 <Route path="/cruises/:cruiseId/station/:stationId" element={<StationDetailPage />} />
+                <Route path="/cruises/:cruiseId/station/:stationId/catch" element={<CatchDetailPage />} />
                 <Route path="*" element={<Navigate to="/" />} />
               </Routes>
             </GridContainer>
