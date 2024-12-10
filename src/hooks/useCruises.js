@@ -38,6 +38,30 @@ export const useAddCruise = () => {
   });
 };
 
+const usersTableName = "users";
+export const useAddUser = () => {
+
+console.log('addUser dadsf')
+  const queryClient = useQueryClient();
+  console.log("in between")
+  const { create, findOne } = useOfflineStorage();
+  console.log('addUser 2')
+  return useMutation({
+    mutationFn: async ({ newUser }) => {
+        console.log('newUser', newUser)
+      await create(usersTableName, newUser);
+      console.log('hit')
+      return await findOne(usersTableName, { id: newUser.id });
+    },
+    onSuccess: (newUser) => {
+      queryClient.setQueryData(
+        [userDataKey, usersTableName],
+        (oldData = []) => [newUser, ...oldData],
+      );
+    },
+  });
+};
+
 export const useUpdateCruise = () => {
   const dbManager = DatabaseManager.getInstance();
   const queryClient = useQueryClient();

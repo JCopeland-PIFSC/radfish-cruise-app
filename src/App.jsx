@@ -20,6 +20,7 @@ import CruiseListPage from "./pages/CruiseList";
 import CruiseNewPage from "./pages/CruiseNew";
 import CruiseDetailPage from "./pages/CruiseDetail";
 import StationDetailPage from "./pages/StationDetail";
+import Login from "./pages/Login";
 import { useInitializeAndCacheListTables } from "./hooks/useInitializeAndCacheListTables";
 import { useLoadCruisesAndStations } from "./hooks/useLoadCruisesAndStations";
 function App({ application }) {
@@ -99,6 +100,7 @@ function App({ application }) {
                     />
                   }
                 />
+                <Route path="/login" element={<Login />} />
                 <Route path="/cruises" element={<CruiseListPage />} />
                 <Route path="/cruises/new" element={<CruiseNewPage />} />
                 <Route path="/cruises/:cruiseId" element={<CruiseDetailPage />} />
