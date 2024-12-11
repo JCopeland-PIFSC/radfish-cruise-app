@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { post } from "../utils/requestMethods";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 import {
   Form,
   Fieldset,
@@ -11,13 +12,18 @@ import {
   GridContainer,
   Grid,
 } from "@trussworks/react-uswds";
-import { useAddUser } from "../hooks/useCruises";
 
 const Login = () => {
   const [error, setError] = useState("");
   const [showPassword, setShowPassword] = React.useState(false);
+  const { login, user } = useAuth();
   const navigate = useNavigate();
-  const { mutateAsync: addUser } = useAddUser();
+
+  // Redirect if user is already authenticated
+  if (user?.isAuthenticated) {
+    navigate("/cruises"); // Adjust the path as needed
+    return null; // Prevent rendering the login form
+  }
 
   const handleLogin = async (event) => {
     event.preventDefault();
@@ -34,8 +40,8 @@ const Login = () => {
 
       if (data) {
         console.log("data", data);
-        const newUser = await addUser({ newUser: data.user });
-        console.log("newUser", newUser);
+        await login(data.user);
+
         event.target.reset();
         navigate("/cruises");
       } else {
