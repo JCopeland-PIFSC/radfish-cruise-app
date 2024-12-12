@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
-import { useAddUser } from "../hooks/useCruises";
 import { useOfflineStorage } from "@nmfs-radfish/react-radfish";
+import { useAddUser } from "../hooks/useUsers";
 
 const AuthContext = createContext();
 
@@ -8,13 +8,12 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const { mutateAsync: addUser } = useAddUser();
-  const { create, findOne } = useOfflineStorage();
-
+  const { findOne } = useOfflineStorage();
 
   // Initialize user from IndexedDB
   useEffect(() => {
     const loadUserFromDB = async () => {
-        const storedUser = await findOne('users', { username: 'q' });
+      const storedUser = await findOne("users", { isAuthenticated: 1 });
       if (storedUser?.isAuthenticated) {
         setUser(storedUser);
       }
@@ -25,8 +24,7 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   const login = async (userData) => {
-    userData = { ...userData, isAuthenticated: true };
-    const user = await addUser({ userData });
+    await addUser({ userData });
     setUser(userData);
   };
 

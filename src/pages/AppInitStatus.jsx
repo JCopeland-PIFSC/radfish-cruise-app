@@ -1,8 +1,10 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { Button, GridContainer, Grid } from "@trussworks/react-uswds";
 
-const AppInitStatusPage = ({ statuses, listsLoading, listsError, listsErrorMessage }) => {
+const AppInitStatusPage = () => {
+  const { state } = useLocation();
+  const { statuses, listsLoading, listsError, listsErrorMessage } = state || {};
   const navigate = useNavigate();
 
   // Determine if all statuses are "green"

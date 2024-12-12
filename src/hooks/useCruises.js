@@ -38,26 +38,6 @@ export const useAddCruise = () => {
   });
 };
 
-const userTableName = "users";
-export const useAddUser = () => {
-  const queryClient = useQueryClient();
-
-  const { create, findOne } = useOfflineStorage();
-
-  return useMutation({
-    mutationFn: async ({ userData }) => {
-      await create(userTableName, userData);
-      return await findOne(userTableName, { id: userData.id });
-    },
-    onSuccess: (userData) => {
-      queryClient.setQueryData([userDataKey, userTableName], (oldData = []) => [
-        userData,
-        ...oldData,
-      ]);
-    },
-  });
-};
-
 export const useUpdateCruise = () => {
   const dbManager = DatabaseManager.getInstance();
   const queryClient = useQueryClient();

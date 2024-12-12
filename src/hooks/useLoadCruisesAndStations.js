@@ -2,17 +2,21 @@ import { useEffect, useState } from "react";
 import { useQueries, useQuery } from "@tanstack/react-query";
 import DatabaseManager from "../utils/DatabaseManager";
 import { get } from "../utils/requestMethods";
+import { useAuth } from "../context/AuthContext";
 
 const HOUR_MS = 1000 * 60 * 60;
 
 export const userDataKey = "userData";
 export const cruiseTableName = "cruises";
 export const stationTableName = "stations";
+export const userTableName = "users";
 
 export const useLoadCruisesAndStations = (listTablesReady, isOffline) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [warning, setWarning] = useState(false); // Warn if cruises/stations are missing and offline
+  const [isInitialized, setIsInitialized] = useState(false);
+  const { user } = useAuth();
 
   const dbManager = DatabaseManager.getInstance();
 
@@ -21,8 +25,11 @@ export const useLoadCruisesAndStations = (listTablesReady, isOffline) => {
     const fetchedData = await get(`/api/${tableName}`);
     const table = dbManager.db.table(tableName);
 
+    // Filter logic based on table name
+    const filteredData = fetchedData.filter((item) => item.userId === user.id);
+
     await dbManager.db.transaction("rw", table, async () => {
-      for (const newRecord of fetchedData) {
+      for (const newRecord of filteredData) {
         const existingRecord = await table.get(newRecord.id); // Assume `id` is the primary key
         if (
           !existingRecord ||
@@ -38,7 +45,7 @@ export const useLoadCruisesAndStations = (listTablesReady, isOffline) => {
   useEffect(() => {
     const initialize = async () => {
       if (!listTablesReady) {
-        setLoading(false);
+        setIsInitialized(false);
         return;
       }
 
@@ -63,6 +70,7 @@ export const useLoadCruisesAndStations = (listTablesReady, isOffline) => {
           await fetchAndStoreTable(cruiseTableName);
           await fetchAndStoreTable(stationTableName);
         }
+        setIsInitialized(true); // Mark initialization complete
       } catch (err) {
         setError(err);
         console.error("Error loading cruises and stations:", err);
@@ -81,32 +89,41 @@ export const useLoadCruisesAndStations = (listTablesReady, isOffline) => {
         queryKey: [userDataKey, cruiseTableName],
         queryFn: () => dbManager.getTableRecords(cruiseTableName, "-startDate"),
         staleTime: HOUR_MS,
-        enabled: listTablesReady,
+        enabled: isInitialized,
       },
       {
         queryKey: [userDataKey, stationTableName],
         queryFn: () => dbManager.getTableRecords(stationTableName),
         staleTime: HOUR_MS,
-        enabled: listTablesReady,
+        enabled: isInitialized,
+      },
+      {
+        queryKey: [userDataKey, "users"],
+        queryFn: () => dbManager.getTableRecords("users"),
+        staleTime: HOUR_MS,
+        enabled: isInitialized,
       },
     ],
   });
 
   const cruiseQuery = queries[0];
   const stationQuery = queries[1];
+  const userQuery = queries[2];
 
   const cruises = cruiseQuery.data || [];
   const stations = stationQuery.data || [];
+  const users = userQuery.data || [];
   const isError = cruiseQuery.isError || stationQuery.isError;
   const errorDetails = cruiseQuery.error || stationQuery.error;
 
   return {
-    loading,
+    loading: loading || !isInitialized,
     warning,
     error,
     cruises,
     stations,
     isError,
     errorDetails,
+    users,
   };
 };
