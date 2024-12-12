@@ -8,6 +8,7 @@ import {
   TextInput,
   Select,
 } from "@trussworks/react-uswds";
+import AppCard from "../components/AppCard";
 import { DatePicker } from "@nmfs-radfish/react-radfish";
 import { useNavigate } from "react-router-dom";
 import { usePortsList } from "../hooks/useListTables";
@@ -80,7 +81,7 @@ const CruiseNewPage = () => {
             <Grid row>
               <h1 className="app-sec-header">New Cruise Form</h1>
             </Grid>
-            <div className="border radius-lg padding-1 margin-y-2 app-card">
+            <AppCard>
               <Form className="maxw-full" onSubmit={handleNewCruise} onReset={handleReset}>
                 <Grid row gap>
                   <Grid col={12} tablet={{ col: true }}>
@@ -143,7 +144,7 @@ const CruiseNewPage = () => {
                   <Button type="submit" className="margin-right-0" >Add Cruise</Button>
                 </Grid>
               </Form>
-            </div>
+            </AppCard>
           </Grid>
         </Grid>
       </Grid>

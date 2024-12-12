@@ -11,6 +11,7 @@ import {
   Select,
   Fieldset
 } from "@trussworks/react-uswds";
+import AppCard from "./AppCard";
 import { usePrecipitationList } from "../hooks/useListTables";
 
 const StationNew = ({ handleNewStation }) => {
@@ -37,7 +38,7 @@ const StationNew = ({ handleNewStation }) => {
   }
 
   return (
-    <div className="border padding-1 margin-y-2 radius-lg app-card">
+    <AppCard>
       <Form className="maxw-full" onSubmit={handleNewStation}>
         <Grid row gap>
           <Grid col={true} tablet={{ col: 6 }}>
@@ -114,7 +115,7 @@ const StationNew = ({ handleNewStation }) => {
           <Button type="submit" >Add Station</Button>
         </Grid>
       </Form>
-    </div>
+    </AppCard>
   );
 };
 
