@@ -1,5 +1,5 @@
 import "../index.css";
-import React, { useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import {
   Button,
   Grid,
@@ -11,7 +11,7 @@ import HeaderWithEdit from "../components/HeaderWithEdit";
 import CruiseView from "../components/CruiseView";
 import CruiseForm from "../components/CruiseForm";
 import AppCard from "../components/AppCard";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useLocation, useParams } from "react-router-dom";
 import { listValueLookup } from "../utils/listLookup";
 import { setStatusColor } from "../utils/setStatusColor";
 import { generateTzDateTime, getLocationTz } from "../utils/dateTimeHelpers";
@@ -26,6 +26,8 @@ const CruiseAction = {
 const CruiseDetailPage = () => {
   const { cruiseId } = useParams();
   const navigate = useNavigate();
+  const location = useLocation();
+  const stationRefs = useRef({});
   const {
     data: ports,
     isError: portsError,
@@ -51,9 +53,23 @@ const CruiseDetailPage = () => {
   const { mutateAsync: updateCruise } = useUpdateCruise();
   const { mutateAsync: addStation } = useAddStation();
 
+  useEffect(() => {
+    if (location.state?.scrollToStation) {
+      const stationId = location.state.scrollToStation;
+      const element = stationRefs.current[stationId]?.current;
+      if (element) {
+        element.scrollIntoView({ behavior: "smooth" });
+      }
+    }
+  }, [location])
+
   if (cruiseLoading || stationsLoading) return <div>Loading Cruise Data...</div>;
   if (portsError || cruiseStatusesError) return <div>Error Loading List Data: {portsError ? errorPorts.message : errorCruiseStatuses.message}</div>;
   if (cruiseError) return <div>Error Loading Cruise Data: {errorCruise.message}</div>;
+
+  stations.forEach((station) => {
+    stationRefs.current[station.id] = stationRefs.current[station.id] || React.createRef();
+  });
 
   const {
     id,
@@ -183,8 +199,9 @@ const CruiseDetailPage = () => {
       {activeAction === CruiseAction.NEW && <StationNew handleNewStation={handleNewStation} />}
       {stations.length
         ? stations.map((station) => (
-          < StationSummary
+          <StationSummary
             key={station.id}
+            stationRef={stationRefs.current[station.id]}
             cruiseId={id}
             station={station}
             activeAction={activeAction} />
