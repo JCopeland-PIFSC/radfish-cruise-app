@@ -15,7 +15,7 @@ const CruiseView = ({ cruise, ports }) => {
 
   return (
     <>
-      <Grid row gap>
+      <Grid row>
         <Grid col={12} tablet={{ col: true }}>
           <DescriptionListItem term="Cruise Name:" description={cruiseName} />
         </Grid>
