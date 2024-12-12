@@ -14,6 +14,7 @@ import CruiseListPage from "./pages/CruiseList";
 import CruiseNewPage from "./pages/CruiseNew";
 import CruiseDetailPage from "./pages/CruiseDetail";
 import StationDetailPage from "./pages/StationDetail";
+import CatchDetailPage from "./pages/CatchDetail";
 import Login from "./pages/Login";
 import { AuthProvider } from "./context/AuthContext";
 import PrivateRoute from "./components/PrivateRoute";
@@ -77,6 +78,7 @@ function App({ application }) {
                         element={<StationDetailPage />}
                       />
                     </Route>
+                    <Route path="/cruises/:cruiseId/station/:stationId/catch" element={<CatchDetailPage />} />
                   </Route>
                   <Route path="*" element={<Navigate to="/" />} />
                 </Routes>

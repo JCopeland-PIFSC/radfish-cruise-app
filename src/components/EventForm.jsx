@@ -9,7 +9,7 @@ import {
   Button,
   Textarea
 } from "@trussworks/react-uswds";
-import { camelToDash, camelToTitleCase } from "../utils/stringUtilities";
+import { camelToDash, camelStrToTitle } from "../utils/stringUtilities";
 import { getTzDateTimeParts } from "../utils/dateTimeHelpers";
 import { usePrecipitationList } from "../hooks/useListTables";
 
@@ -28,7 +28,7 @@ const EventForm = ({ event, handleSaveEvent, eventType }) => {
     isError: precipitationError,
     error } = usePrecipitationList();
   const eventPrefix = camelToDash(eventType);
-  const eventLabel = camelToTitleCase(eventType);
+  const eventLabel = camelStrToTitle(eventType);
 
   // Render loading/error states
   if (precipitationError) {

@@ -1,17 +1,23 @@
 import { Grid, Button } from "@trussworks/react-uswds";
-import { camelToTitleCase } from "../utils/stringUtilities";
+import { camelStrToTitle } from "../utils/stringUtilities";
 
-const EventHeader = ({ eventType, activeAction, handleSetAction, handleCancelEvent }) => {
-  const eventLabel = camelToTitleCase(eventType)
+const HeaderWithEdit = ({
+  title,
+  eventType,
+  activeAction,
+  handleSetAction,
+  handleCancelAction
+}) => {
+  const eventLabel = camelStrToTitle(eventType)
 
   return (
-    <Grid row className="flex-justify">
-      <h1 className="app-sec-header">Event: {eventLabel}</h1>
+    <Grid row className="flex-justify margin-bottom-1">
+      <h1 className="app-sec-header">{title}</h1>
       {activeAction === eventType
         ?
         <Button
           className="margin-right-0"
-          onClick={() => handleCancelEvent(eventType)}
+          onClick={handleCancelAction}
           secondary
         >
           Cancel Edit
@@ -19,7 +25,7 @@ const EventHeader = ({ eventType, activeAction, handleSetAction, handleCancelEve
         :
         <Button
           className="margin-right-0"
-          onClick={() => handleSetAction(eventType)}
+          onClick={handleSetAction}
           disabled={activeAction !== null && activeAction !== eventType}
         >
           Edit {eventLabel}
@@ -29,4 +35,4 @@ const EventHeader = ({ eventType, activeAction, handleSetAction, handleCancelEve
   );
 }
 
-export default EventHeader;
+export default HeaderWithEdit;

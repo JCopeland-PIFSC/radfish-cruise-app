@@ -2,7 +2,7 @@ export function camelToDash(str) {
   return str.replace(/([a-z])([A-Z])/g, "$1-$2").toLowerCase();
 }
 
-export function camelToTitleCase(str) {
+export function camelStrToTitle(str) {
   return str
     .replace(/([a-z])([A-Z])/g, "$1 $2")
     .replace(/^\w/, (c) => c.toUpperCase())
