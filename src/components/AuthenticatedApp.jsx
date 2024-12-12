@@ -1,5 +1,5 @@
-import React from "react";
-import { Outlet, Navigate } from "react-router-dom";
+import React, { useEffect, useMemo } from "react";
+import { Outlet, useNavigate } from "react-router-dom";
 import { useOfflineStatus } from "@nmfs-radfish/react-radfish";
 import { useInitializeAndCacheListTables } from "../hooks/useInitializeAndCacheListTables";
 import { useLoadCruisesAndStations } from "../hooks/useLoadCruisesAndStations";
@@ -8,6 +8,7 @@ import Spinner from "./Spinner";
 const AuthenticatedApp = () => {
   // Initialize global data and caches
   const { isOffline } = useOfflineStatus();
+  const navigate = useNavigate();
   const {
     isReady,
     isLoading: listsLoading,
@@ -20,38 +21,49 @@ const AuthenticatedApp = () => {
     error: cruisesError,
   } = useLoadCruisesAndStations(isReady, isOffline);
 
-  // Statuses for the status page
-  const statuses = {
-    "Network Status": isOffline ? "red" : "green",
-    "List Tables Initialized": isReady ? "green" : "yellow",
-    "Cruises & Stations Loaded": cruisesLoading
-      ? "yellow"
-      : cruisesError
-        ? "red"
-        : "green",
-  };
+  // Memoize statuses to prevent unnecessary re-renders
+  const statuses = useMemo(
+    () => ({
+      "Network Status": isOffline ? "red" : "green",
+      "List Tables Initialized": isReady ? "green" : "yellow",
+      "Cruises & Stations Loaded": cruisesLoading
+        ? "yellow"
+        : cruisesError
+          ? "red"
+          : "green",
+    }),
+    [isOffline, isReady, cruisesLoading, cruisesError],
+  );
 
-  if (listsLoading || cruisesLoading) {
-    return <Spinner />;
-  }
-
-  // Fallback UI for initialization errors (if needed)
-  if (isListsError || cruisesError) {
-    return (
-      <Navigate
-        to="/app-init-status"
-        replace
-        state={{
+  // This navigation happens as a side effect in response to the error state.
+  // The useEffect hook ensures this logic only runs when an error is detected,
+  // preventing unnecessary re-renders or navigation loops.
+  useEffect(() => {
+    if (isListsError || cruisesError) {
+      navigate("/app-init-status", {
+        state: {
           statuses,
           listsLoading,
           isListsError,
           listsErrorMessage,
-          additonalWarning:
+          additionalWarning:
             cruisesWarning &&
             "Cruises or stations are missing. Please connect to the network if you suspect data is incomplete.",
-        }}
-      />
-    );
+        },
+      });
+    }
+  }, [
+    isListsError,
+    cruisesError,
+    navigate,
+    statuses,
+    listsLoading,
+    listsErrorMessage,
+    cruisesWarning,
+  ]);
+
+  if (listsLoading || cruisesLoading) {
+    return <Spinner />;
   }
 
   return (

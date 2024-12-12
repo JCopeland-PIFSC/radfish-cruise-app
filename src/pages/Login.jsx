@@ -67,7 +67,7 @@ const Login = () => {
                     <TextInput
                       id="email"
                       name="email"
-                      type="text"
+                      type="email"
                       autoCorrect="off"
                       autoCapitalize="off"
                       required

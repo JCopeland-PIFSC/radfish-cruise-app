@@ -32,7 +32,6 @@ export const useInitializeAndCacheListTables = (isOffline) => {
           throw new Error("Offline and list tables are uninitialized.");
         } else if (!isOffline) {
           const updateTables = await dbManager.getUpdateListTablesList();
-          console.log("updateTables", updateTables);
           if (updateTables.length) {
             const now = new Date();
             await Promise.all(
