@@ -1,6 +1,6 @@
 import { Grid, Form, Label, TextInput, Fieldset, Select, Button, DatePicker } from "@trussworks/react-uswds";
 
-const CruiseForm = ({ cruise, ports, handleSubmit }) => {
+const CruiseForm = ({ cruise, ports, handleSaveCruise }) => {
   const { cruiseName,
     vesselName,
     startDate,
@@ -9,7 +9,7 @@ const CruiseForm = ({ cruise, ports, handleSubmit }) => {
     returnPortId } = cruise;
 
   return (
-    <Form className="maxw-full" onSubmit={handleSubmit}>
+    <Form className="maxw-full" onSubmit={handleSaveCruise}>
       <Grid row gap>
         <Grid col={12} tablet={{ col: true }}>
           <Grid row>

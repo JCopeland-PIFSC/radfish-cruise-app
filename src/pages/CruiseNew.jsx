@@ -44,7 +44,7 @@ const CruiseNewPage = () => {
     navigate("/cruises");
   };
 
-  const handleSubmit = async (event) => {
+  const handleNewCruise = async (event) => {
     event.preventDefault();
     const formData = new FormData(event.target);
     const values = { id: crypto.randomUUID(), cruiseStatusId: 1, returnPort: null, endDate: null };
@@ -81,7 +81,7 @@ const CruiseNewPage = () => {
               <h1 className="app-sec-header">New Cruise Form</h1>
             </Grid>
             <div className="border radius-lg padding-1 margin-y-2 app-card">
-              <Form className="maxw-full" onSubmit={handleSubmit} onReset={handleReset}>
+              <Form className="maxw-full" onSubmit={handleNewCruise} onReset={handleReset}>
                 <Grid row gap>
                   <Grid col={12} tablet={{ col: true }}>
                     <Grid row>
