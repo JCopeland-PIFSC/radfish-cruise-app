@@ -23,6 +23,23 @@ const CruiseAction = {
   EDIT: "EDIT",
 };
 
+const InitializedStation = {
+  cruiseId: null,
+  stationName: null,
+  events: {
+    beginSet: {
+      timestamp: null,
+      latitude: null,
+      longitude: null,
+      windSpeedKnots: null,
+      waveHeightMeters: null,
+      visibilityKm: null,
+      precipitationId: null,
+      comments: null
+    },
+  }
+};
+
 const CruiseDetailPage = () => {
   const { cruiseId } = useParams();
   const navigate = useNavigate();
@@ -165,13 +182,14 @@ const CruiseDetailPage = () => {
       <AppCard>
         <HeaderWithEdit
           title=""
-          eventType={CruiseAction.EDIT}
+          editLabel={"Cruise"}
+          actionCheck={CruiseAction.EDIT}
           activeAction={activeAction}
           handleSetAction={() => setActiveAction(CruiseAction.EDIT)}
           handleCancelAction={() => setActiveAction(null)} />
         {activeAction !== null && activeAction === CruiseAction.EDIT
           ?
-          <CruiseForm cruise={cruise} ports={ports} handleSubmit={handleSaveCruise} />
+          <CruiseForm cruise={cruise} ports={ports} handleSaveCruise={handleSaveCruise} />
           :
           <CruiseView cruise={cruise} ports={ports} />
         }
@@ -212,20 +230,3 @@ const CruiseDetailPage = () => {
 }
 
 export default CruiseDetailPage;
-
-const InitializedStation = {
-  cruiseId: null,
-  stationName: null,
-  events: {
-    beginSet: {
-      timestamp: null,
-      latitude: null,
-      longitude: null,
-      windSpeedKnots: null,
-      waveHeightMeters: null,
-      visibilityKm: null,
-      precipitationId: null,
-      comments: null
-    },
-  }
-}

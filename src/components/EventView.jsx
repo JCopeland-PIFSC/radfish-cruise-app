@@ -27,13 +27,13 @@ const EventView = ({ event }) => {
   return (
     <Grid row>
       <Grid col={12}>
-        <Grid row gap>
+        <Grid row>
           <Grid col={12} tablet={{ col: true }}>
             <DescriptionListItem
               term="DateTime:"
-              description={timestamp}
-              dtCol="2" ddCol="10" />
+              description={timestamp} />
           </Grid>
+          <Grid col={12} tablet={{ col: true }} />
         </Grid>
         <Grid row gap>
           <Grid col={12} tablet={{ col: true }}>
@@ -61,13 +61,13 @@ const EventView = ({ event }) => {
               description={listValueLookup(precipitation, precipitationId, "description")} />
           </Grid>
         </Grid>
-        <Grid row gap>
-          <Grid col={12} >
+        <Grid row>
+          <Grid col={12} tablet={{ col: true }}>
             <DescriptionListItem
               term="Comments:"
-              description={comments}
-              dtCol="2" ddCol="10" />
+              description={comments} />
           </Grid>
+          <Grid col={12} tablet={{ col: true }} />
         </Grid>
       </Grid>
     </Grid>
