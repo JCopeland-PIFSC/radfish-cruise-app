@@ -60,6 +60,14 @@ hr.app-hr-light {
   border-top: 1px solid #757575;
 }
 
+.usa-form .usa-button.btn-fix-top-1 {
+  margin-top: 0.5rem;
+}
+
+.usa-form .usa-button.btn-fix-top-3 {
+  margin-top: 1.5rem;
+}
+
 @media (min-width: 640px) {
   .app-sec-header {
     font-size: x-large;

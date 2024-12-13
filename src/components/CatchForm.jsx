@@ -109,7 +109,7 @@ const CatchForm = ({ formData, speciesList, sampleTypesList, onSubmit }) => {
       <Grid row className="flex-justify-end margin-bottom-2">
         <Button
           type="button"
-          className="margin-right-0"
+          className="btn-fix-top-3 margin-right-0"
           onClick={() => handleAddSample(structuredClone(InitializedSample))}
         >Add New Sample</Button>
       </Grid>

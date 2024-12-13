@@ -141,7 +141,7 @@ const CruiseNewPage = () => {
                   <Button type="reset" className="margin-right-0 mobile-lg:margin-right-1" secondary>
                     Reset
                   </Button>
-                  <Button type="submit" className="margin-right-0" >Add Cruise</Button>
+                  <Button type="submit" className="btn-fix-top-3 margin-right-0" >Add Cruise</Button>
                 </Grid>
               </Form>
             </AppCard>
