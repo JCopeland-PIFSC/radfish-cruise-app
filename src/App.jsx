@@ -23,6 +23,7 @@ import StationDetailPage from "./pages/StationDetail";
 import CatchDetailPage from "./pages/CatchDetail";
 import { useInitializeAndCacheListTables } from "./hooks/useInitializeAndCacheListTables";
 import { useLoadCruisesAndStations } from "./hooks/useLoadCruisesAndStations";
+
 function App({ application }) {
   const [isExpanded, setExpanded] = useState(false);
 

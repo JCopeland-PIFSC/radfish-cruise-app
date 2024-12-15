@@ -33,6 +33,19 @@ app.on("ready", async () => {
   const dbManager = DatabaseManager.getInstance(dbConfig);
   dbManager.initMetadataTable();
 
+  // Dexie debugging create and update events
+  if (import.meta.env.MODE === "development") {
+    // Set the table events to listen for.
+    const debugTable = "stations"
+    dbManager.db.table(debugTable).hook("creating", (primKey, obj, transaction) => {
+      console.log(`Local ${debugTable} Create: ${JSON.stringify(obj)}`);
+    });
+
+    dbManager.db.table(debugTable).hook("updating", (updates, primKey, obj, transaction) => {
+      console.log(`Local ${debugTable} Update: ${JSON.stringify(updates)}`);
+    });
+  }
+
   const queryClient = new QueryClient();
 
   root.render(

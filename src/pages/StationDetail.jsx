@@ -5,10 +5,10 @@ import EventView from "../components/EventView";
 import EventForm from "../components/EventForm";
 import HeaderWithEdit from "../components/HeaderWithEdit";
 import AppCard from "../components/AppCard";
-import { getLocationTz, generateTzDateTime } from "../utils/dateTimeHelpers";
 import { EventType } from "../utils/listLookup";
-import { useGetCruiseById, useGetStationById, useUpdateStation } from "../hooks/useCruises";
 import { camelStrToTitle } from "../utils/stringUtilities";
+import { getLocationTz, generateTzDateTime } from "../utils/dateTimeHelpers";
+import { useGetCruiseById, useGetStationById, useUpdateStation } from "../hooks/useCruises";
 
 const StationDetailPage = () => {
   const { cruiseId, stationId } = useParams();
@@ -20,12 +20,12 @@ const StationDetailPage = () => {
     error: errorStation
   } = useGetStationById(stationId);
   const { mutateAsync: updateStation } = useUpdateStation();
-  const [activeAction, setActiveAction] = useState(null);
   const inputFocus = useRef(null);
   const navigate = useNavigate();
+  const [activeAction, setActiveAction] = useState(null);
   const [newEvent, setNewEvent] = useState({ endSet: null, beginHaul: null, endHaul: null });
   const [addEvent, setAddEvent] = useState(null);
-  const [showAddCatch, setShowAddCatch] = useState(false);
+  const [showCatchButton, setShowCatchButton] = useState();
 
   useEffect(() => {
     if (inputFocus.current) {
@@ -37,7 +37,7 @@ const StationDetailPage = () => {
   useEffect(() => {
     if (station) {
       const { endSet: newEndSet, beginHaul: newBeginHaul, endHaul: newEndHaul } = newEvent;
-      const { events } = station;
+      const { events, catch: catches } = station;
       const { endSet, beginHaul, endHaul } = events;
 
       if (!endSet && newEndSet === null) {
@@ -48,20 +48,23 @@ const StationDetailPage = () => {
         setAddEvent(EventType.END_HAUL)
       } else {
         setAddEvent(null);
-        setShowAddCatch(true);
+        const buttonLabel = (catches && catches.length) ? "Edit Catches" : "Add Catches"
+        setShowCatchButton(buttonLabel);
       }
     }
-  }, [station, newEvent, showAddCatch])
+  }, [station, newEvent, showCatchButton])
 
   if (stationLoading) return <div>Loading Station Data...</div>;
   if (stationError) return <div>Error Loading Station Data: {errorStation?.message}</div>;
 
   const { cruiseName, } = cruise;
-  const { id, stationName, events, catch: catches } = station;
+  const { id, stationName, events, } = station;
   const { beginSet, endSet, beginHaul, endHaul } = events;
 
-  const handleNavCruisesDetail = (cruiseId) => {
-    navigate(`/cruises/${cruiseId}`);
+  const handleNavCruiseDetail = (cruiseId, stationId) => {
+    return () => navigate(`/cruises/${cruiseId}`, {
+      state: { scrollToStation: stationId }
+    });
   };
 
   const handleNavCatchDetail = (cruiseId, stationId) => {
@@ -120,7 +123,7 @@ const StationDetailPage = () => {
     <>
       {/* Station Header */}
       <Grid row className="margin-top-2">
-        <Button className="margin-right-0" onClick={() => handleNavCruisesDetail(cruiseId)} >&lt; Cruise: {cruiseName || ""}</Button>
+        <Button className="margin-right-0" onClick={handleNavCruiseDetail(cruiseId, stationId)} >&lt; Cruise: {cruiseName || ""}</Button>
       </Grid>
       <Grid row className="flex-justify margin-top-2">
         <h1 className="app-sec-header">Station: {stationName.toUpperCase()}</h1>
@@ -129,7 +132,8 @@ const StationDetailPage = () => {
       <AppCard>
         <HeaderWithEdit
           title={`Event: ${camelStrToTitle(EventType.BEGIN_SET)}`}
-          eventType={EventType.BEGIN_SET}
+          editLabel={camelStrToTitle(EventType.BEGIN_SET)}
+          actionCheck={EventType.BEGIN_SET}
           activeAction={activeAction}
           handleSetAction={() => setActiveAction(EventType.BEGIN_SET)}
           handleCancelAction={handleCancelEvent(EventType.BEGIN_SET)} />
@@ -148,7 +152,8 @@ const StationDetailPage = () => {
         <AppCard>
           <HeaderWithEdit
             title={`Event: ${camelStrToTitle(EventType.END_SET)}`}
-            eventType={EventType.END_SET}
+            editLabel={camelStrToTitle(EventType.END_SET)}
+            actionCheck={EventType.END_SET}
             activeAction={activeAction}
             handleSetAction={() => setActiveAction(EventType.END_SET)}
             handleCancelAction={handleCancelEvent(EventType.END_SET)} />
@@ -169,7 +174,8 @@ const StationDetailPage = () => {
         <AppCard>
           <HeaderWithEdit
             title={`Event: ${camelStrToTitle(EventType.BEGIN_HAUL)}`}
-            eventType={EventType.BEGIN_HAUL}
+            editLabel={camelStrToTitle(EventType.BEGIN_HAUL)}
+            actionCheck={EventType.BEGIN_HAUL}
             activeAction={activeAction}
             handleSetAction={() => setActiveAction(EventType.BEGIN_HAUL)}
             handleCancelAction={handleCancelEvent(EventType.BEGIN_HAUL)} />
@@ -190,7 +196,8 @@ const StationDetailPage = () => {
         <AppCard>
           <HeaderWithEdit
             title={`Event: ${camelStrToTitle(EventType.END_HAUL)}`}
-            eventType={EventType.END_HAUL}
+            editLabel={camelStrToTitle(EventType.END_HAUL)}
+            actionCheck={EventType.END_HAUL}
             activeAction={activeAction}
             handleSetAction={() => setActiveAction(EventType.END_HAUL)}
             handleCancelAction={handleCancelEvent(EventType.END_HAUL)} />
@@ -214,12 +221,13 @@ const StationDetailPage = () => {
           >Add {camelStrToTitle(addEvent)}</Button>
         </Grid>
       }
-      {showAddCatch &&
+      {showCatchButton &&
         <Grid row className="flex-justify-end margin-bottom-2">
           <Button
             className="margin-right-0"
             onClick={() => handleNavCatchDetail(cruiseId, stationId)}
-          >Add Catch</Button>
+          >{showCatchButton}
+          </Button>
         </Grid>
       }
     </>

@@ -8,6 +8,8 @@ import {
   TextInput,
   Select,
 } from "@trussworks/react-uswds";
+import AppCard from "../components/AppCard";
+import ResponsiveRow from "../components/ResponsiveRow";
 import { DatePicker } from "@nmfs-radfish/react-radfish";
 import { useNavigate } from "react-router-dom";
 import { usePortsList } from "../hooks/useListTables";
@@ -44,7 +46,7 @@ const CruiseNewPage = () => {
     navigate("/cruises");
   };
 
-  const handleSubmit = async (event) => {
+  const handleNewCruise = async (event) => {
     event.preventDefault();
     const formData = new FormData(event.target);
     const values = { id: crypto.randomUUID(), cruiseStatusId: 1, returnPort: null, endDate: null };
@@ -80,70 +82,53 @@ const CruiseNewPage = () => {
             <Grid row>
               <h1 className="app-sec-header">New Cruise Form</h1>
             </Grid>
-            <div className="border radius-lg padding-1 margin-y-2 app-card">
-              <Form className="maxw-full" onSubmit={handleSubmit} onReset={handleReset}>
-                <Grid row gap>
-                  <Grid col={12} tablet={{ col: true }}>
-                    <Grid row>
-                      <Label htmlFor="cruise-name" className="margin-top-2 grid-col-4 text-bold" requiredMarker>
-                        Cruise Name:
-                      </Label>
-                      <TextInput
-                        id="cruise-name"
-                        name="cruiseName"
-                        className="grid-col-8"
-                        inputRef={inputFocus}
-                        required
-                      />
-                    </Grid>
-                  </Grid>
-                  <Grid col={12} tablet={{ col: true }}>
-                    <Grid row>
-                      <Label htmlFor="vessel-name" className="margin-top-2 grid-col-4 text-bold" requiredMarker>
-                        Vessel Name:
-                      </Label>
-                      <TextInput id="vessel-name" name="vesselName" className="grid-col-8" required />
-                    </Grid>
-                  </Grid>
-                </Grid>
-                <Grid row gap>
-                  <Grid col={12} tablet={{ col: true }}>
-                    <Grid row>
-                      <Label htmlFor="start-date" className="margin-top-2 grid-col-4 text-bold" requiredMarker>
-                        Start Date:
-                      </Label>
-                      <DatePicker id="start-date" name="startDate" className="margin-top-0 grid-col-8" required />
-                    </Grid>
-                  </Grid>
-                  <Grid col={12} tablet={{ col: true }}>
-                    <Grid row>
-                      <Label htmlFor="departure-port-select" className="margin-top-2 grid-col-4 text-bold" requiredMarker>
-                        Departure Port:
-                      </Label>
-                      <Select
-                        id="departure-port-select"
-                        name="departurePortId"
-                        className="grid-col-8"
-                        required
-                      >
-                        <option value={null}>- Select Port -</option>
-                        {ports.map((port) => (
-                          <option key={port.id} value={port.id}>
-                            {port.name}
-                          </option>
-                        ))}
-                      </Select>
-                    </Grid>
-                  </Grid>
-                </Grid>
+            <AppCard>
+              <Form className="maxw-full" onSubmit={handleNewCruise} onReset={handleReset}>
+                <ResponsiveRow>
+                  <Label htmlFor="cruise-name" className="margin-top-2 text-bold" requiredMarker>
+                    Cruise Name:
+                  </Label>
+                  <TextInput
+                    id="cruise-name"
+                    name="cruiseName"
+                    className=""
+                    inputRef={inputFocus}
+                    required
+                  />
+                  <Label htmlFor="vessel-name" className="margin-top-2 text-bold" requiredMarker>
+                    Vessel Name:
+                  </Label>
+                  <TextInput id="vessel-name" name="vesselName" className="" required />
+                </ResponsiveRow>
+                <ResponsiveRow>
+                  <Label htmlFor="start-date" className="margin-top-2 text-bold" requiredMarker>
+                    Start Date:
+                  </Label>
+                  <DatePicker id="start-date" name="startDate" className="margin-top-0" required />
+                  <Label htmlFor="departure-port-select" className="margin-top-2 text-bold" requiredMarker>
+                    Departure Port:
+                  </Label>
+                  <Select
+                    id="departure-port-select"
+                    name="departurePortId"
+                    required
+                  >
+                    <option value={null}>- Select Port -</option>
+                    {ports.map((port) => (
+                      <option key={port.id} value={port.id}>
+                        {port.name}
+                      </option>
+                    ))}
+                  </Select>
+                </ResponsiveRow>
                 <Grid row className="flex-justify-end">
                   <Button type="reset" className="margin-right-0 mobile-lg:margin-right-1" secondary>
                     Reset
                   </Button>
-                  <Button type="submit" className="margin-right-0" >Add Cruise</Button>
+                  <Button type="submit" className="btn-fix-top-3 margin-right-0" >Add Cruise</Button>
                 </Grid>
               </Form>
-            </div>
+            </AppCard>
           </Grid>
         </Grid>
       </Grid>

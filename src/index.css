@@ -5,9 +5,9 @@
 /* normalize css */
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
-    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
-    sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto",
+    "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans",
+    "Helvetica Neue", sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -50,6 +50,22 @@ body {
   font-weight: bold;
   line-height: 1rem;
   margin: 0.5rem 0;
+}
+
+hr.app-hr-heavy {
+  border-top: 4px solid rgb(60, 60, 60);
+}
+
+hr.app-hr-light {
+  border-top: 1px solid #757575;
+}
+
+.usa-form .usa-button.btn-fix-top-1 {
+  margin-top: 0.5rem;
+}
+
+.usa-form .usa-button.btn-fix-top-3 {
+  margin-top: 1.5rem;
 }
 
 @media (min-width: 640px) {

@@ -35,7 +35,7 @@ const AppInitStatusPage = ({ statuses, listsLoading, listsError, listsErrorMessa
   };
 
   // Navigate to Cruises
-  const handleCruisesRedirect = () => {
+  const handleNavCruises = () => {
     if (allStatusesPass) {
       navigate("/cruises");
     }
@@ -81,7 +81,7 @@ const AppInitStatusPage = ({ statuses, listsLoading, listsError, listsErrorMessa
           <Button
             type="button"
             disabled={!allStatusesPass}
-            onClick={handleCruisesRedirect}
+            onClick={handleNavCruises}
           >
             {allStatusesPass ? "Go to Cruises" : "Statuses Incomplete"}
           </Button>
