@@ -15,8 +15,8 @@ export const useGetCruises = () => {
     queryKey: [userDataKey, cruiseTableName],
     queryFn: async () =>
       await dbManager.getTableRecords(cruiseTableName, "-startDate"),
-    staleTime: HOUR_MS * 1,
-    cacheTime: HOUR_MS * 24,
+    staleTime: 0,
+    cacheTime: 0,
   });
 };
 
@@ -44,9 +44,7 @@ export const useUpdateCruise = () => {
 
   return useMutation({
     mutationFn: async ({ cruiseId, updates }) => {
-      await dbManager.db.transaction("rw", cruiseTableName, async () => {
-        await dbManager.db.table(cruiseTableName).update(cruiseId, updates);
-      });
+      await dbManager.db.table(cruiseTableName).update(cruiseId, updates);
       return { cruiseId, updates };
     },
     onSuccess: ({ cruiseId, updates }) => {
@@ -69,8 +67,8 @@ export const useGetCruiseById = (cruiseId) => {
     queryFn: async () =>
       await dbManager.getTableRecords(cruiseTableName, { id: cruiseId }),
     select: (data) => data?.[0] || null,
-    staleTime: HOUR_MS * 1,
-    cacheTime: HOUR_MS * 24,
+    staleTime: 0,
+    cacheTime: 0,
   });
 };
 
@@ -80,8 +78,8 @@ export const useGetStationsByCruiseId = (cruiseId) => {
     queryKey: [userDataKey, stationTableName, cruiseId],
     queryFn: async () =>
       await dbManager.getTableRecords(stationTableName, { cruiseId }),
-    staleTime: HOUR_MS * 1,
-    cacheTime: HOUR_MS * 24,
+    staleTime: 0,
+    cacheTime: 0,
   });
 };
 
@@ -92,8 +90,8 @@ export const useGetStationById = (stationId) => {
     queryFn: async () =>
       await dbManager.getTableRecords(stationTableName, { id: stationId }),
     select: (data) => data?.[0] || null,
-    staleTime: HOUR_MS * 1,
-    cacheTime: HOUR_MS * 24,
+    staleTime: 0,
+    cacheTime: 0,
   });
 };
 
@@ -103,9 +101,7 @@ export const useAddStation = () => {
 
   return useMutation({
     mutationFn: async ({ cruiseId, newStation }) => {
-      await dbManager.db.transaction("rw", stationTableName, async () => {
-        await dbManager.db.table(stationTableName).add(newStation);
-      });
+      await dbManager.db.table(stationTableName).add(newStation);
       return { cruiseId, newStation };
     },
     onSuccess: ({ cruiseId, newStation }) => {
@@ -123,9 +119,7 @@ export const useUpdateStation = () => {
 
   return useMutation({
     mutationFn: async ({ cruiseId, stationId, updates }) => {
-      await dbManager.db.transaction("rw", stationTableName, async () => {
-        await dbManager.db.table(stationTableName).update(stationId, updates);
-      });
+      await dbManager.db.table(stationTableName).update(stationId, updates);
       return { cruiseId, stationId, updates };
     },
     onSuccess: ({ cruiseId, stationId, updates }) => {

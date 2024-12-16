@@ -29,6 +29,10 @@ const CruiseListPage = () => {
     navigate("/cruises/new");
   };
 
+  const handleRowClick = ({ id }) => {
+    navigate(`/cruises/${id}`);
+  }
+
   const columns = [
     {
       key: "cruiseName",
@@ -63,17 +67,6 @@ const CruiseListPage = () => {
       key: "startDate",
       label: "Start Date",
     },
-    {
-      key: "cruiseEdit",
-      label: "Edit Cruise",
-      render: (row) => (
-        <Link to={`/cruises/${row.id}`}>
-          <Button>
-            <Icon.Edit aria-hidden={true} alt="edit icon" />
-          </Button>
-        </Link>
-      ),
-    },
   ];
 
   return (
@@ -85,7 +78,7 @@ const CruiseListPage = () => {
         </Button>
       </Grid>
       <Grid row className="margin-top-2">
-        <Table columns={columns} data={cruises} className="margin-top-0" bordered striped />
+        <Table columns={columns} data={cruises} onRowClick={handleRowClick} className="margin-top-0" bordered striped />
       </Grid>
     </>
   );

@@ -1,19 +1,18 @@
 import { Grid, Button } from "@trussworks/react-uswds";
-import { camelStrToTitle } from "../utils/stringUtilities";
 
 const HeaderWithEdit = ({
   title,
-  eventType,
+  editLabel,
+  actionCheck,
   activeAction,
   handleSetAction,
   handleCancelAction
 }) => {
-  const eventLabel = camelStrToTitle(eventType)
 
   return (
     <Grid row className="flex-justify margin-bottom-1">
       <h1 className="app-sec-header">{title}</h1>
-      {activeAction === eventType
+      {activeAction === actionCheck
         ?
         <Button
           className="margin-right-0"
@@ -26,9 +25,9 @@ const HeaderWithEdit = ({
         <Button
           className="margin-right-0"
           onClick={handleSetAction}
-          disabled={activeAction !== null && activeAction !== eventType}
+          disabled={activeAction !== null && activeAction !== actionCheck}
         >
-          Edit {eventLabel}
+          Edit {editLabel}
         </Button>
       }
     </Grid>

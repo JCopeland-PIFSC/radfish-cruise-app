@@ -1,7 +1,6 @@
 // This config will contain DB configuration detail specific to the application
 // This configuration follows the format used by the RADFish hook
 const offlineStorageConfig = {
-  type: "indexedDB",
   name: import.meta.env.VITE_INDEXED_DB_NAME,
   version: import.meta.env.VITE_INDEXED_DB_VERSION,
   stores: {
