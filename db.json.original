@@ -2,6 +2,7 @@
   "cruises": [
     {
       "id": "4ba87656-03c8-48e4-9048-5fd6423ee911",
+      "userId": "user-1",
       "cruiseName": "CRUISE001",
       "cruiseStatusId": 5,
       "vesselName": "RADFish Research Vessel",
@@ -12,6 +13,7 @@
     },
     {
       "id": "e5f0cdd2-92c8-4491-b683-1283292b201b",
+      "userId": "user-1",
       "cruiseName": "CRUISE002",
       "cruiseStatusId": 4,
       "vesselName": "RADFish Research Vessel",
@@ -22,6 +24,7 @@
     },
     {
       "id": "8377bbfb-a43d-493d-9563-31765959d8f8",
+      "userId": "user-2",
       "cruiseName": "CRUISE003",
       "cruiseStatusId": 3,
       "vesselName": "RADFish Research Vessel",
@@ -32,6 +35,7 @@
     },
     {
       "id": "64587ae6-9721-49a4-b39d-9d1dccbcc621",
+      "userId": "user-2",
       "cruiseName": "CRUISE004",
       "cruiseStatusId": 1,
       "vesselName": "RADFish Research Vessel",
@@ -46,6 +50,7 @@
       "id": "44300c7a-bdcf-4eda-86c9-09edaeedd967",
       "cruiseId": "4ba87656-03c8-48e4-9048-5fd6423ee911",
       "stationName": "STATION001",
+      "userId": "user-2",
       "events": {
         "beginSet": {
           "timestamp": "2024-10-02T08:00-07:00",
@@ -139,6 +144,7 @@
       "id": "ebb427a5-f533-4d8f-bf49-77a4580f28b3",
       "cruiseId": "4ba87656-03c8-48e4-9048-5fd6423ee911",
       "stationName": "STATION002",
+      "userId": "user-2",
       "events": {
         "beginSet": {
           "timestamp": "2024-10-03T07:30-07:00",
@@ -202,6 +208,7 @@
       "id": "1542a8f2-1c94-4c0a-bac2-d66bde947914",
       "cruiseId": "4ba87656-03c8-48e4-9048-5fd6423ee911",
       "stationName": "STATION003",
+      "userId": "user-2",
       "events": {
         "beginSet": {
           "timestamp": "2024-10-04T08:00-07:00",
@@ -295,6 +302,7 @@
       "id": "c14970e4-5fb9-4cbc-b964-14286fae2cd2",
       "cruiseId": "e5f0cdd2-92c8-4491-b683-1283292b201b",
       "stationName": "STATION004",
+      "userId": "user-1",
       "events": {
         "beginSet": {
           "timestamp": "2024-09-02T08:00-07:00",
@@ -388,6 +396,7 @@
       "id": "f441ceee-2ce6-4be4-9791-4f55d869be7a",
       "cruiseId": "e5f0cdd2-92c8-4491-b683-1283292b201b",
       "stationName": "STATION005",
+      "userId": "user-1",
       "events": {
         "beginSet": {
           "timestamp": "2024-09-03T07:30-07:00",
@@ -451,6 +460,7 @@
       "id": "0cd27449-4582-4a8f-85b9-e900eebc2db0",
       "cruiseId": "e5f0cdd2-92c8-4491-b683-1283292b201b",
       "stationName": "STATION006",
+      "userId": "user-1",
       "events": {
         "beginSet": {
           "timestamp": "2024-09-04T08:00-07:00",
@@ -544,6 +554,7 @@
       "id": "0f12587a-deb0-4c59-8fd6-e52008ba57b1",
       "cruiseId": "8377bbfb-a43d-493d-9563-31765959d8f8",
       "stationName": "STATION007",
+      "userId": "user-1",
       "events": {
         "beginSet": {
           "timestamp": "2024-09-11T08:00-07:00",
@@ -637,6 +648,7 @@
       "id": "9854996f-2b0e-45a1-aa6e-947cb51ff281",
       "cruiseId": "8377bbfb-a43d-493d-9563-31765959d8f8",
       "stationName": "STATION008",
+      "userId": "user-1",
       "events": {
         "beginSet": {
           "timestamp": "2024-09-12T07:30-07:00",
@@ -700,6 +712,7 @@
       "id": "44c42c80-7fce-4ed7-bafd-50a2569982f8",
       "cruiseId": "8377bbfb-a43d-493d-9563-31765959d8f8",
       "stationName": "STATION009",
+      "userId": "user-1",
       "events": {
         "beginSet": {
           "timestamp": "2024-09-13T08:00-07:00",
@@ -793,6 +806,7 @@
       "id": "16b39b73-5ced-4121-9faf-9cfa15d2af4b",
       "cruiseId": "64587ae6-9721-49a4-b39d-9d1dccbcc621",
       "stationName": "STATION010",
+      "userId": "user-1",
       "events": {
         "beginSet": {
           "timestamp": "2024-10-01T08:00-07:00",
@@ -886,6 +900,7 @@
       "id": "0b3ef606-bbb3-46be-8f9c-9d258897ccbe",
       "cruiseId": "64587ae6-9721-49a4-b39d-9d1dccbcc621",
       "stationName": "STATION011",
+      "userId": "user-2",
       "events": {
         "beginSet": {
           "timestamp": "2024-10-01T07:30-07:00",
@@ -1004,6 +1019,18 @@
     {
       "id": 5,
       "name": "Accepted"
+    }
+  ],
+  "users": [
+    {
+      "id": "user-1",
+      "email": "user-1@example.com",
+      "password": "123"
+    },
+    {
+      "id": "user-2",
+      "email": "user-2@example.com",
+      "password": "456"
     }
   ]
 }

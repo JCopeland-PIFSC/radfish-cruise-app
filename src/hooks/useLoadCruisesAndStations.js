@@ -85,6 +85,11 @@ export const useLoadCruisesAndStations = (listTablesReady, isOffline) => {
         queryFn: () => dbManager.getTableRecords(stationTableName),
         enabled: listTablesReady,
       },
+      {
+        queryKey: [userDataKey, "users"],
+        queryFn: () => dbManager.getTableRecords("users"),
+        enabled: listTablesReady,
+      },
     ],
   });
 
