@@ -61,7 +61,6 @@ export const useLoadCruisesAndStations = (listTablesReady, isOffline) => {
           await fetchAndStoreTable(cruiseTableName);
           await fetchAndStoreTable(stationTableName);
         }
-
       } catch (err) {
         setError(err);
         console.error("Error loading cruises and stations:", err);
