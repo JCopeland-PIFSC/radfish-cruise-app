@@ -9,7 +9,6 @@ const DISABLE = 0;
 export const userDataKey = "userData";
 export const cruiseTableName = "cruises";
 export const stationTableName = "stations";
-export const userTableName = "users";
 
 export const useLoadCruisesAndStations = (listTablesReady, isOffline) => {
   const [loading, setLoading] = useState(true);

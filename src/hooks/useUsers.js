@@ -1,10 +1,10 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { userDataKey, userTableName } from "./useLoadCruisesAndStations";
+import { userDataKey } from "./useLoadCruisesAndStations";
 import { useOfflineStorage } from "@nmfs-radfish/react-radfish";
 
 export const useAddUser = () => {
+  const userTableName = "users";
   const queryClient = useQueryClient();
-
   const { create, findOne } = useOfflineStorage();
 
   return useMutation({
