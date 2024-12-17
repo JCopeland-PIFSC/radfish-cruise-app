@@ -4,6 +4,7 @@ import {
   userDataKey,
   cruiseTableName,
   stationTableName,
+  userCruisesTableName,
 } from "./useLoadCruisesAndStations";
 import { useOfflineStorage } from "@nmfs-radfish/react-radfish";
 
