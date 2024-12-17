@@ -11,6 +11,17 @@ import {
 const MainHeader = () => {
   const [isExpanded, setExpanded] = useState(false);
   const { user } = useAuth();
+  const menuItems = [
+    <Link to="/cruises" style={{ color: `${isExpanded ? "black" : "white"}` }}>
+      Cruises
+    </Link>,
+  ];
+  const accountItems = [
+    <p key="one">{user?.username}</p>,
+    <Link to="/switch-accounts" key="two">
+      Switch Accounts
+    </Link>,
+  ];
   return (
     <Header
       basic={true}
@@ -19,25 +30,15 @@ const MainHeader = () => {
     >
       <div className="usa-nav-container">
         <div className="usa-navbar">
-          <Title className="header-title">
-            RADFish Cruise App
-            <span className="header-username"> -- {user?.username}</span>
-          </Title>
+          <Title className="header-title">RADFish Cruise App</Title>
           <NavMenuButton
             onClick={() => setExpanded((prvExpanded) => !prvExpanded)}
             label="Menu"
           />
         </div>
         <ExtendedNav
-          primaryItems={[
-            <Link
-              to="/cruises"
-              style={{ color: `${isExpanded ? "black" : "white"}` }}
-            >
-              Cruises
-            </Link>,
-          ]}
-          secondaryItems={[<Link to="/switch-accounts">Switch Accounts</Link>]}
+          primaryItems={menuItems}
+          secondaryItems={accountItems}
           mobileExpanded={isExpanded}
           onToggleMobileNav={() => setExpanded((prvExpanded) => !prvExpanded)}
         ></ExtendedNav>

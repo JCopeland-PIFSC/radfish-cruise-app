@@ -28,6 +28,7 @@ body {
 
 .header-title {
   color: white;
+  padding-top: 2rem;
 }
 
 /* Minimum size for NOAA logo must be 72px (0.75 in) */
@@ -37,4 +38,19 @@ body {
 
 .header-username {
   font-weight: 500;
+}
+
+.usa-nav__secondary {
+  bottom: 3rem !important;
+  right: 1rem !important;
+}
+
+.usa-nav__secondary-links {
+  height: 1rem;
+}
+
+.usa-nav__secondary-item {
+  display: flex;
+  align-items: center;
+  color: white;
 }

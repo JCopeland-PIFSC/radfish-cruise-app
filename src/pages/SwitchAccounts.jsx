@@ -44,7 +44,6 @@ const SwitchAccounts = () => {
                 {/* Render fetched users dynamically */}
                 {users.length > 0 ? (
                   <div>
-                    <h2 className="margin-top-2">Authenticated Users</h2>
                     {users.map((user, index) => (
                       <p key={index}>
                         <Button
