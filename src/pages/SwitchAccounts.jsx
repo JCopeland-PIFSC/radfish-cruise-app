@@ -1,11 +1,15 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Button, GridContainer, Grid } from "@trussworks/react-uswds";
-import { useGetAuthenticatedUsers } from "../hooks/useUsers";
+import { useGetAuthenticatedUsers, useResetCurrentUser } from "../hooks/useUsers";
+import { useAuth } from "../context/AuthContext";
 
 const SwitchAccounts = () => {
-  const { getAllAuthenticatedUsers } = useGetAuthenticatedUsers();
   const [users, setUsers] = useState([]);
+  const { getAllAuthenticatedUsers } = useGetAuthenticatedUsers();
+  const { resetAndSetCurrentUser } = useResetCurrentUser();
+  const navigate = useNavigate();
+  const { loadUserFromDB } = useAuth();
 
   // Fetch authenticated users on component mount
   useEffect(() => {
@@ -47,9 +51,11 @@ const SwitchAccounts = () => {
                           type="button"
                           outline={true}
                           className="width-full"
-                          onClick={() =>
-                            console.log(`Switched to user: ${user.username}`)
-                          }
+                          onClick={ async() => {
+                            await resetAndSetCurrentUser(user.id);
+                            await loadUserFromDB(); 
+                            navigate("/cruises");
+                          }}
                         >
                           {user.username}
                         </Button>

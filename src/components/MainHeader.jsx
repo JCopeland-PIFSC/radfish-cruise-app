@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 import {
   Title,
   NavMenuButton,
@@ -9,7 +10,7 @@ import {
 
 const MainHeader = () => {
   const [isExpanded, setExpanded] = useState(false);
-
+  const { user } = useAuth();
   return (
     <Header
       basic={true}
@@ -18,7 +19,10 @@ const MainHeader = () => {
     >
       <div className="usa-nav-container">
         <div className="usa-navbar">
-          <Title className="header-title">RADFish Cruise App</Title>
+          <Title className="header-title">
+            RADFish Cruise App
+            <span className="header-username"> -- {user?.username}</span>
+          </Title>
           <NavMenuButton
             onClick={() => setExpanded((prvExpanded) => !prvExpanded)}
             label="Menu"

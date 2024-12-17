@@ -34,3 +34,7 @@ body {
 .header-logo {
   width: 72px;
 }
+
+.header-username {
+  font-weight: 500;
+}

@@ -11,18 +11,21 @@ export const AuthProvider = ({ children }) => {
   const { resetAndSetCurrentUser } = useResetCurrentUser();
   const { findOne } = useOfflineStorage();
 
-  // Initialize user from IndexedDB
+  // Initialize user on mount
   useEffect(() => {
-    const loadUserFromDB = async () => {
-      const storedUser = await findOne("users", { isCurrentUser: 1 });
-      if (storedUser?.isAuthenticated) {
-        setUser(storedUser);
-      }
-      setLoading(false);
-    };
-
     loadUserFromDB();
   }, []);
+
+  // Function to load the current user from IndexedDB
+  const loadUserFromDB = async () => {
+    const storedUser = await findOne("users", { isCurrentUser: 1 });
+    if (storedUser?.isAuthenticated) {
+      setUser(storedUser);
+    } else {
+      setUser(null);
+    }
+    setLoading(false);
+  };
 
   const login = async (authUserData) => {
     // Store the new user
@@ -46,7 +49,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user, login, logout, loading }}>
+    <AuthContext.Provider value={{ user, login, logout, loading, loadUserFromDB }}>
       {children}
     </AuthContext.Provider>
   );
