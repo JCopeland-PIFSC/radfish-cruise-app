@@ -1,21 +1,18 @@
-import React from "react";
 import { Grid } from "@trussworks/react-uswds";
 
 const DescriptionListItem = ({
   term,
   description,
-  dtCol = "4",
-  ddCol = "8",
   className = "",
-  children,
 }) => {
   return (
-    <Grid row>
-      <dl className={`app-desc-list ${className}`}>
-        <dt className={`grid-col-${dtCol}`}>{term}</dt>
-        {children}
-        <dd className={`grid-col-${ddCol}`}>{description}</dd>
-      </dl>
+    <Grid row className={`app-desc-list grid-row ${className}`}>
+      <Grid col={12} mobileLg={{ col: 4 }} tablet={{ col: 12 }}>
+        <dt>{term}</dt>
+      </Grid>
+      <Grid col={12} mobileLg={{ col: 8 }} tablet={{ col: 12 }}>
+        <dd>{description}</dd>
+      </Grid>
     </Grid>
   );
 };

@@ -17,6 +17,13 @@ code {
     monospace;
 }
 
+dl,
+dt,
+dd {
+  margin: 0;
+  padding: 0;
+}
+
 #root,
 html,
 body {
