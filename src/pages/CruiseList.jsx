@@ -79,6 +79,7 @@ const CruiseListPage = () => {
       </Grid>
       <Grid row className="margin-top-2">
         <Table columns={columns} data={cruises} onRowClick={handleRowClick} className="margin-top-0" bordered striped />
+        {!cruises.length && <p>No Cruises Recorded!</p>}
       </Grid>
     </>
   );
