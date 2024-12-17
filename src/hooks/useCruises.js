@@ -7,6 +7,7 @@ import {
   userCruisesTableName,
 } from "./useLoadCruisesAndStations";
 import { useOfflineStorage } from "@nmfs-radfish/react-radfish";
+import { useAuth } from "../context/AuthContext";
 
 const HOUR_MS = 1000 * 60 * 60;
 
@@ -22,13 +23,37 @@ export const useGetCruises = () => {
 };
 
 export const useAddCruise = () => {
+  const { user } = useAuth();
+  if (!user || !user.id)
+    throw new Error("Authorized User required to add Cruise!");
+
   const queryClient = useQueryClient();
-  const { create, findOne } = useOfflineStorage();
+  const { create, findOne, update } = useOfflineStorage();
 
   return useMutation({
     mutationFn: async ({ newCruise }) => {
       await create(cruiseTableName, newCruise);
-      return await findOne(cruiseTableName, { id: newCruise.id });
+      const newLocalCruise = await findOne(cruiseTableName, {
+        id: newCruise.id,
+      });
+      const userCruises = await findOne(userCruisesTableName, { id: user.id });
+      if (userCruises) {
+        const uuid = userCruises.uuid ? userCruises.uuid : crypto.randomUUID();
+        await update(userCruisesTableName, [
+          {
+            id: user.id,
+            uuid,
+            cruises: [...userCruises.cruises, newLocalCruise.id],
+          },
+        ]);
+      } else {
+        await create(userCruisesTableName, {
+          id: user.id,
+          uuid: crypto.randomUUID(),
+          cruises: [newLocalCruise.id],
+        });
+      }
+      return newLocalCruise;
     },
     onSuccess: (newCruise) => {
       queryClient.setQueryData(
