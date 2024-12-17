@@ -1,66 +1,32 @@
 import "./index.css";
-import { BrowserRouter, Routes, Route, Navigate, Link } from "react-router-dom";
-import { useState } from "react";
-import { Application, useOfflineStatus } from "@nmfs-radfish/react-radfish";
-import {
-  GridContainer,
-  Title,
-  NavMenuButton,
-  PrimaryNav,
-  Header,
-} from "@trussworks/react-uswds";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { Application } from "@nmfs-radfish/react-radfish";
+import { AuthProvider } from "./context/AuthContext";
 import AppInitStatusPage from "./pages/AppInitStatus";
 import CruiseListPage from "./pages/CruiseList";
 import CruiseNewPage from "./pages/CruiseNew";
 import CruiseDetailPage from "./pages/CruiseDetail";
 import StationDetailPage from "./pages/StationDetail";
 import CatchDetailPage from "./pages/CatchDetail";
+import SwitchAccounts from "./pages/SwitchAccounts";
 import Login from "./pages/Login";
-import { AuthProvider } from "./context/AuthContext";
 import PrivateRoute from "./components/PrivateRoute";
 import AuthenticatedApp from "./components/AuthenticatedApp";
+import MainHeader from "./components/MainHeader";
+import { GridContainer } from "@trussworks/react-uswds";
 
 function App({ application }) {
-  const [isExpanded, setExpanded] = useState(false);
-
   return (
     <Application application={application}>
       <main id="main-content">
         <BrowserRouter>
-          <Header
-            basic={true}
-            showMobileOverlay={isExpanded}
-            className="header-container"
-          >
-            <div className="usa-nav-container">
-              <div className="usa-navbar">
-                <Title className="header-title">RADFish Cruise App</Title>
-                <NavMenuButton
-                  onClick={() => setExpanded((prvExpanded) => !prvExpanded)}
-                  label="Menu"
-                />
-              </div>
-              <PrimaryNav
-                items={[
-                  <Link
-                    to="/cruises"
-                    style={{ color: `${isExpanded ? "black" : "white"}` }}
-                  >
-                    Cruises
-                  </Link>,
-                ]}
-                mobileExpanded={isExpanded}
-                onToggleMobileNav={() =>
-                  setExpanded((prvExpanded) => !prvExpanded)
-                }
-              ></PrimaryNav>
-            </div>
-          </Header>
-          <div className="flex-justify-center">
-            <GridContainer containerSize="tablet-lg">
-              <AuthProvider>
+          <AuthProvider>
+            <MainHeader />
+            <div className="flex-justify-center">
+              <GridContainer containerSize="tablet-lg">
                 <Routes>
                   <Route path="/" element={<Login />} />
+                   <Route path="/login" element={<Login />} />
                   <Route element={<PrivateRoute />}>
                     <Route path="/*" element={<AuthenticatedApp />}>
                       <Route
@@ -78,13 +44,17 @@ function App({ application }) {
                         element={<StationDetailPage />}
                       />
                     </Route>
-                    <Route path="/cruises/:cruiseId/station/:stationId/catch" element={<CatchDetailPage />} />
+                    <Route
+                      path="/cruises/:cruiseId/station/:stationId/catch"
+                      element={<CatchDetailPage />}
+                    />
+                    <Route path="switch-accounts" element={<SwitchAccounts />} />
                   </Route>
                   <Route path="*" element={<Navigate to="/" />} />
                 </Routes>
-              </AuthProvider>
-            </GridContainer>
-          </div>
+              </GridContainer>
+            </div>
+          </AuthProvider>
         </BrowserRouter>
       </main>
     </Application>

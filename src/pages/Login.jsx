@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useOfflineStatus } from "@nmfs-radfish/react-radfish";
 import { post } from "../utils/requestMethods";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
@@ -10,19 +11,23 @@ import {
   Button,
   GridContainer,
   Grid,
+  Select,
 } from "@trussworks/react-uswds";
 
 const Login = () => {
   const [error, setError] = useState("");
   const [showPassword, setShowPassword] = React.useState(false);
+  const { isOffline } = useOfflineStatus();
   const { login, user } = useAuth();
   const navigate = useNavigate();
+  const searchParams = new URLSearchParams(location.search);
+  const addAccountMode = searchParams.get("addAccount");
 
-  // Redirect if user is already authenticated
-  if (user?.isAuthenticated) {
-    navigate("/cruises"); 
-    return null;
-  }
+  useEffect(() => {
+    if (user?.isAuthenticated && !addAccountMode) {
+      navigate("/cruises");
+    }
+  }, [user, navigate, addAccountMode]);
 
   const handleLogin = async (event) => {
     event.preventDefault();
@@ -38,7 +43,7 @@ const Login = () => {
         event.target.reset();
         navigate("/cruises");
       } else {
-        setError("Invalid email or password.");
+        setError("Invalid username or password.");
       }
     } catch (err) {
       setError("Login failed. Please check your credentials.");
@@ -63,38 +68,57 @@ const Login = () => {
                 <h1 className="margin-bottom-0">Sign in</h1>
                 <Form onSubmit={handleLogin}>
                   <Fieldset legend="Access your account" legendStyle="large">
-                    <Label htmlFor="email">Email address</Label>
-                    <TextInput
-                      id="email"
-                      name="email"
-                      type="email"
-                      autoCorrect="off"
-                      autoCapitalize="off"
-                      required
-                    />
+                    {isOffline ? (
+                      <Select
+                        id="species-select"
+                        name="speciesId"
+                        // value={localData.speciesId}
+                        // onChange={handleChange}
+                        className="grid-col-8"
+                        required
+                      >
+                        {/* <option value={null}>- Select Species -</option>
+                        {user.map((species) => (
+                          <option key={species.id} value={species.id}>
+                            {species.name}
+                          </option>
+                        ))} */}
+                      </Select>
+                    ) : (
+                      <>
+                        <Label htmlFor="username">username</Label>
+                        <TextInput
+                          id="username"
+                          name="username"
+                          type="username"
+                          autoCorrect="off"
+                          autoCapitalize="off"
+                          required
+                        />
 
-                    <Label htmlFor="password-sign-in">Password</Label>
-                    <TextInput
-                      id="password"
-                      name="password"
-                      type={showPassword ? "text" : "password"}
-                      autoCorrect="off"
-                      autoCapitalize="off"
-                      required
-                    />
+                        <Label htmlFor="password-sign-in">Password</Label>
+                        <TextInput
+                          id="password"
+                          name="password"
+                          type={showPassword ? "text" : "password"}
+                          autoCorrect="off"
+                          autoCapitalize="off"
+                          required
+                        />
 
-                    <button
-                      title="Show password"
-                      type="button"
-                      className="usa-show-password"
-                      aria-controls="password-sign-in"
-                      onClick={() =>
-                        setShowPassword((showPassword) => !showPassword)
-                      }
-                    >
-                      {showPassword ? "Hide password" : "Show password"}
-                    </button>
-
+                        <button
+                          title="Show password"
+                          type="button"
+                          className="usa-show-password"
+                          aria-controls="password-sign-in"
+                          onClick={() =>
+                            setShowPassword((showPassword) => !showPassword)
+                          }
+                        >
+                          {showPassword ? "Hide password" : "Show password"}
+                        </button>
+                      </>
+                    )}
                     <Button type="submit">Sign in</Button>
                   </Fieldset>
                 </Form>
