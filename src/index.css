@@ -75,9 +75,29 @@ hr.app-hr-light {
   margin-top: 1.5rem;
 }
 
+.usa-form .usa-button.btn-bot-right {
+  margin-top: 1rem;
+  margin-right: 0;
+  align-self: flex-end;
+}
+
+.app-textarea {
+  height: 40px; /* Small starting height */
+  transition: all 0.3s ease; /* Smooth transition for size changes */
+  resize: none; /* Prevent manual resizing */
+}
+
+.app-textarea:focus {
+  height: 140px; /* Increased height when focused */
+}
+
 @media (min-width: 640px) {
   .app-sec-header {
     font-size: x-large;
     line-height: 1.2rem;
+  }
+
+  .usa-form .usa-button.btn-bot-right {
+    margin-top: auto;
   }
 }
