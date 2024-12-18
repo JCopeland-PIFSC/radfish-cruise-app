@@ -142,6 +142,7 @@ const CatchDetailPage = () => {
             }
           </AppCard>
         ))
+        : (activeAction !== CatchAction.NEW && "No Catches Recorded")
       }
     </>
   );
