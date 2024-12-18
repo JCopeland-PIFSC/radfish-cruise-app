@@ -8,7 +8,7 @@ import AppCard from "../components/AppCard";
 import { EventType } from "../utils/listLookup";
 import { camelStrToTitle } from "../utils/stringUtilities";
 import { getLocationTz, generateTzDateTime } from "../utils/dateTimeHelpers";
-import { useGetCruiseById, useGetStationById, useUpdateStation } from "../hooks/useCruises";
+import { useGetCruiseById, useGetStationById, useUpdateStation, useCruiseStatusLock } from "../hooks/useCruises";
 
 const StationDetailPage = () => {
   const { cruiseId, stationId } = useParams();
@@ -20,6 +20,7 @@ const StationDetailPage = () => {
     error: errorStation
   } = useGetStationById(stationId);
   const { mutateAsync: updateStation } = useUpdateStation();
+  const { isStatusLocked } = useCruiseStatusLock(cruiseId);
   const inputFocus = useRef(null);
   const navigate = useNavigate();
   const [activeAction, setActiveAction] = useState(null);
@@ -136,7 +137,8 @@ const StationDetailPage = () => {
           actionCheck={EventType.BEGIN_SET}
           activeAction={activeAction}
           handleSetAction={() => setActiveAction(EventType.BEGIN_SET)}
-          handleCancelAction={handleCancelEvent(EventType.BEGIN_SET)} />
+          handleCancelAction={handleCancelEvent(EventType.BEGIN_SET)}
+          statusLock={isStatusLocked} />
         {activeAction === EventType.BEGIN_SET
           ? <EventForm
             event={beginSet}
@@ -156,7 +158,8 @@ const StationDetailPage = () => {
             actionCheck={EventType.END_SET}
             activeAction={activeAction}
             handleSetAction={() => setActiveAction(EventType.END_SET)}
-            handleCancelAction={handleCancelEvent(EventType.END_SET)} />
+            handleCancelAction={handleCancelEvent(EventType.END_SET)}
+            statusLock={isStatusLocked} />
           {activeAction === EventType.END_SET
             ? <EventForm
               event={endSet || newEvent[EventType.END_SET]}
@@ -178,7 +181,8 @@ const StationDetailPage = () => {
             actionCheck={EventType.BEGIN_HAUL}
             activeAction={activeAction}
             handleSetAction={() => setActiveAction(EventType.BEGIN_HAUL)}
-            handleCancelAction={handleCancelEvent(EventType.BEGIN_HAUL)} />
+            handleCancelAction={handleCancelEvent(EventType.BEGIN_HAUL)}
+            statusLock={isStatusLocked} />
           {activeAction === EventType.BEGIN_HAUL
             ? <EventForm
               event={beginHaul || newEvent[EventType.BEGIN_HAUL]}
@@ -200,7 +204,8 @@ const StationDetailPage = () => {
             actionCheck={EventType.END_HAUL}
             activeAction={activeAction}
             handleSetAction={() => setActiveAction(EventType.END_HAUL)}
-            handleCancelAction={handleCancelEvent(EventType.END_HAUL)} />
+            handleCancelAction={handleCancelEvent(EventType.END_HAUL)}
+            statusLock={isStatusLocked} />
           {activeAction === EventType.END_HAUL
             ? <EventForm
               event={endHaul || newEvent[EventType.END_HAUL]}

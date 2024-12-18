@@ -6,7 +6,7 @@ import CatchForm from "../components/CatchForm";
 import HeaderWithEdit from "../components/HeaderWithEdit";
 import { useParams, useNavigate } from "react-router-dom";
 import { useSampleTypesList, useSpeciesList } from "../hooks/useListTables";
-import { useUpdateStation, useGetCruiseById, useGetStationById } from "../hooks/useCruises";
+import { useUpdateStation, useGetCruiseById, useGetStationById, useCruiseStatusLock } from "../hooks/useCruises";
 
 const CatchAction = {
   NEW: "NEW",
@@ -31,6 +31,7 @@ const CatchDetailPage = () => {
   const { data: species, } = useSpeciesList();
   const { data: sampleTypes, } = useSampleTypesList();
   const { mutateAsync: updateStation } = useUpdateStation();
+  const { isStatusLocked } = useCruiseStatusLock(cruiseId);
   const navigate = useNavigate();
   const [catches, setCatches] = useState([]);
   const [activeAction, setActiveAction] = useState(null);
@@ -104,7 +105,7 @@ const CatchDetailPage = () => {
             : <Button
               className="margin-right-0"
               onClick={() => setActiveAction(CatchAction.NEW)}
-              disabled={activeAction !== null && activeAction !== CatchAction.NEW}
+              disabled={activeAction !== null && activeAction !== CatchAction.NEW || isStatusLocked}
             >
               Add New Catch
             </Button>
@@ -127,7 +128,8 @@ const CatchDetailPage = () => {
               actionCheck={idx}
               activeAction={activeAction}
               handleSetAction={() => setActiveAction(idx)}
-              handleCancelAction={() => setActiveAction(null)} />
+              handleCancelAction={() => setActiveAction(null)}
+              statusLock={isStatusLocked} />
             {activeAction === idx
               ? <CatchForm
                 formData={catchItem}

@@ -16,7 +16,7 @@ import { listValueLookup } from "../utils/listLookup";
 import { setStatusColor } from "../utils/setStatusColor";
 import { generateTzDateTime, getLocationTz } from "../utils/dateTimeHelpers";
 import { usePortsList, useCruiseStatusesList } from "../hooks/useListTables";
-import { useGetCruiseById, useGetStationsByCruiseId, useUpdateCruise, useAddStation } from "../hooks/useCruises";
+import { useGetCruiseById, useGetStationsByCruiseId, useUpdateCruise, useAddStation, useCruiseStatusLock } from "../hooks/useCruises";
 
 const CruiseAction = {
   NEW: "NEW",
@@ -69,6 +69,7 @@ const CruiseDetailPage = () => {
   const [activeAction, setActiveAction] = useState(null);
   const { mutateAsync: updateCruise } = useUpdateCruise();
   const { mutateAsync: addStation } = useAddStation();
+  const { isStatusLocked } = useCruiseStatusLock(cruiseId);
 
   useEffect(() => {
     if (location.state?.scrollToStation) {
@@ -186,7 +187,8 @@ const CruiseDetailPage = () => {
           actionCheck={CruiseAction.EDIT}
           activeAction={activeAction}
           handleSetAction={() => setActiveAction(CruiseAction.EDIT)}
-          handleCancelAction={() => setActiveAction(null)} />
+          handleCancelAction={() => setActiveAction(null)}
+          statusLock={isStatusLocked} />
         {activeAction !== null && activeAction === CruiseAction.EDIT
           ?
           <CruiseForm cruise={cruise} ports={ports} handleSaveCruise={handleSaveCruise} />
@@ -208,7 +210,7 @@ const CruiseDetailPage = () => {
             : <Button
               className="margin-right-0"
               onClick={() => setActiveAction(CruiseAction.NEW)}
-              disabled={activeAction !== null && activeAction !== CruiseAction.NEW}
+              disabled={activeAction !== null && activeAction !== CruiseAction.NEW || isStatusLocked}
             >
               New Station
             </Button>
