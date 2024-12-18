@@ -1,3 +1,4 @@
+import { useMemo } from "react";
 import { useMutation, useQueryClient, useQuery } from "@tanstack/react-query";
 import DatabaseManager from "../utils/DatabaseManager";
 import {
@@ -7,6 +8,7 @@ import {
   userCruisesTableName,
 } from "./useLoadCruisesAndStations";
 import { useOfflineStorage } from "@nmfs-radfish/react-radfish";
+import { CruiseStatus } from "../utils/listLookup";
 import { useAuth } from "../context/AuthContext";
 
 const HOUR_MS = 1000 * 60 * 60;
@@ -159,4 +161,17 @@ export const useUpdateStation = () => {
       queryClient.invalidateQueries([userDataKey, stationTableName, cruiseId]);
     },
   });
+};
+
+export const useCruiseStatusLock = (cruiseId) => {
+  const { data } = useGetCruiseById(cruiseId);
+  const isStatusLocked = useMemo(() => {
+    if (!data || !data.cruiseStatusId) return false;
+
+    return [CruiseStatus.SUBMITTED, CruiseStatus.ACCEPTED].includes(
+      `${data.cruiseStatusId}`,
+    );
+  }, [data]);
+
+  return { isStatusLocked };
 };
