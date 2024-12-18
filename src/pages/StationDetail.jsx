@@ -226,6 +226,7 @@ const StationDetailPage = () => {
           <Button
             className="margin-right-0"
             onClick={() => handleNavCatchDetail(cruiseId, stationId)}
+            disabled={activeAction !== null}
           >{showCatchButton}
           </Button>
         </Grid>
