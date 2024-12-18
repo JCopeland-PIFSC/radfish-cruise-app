@@ -16,12 +16,20 @@ const MainHeader = () => {
       Cruises
     </Link>,
   ];
-  const accountItems = [
-    <p key="one">{user?.username}</p>,
-    <Link to="/switch-accounts" key="two">
-      Switch Accounts
-    </Link>,
-  ];
+  const accountItems = user?.username
+  ? [
+      <p className="text_transform-capitalize" key="one">
+        {user.username}
+      </p>,
+      <Link
+        className="text_color-white"
+        to="/switch-accounts"
+        key="two"
+      >
+        Switch Accounts
+      </Link>,
+    ]
+  : [];
   return (
     <Header
       basic={true}

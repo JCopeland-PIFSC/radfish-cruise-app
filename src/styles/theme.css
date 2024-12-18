@@ -54,3 +54,15 @@ body {
   align-items: center;
   color: white;
 }
+
+.text_align-center {
+  text-align: center;
+}
+
+.text_transform-capitalize {
+  text-transform: capitalize;
+}
+
+.text_color-white {
+  color: lightgray !important;
+}

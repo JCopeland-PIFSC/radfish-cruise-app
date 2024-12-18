@@ -86,7 +86,7 @@ const Login = () => {
                       </Select>
                     ) : (
                       <>
-                        <Label htmlFor="username">username</Label>
+                        <Label htmlFor="username">Username</Label>
                         <TextInput
                           id="username"
                           name="username"
