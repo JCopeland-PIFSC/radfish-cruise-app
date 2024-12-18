@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Grid, Form, Label, TextInput, Select, Button } from "@trussworks/react-uswds";
 import SampleInput from "./SampleInput";
+import ResponsiveRow from "./ResponsiveRow";
 
 const InitializedSample = {
   "lengthCm": "",
@@ -68,44 +69,34 @@ const CatchForm = ({ formData, speciesList, sampleTypesList, onSubmit }) => {
 
   return (
     <Form className="maxw-full" onSubmit={handleSubmit}>
-      <Grid row gap>
-        <Grid col={12} tablet={{ col: true }}>
-          <Grid row>
-            <Label htmlFor="species-select" className="grid-col-4 text-bold margin-top-2" requiredMarker>
-              Species:
-            </Label>
-            <Select
-              id="species-select"
-              name="speciesId"
-              value={localData.speciesId}
-              onChange={handleChange}
-              className="grid-col-8"
-              required
-            >
-              <option value={null}>- Select Species -</option>
-              {speciesList.map((species) => (
-                <option key={species.id} value={species.id}>
-                  {species.name}
-                </option>
-              ))}
-            </Select>
-          </Grid>
-        </Grid>
-        <Grid col={12} tablet={{ col: true }}>
-          <Grid row>
-            <Label htmlFor="catch-weight" className="grid-col-4 text-bold margin-top-2" requiredMarker>
-              Total Weight:
-            </Label>
-            <TextInput
-              id="catch-weight"
-              name="aggregateWeightKg"
-              value={localData.aggregateWeightKg}
-              onChange={handleChange}
-              className="grid-col-8"
-              required />
-          </Grid>
-        </Grid>
-      </Grid>
+      <ResponsiveRow>
+        <Label htmlFor="species-select" className="text-bold margin-top-2" requiredMarker>
+          Species:
+        </Label>
+        <Select
+          id="species-select"
+          name="speciesId"
+          value={localData.speciesId}
+          onChange={handleChange}
+          required
+        >
+          <option value={null}>- Select Species -</option>
+          {speciesList.map((species) => (
+            <option key={species.id} value={species.id}>
+              {species.name}
+            </option>
+          ))}
+        </Select>
+        <Label htmlFor="catch-weight" className="text-bold margin-top-2" requiredMarker>
+          Total Weight:
+        </Label>
+        <TextInput
+          id="catch-weight"
+          name="aggregateWeightKg"
+          value={localData.aggregateWeightKg}
+          onChange={handleChange}
+          required />
+      </ResponsiveRow>
       <Grid row className="flex-justify-end margin-bottom-2">
         <Button
           type="button"
@@ -114,7 +105,6 @@ const CatchForm = ({ formData, speciesList, sampleTypesList, onSubmit }) => {
         >Add New Sample</Button>
       </Grid>
       <hr className="border-top-width-05 border-base" />
-
       {localData.individuals.length
         ? localData.individuals.map((sample, idx) => (
           <div key={idx}>

@@ -58,7 +58,7 @@ const StationSummary = ({ cruiseId, station, activeAction, stationRef }) => {
           <h3 className="app-sec-header">Catch Summary</h3>
         </Grid>
         <Grid col>
-          {catchList && catchList.length
+          {catchList?.length
             ? catchList.map((catchItem, idx) => (
               <CatchSummary key={idx} catchItem={catchItem} />
             ))

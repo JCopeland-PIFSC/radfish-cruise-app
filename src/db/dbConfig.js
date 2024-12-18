@@ -13,6 +13,7 @@ const offlineStorageConfig = {
     cruises: "id, cruiseName, startDate",
     stations: "id, cruiseId, stationName",
     users: "id, username, isAuthenticated, isCurrentUser",
+    userCruises: "id",
   },
 };
 

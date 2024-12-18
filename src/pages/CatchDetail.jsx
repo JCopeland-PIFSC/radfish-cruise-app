@@ -118,8 +118,8 @@ const CatchDetailPage = () => {
             sampleTypesList={sampleTypes}
             onSubmit={handleNewCatch} />
         </AppCard>}
-      {catches && catches.length &&
-        catches.map((catchItem, idx) => (
+      {catches?.length
+        ? catches.map((catchItem, idx) => (
           <AppCard key={idx}>
             <HeaderWithEdit
               title=""
@@ -141,7 +141,9 @@ const CatchDetailPage = () => {
                 sampleTypesList={sampleTypes} />
             }
           </AppCard>
-        ))}
+        ))
+        : (activeAction !== CatchAction.NEW && "No Catches Recorded")
+      }
     </>
   );
 };

@@ -19,7 +19,7 @@ const CatchView = ({ catchDetails, speciesList, sampleTypesList }) => {
       <hr className="app-hr-heavy" />
       <Grid row>
         <Grid col>
-          {individuals && individuals.length
+          {individuals?.length
             ? individuals.map((sampleItem, idx) => (
               <div key={idx}>
                 {(idx > 0) && <hr className="app-hr-light" />}

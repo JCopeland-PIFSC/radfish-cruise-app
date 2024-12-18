@@ -48,7 +48,7 @@ const StationDetailPage = () => {
         setAddEvent(EventType.END_HAUL)
       } else {
         setAddEvent(null);
-        const buttonLabel = (catches && catches.length) ? "Edit Catches" : "Add Catches"
+        const buttonLabel = (catches?.length) ? "Edit Catches" : "Add Catches"
         setShowCatchButton(buttonLabel);
       }
     }
@@ -226,6 +226,7 @@ const StationDetailPage = () => {
           <Button
             className="margin-right-0"
             onClick={() => handleNavCatchDetail(cruiseId, stationId)}
+            disabled={activeAction !== null}
           >{showCatchButton}
           </Button>
         </Grid>

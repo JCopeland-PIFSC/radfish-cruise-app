@@ -27,7 +27,7 @@ export const useInitializeAndCacheListTables = (isOffline) => {
 
       try {
         const emptyTables = await dbManager.getEmptyListTablesList();
-        if (isOffline && emptyTables.length) {
+        if (isOffline && emptyTables?.length) {
           // Offline and tables are not initialized
           throw new Error("Offline and list tables are uninitialized.");
         } else if (!isOffline) {
