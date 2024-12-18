@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { post } from "../utils/requestMethods";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
@@ -10,6 +10,7 @@ import {
   Button,
   GridContainer,
   Grid,
+  Select,
 } from "@trussworks/react-uswds";
 
 const Login = () => {
@@ -17,12 +18,14 @@ const Login = () => {
   const [showPassword, setShowPassword] = React.useState(false);
   const { login, user } = useAuth();
   const navigate = useNavigate();
+  const searchParams = new URLSearchParams(location.search);
+  const addAccountMode = searchParams.get("addAccount");
 
-  // Redirect if user is already authenticated
-  if (user?.isAuthenticated) {
-    navigate("/cruises"); 
-    return null;
-  }
+  useEffect(() => {
+    if (user?.isAuthenticated && !addAccountMode) {
+      navigate("/cruises");
+    }
+  }, [user, navigate, addAccountMode]);
 
   const handleLogin = async (event) => {
     event.preventDefault();
@@ -38,7 +41,7 @@ const Login = () => {
         event.target.reset();
         navigate("/cruises");
       } else {
-        setError("Invalid email or password.");
+        setError("Invalid username or password.");
       }
     } catch (err) {
       setError("Login failed. Please check your credentials.");
@@ -63,11 +66,11 @@ const Login = () => {
                 <h1 className="margin-bottom-0">Sign in</h1>
                 <Form onSubmit={handleLogin}>
                   <Fieldset legend="Access your account" legendStyle="large">
-                    <Label htmlFor="email">Email address</Label>
+                    <Label htmlFor="username">Username</Label>
                     <TextInput
-                      id="email"
-                      name="email"
-                      type="email"
+                      id="username"
+                      name="username"
+                      type="username"
                       autoCorrect="off"
                       autoCapitalize="off"
                       required
@@ -94,7 +97,6 @@ const Login = () => {
                     >
                       {showPassword ? "Hide password" : "Show password"}
                     </button>
-
                     <Button type="submit">Sign in</Button>
                   </Fieldset>
                 </Form>

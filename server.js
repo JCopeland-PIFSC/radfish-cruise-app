@@ -6,18 +6,18 @@ const middlewares = jsonServer.defaults();
 server.use(middlewares);
 server.use(jsonServer.bodyParser);
 server.post("/login", (req, res) => {
-    const { email, password } = req.body;
+    const { username, password } = req.body;
 
-    if (!email || !password) {
-      return res.status(400).json({ error: "email and password are required" });
+    if (!username || !password) {
+      return res.status(400).json({ error: "username and password are required" });
     }
   
     // Access the `users` table in db.json
     const users = router.db.get("users").value();
   
-    // Find the user with the matching email and password
+    // Find the user with the matching username and password
     const user = users.find(
-      (user) => user.email === email && user.password === password
+      (user) => user.username === username && user.password === password
     );
   
     if (!user) {
@@ -27,7 +27,7 @@ server.post("/login", (req, res) => {
     // If user exists, send success response with user data (e.g., token)
     return res.status(200).json({
       message: "Login successful",
-      user: { id: user.id, email: user.email, isAuthenticated: 1 },
+      user: { id: user.id, username: user.username, isAuthenticated: 1 },
     });
   });
 
