@@ -8,7 +8,6 @@ export const useGetAuthenticatedUsers = () => {
 
   const getAllAuthenticatedUsers = useCallback(async () => {
     const users = await find(userTableName, { isAuthenticated: 1 });
-    console.log("Authenticated users:", users);
     return users;
   }, [find]);
 

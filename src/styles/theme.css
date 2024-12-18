@@ -66,3 +66,13 @@ body {
 .text_color-white {
   color: lightgray !important;
 }
+
+@media (max-width: 768px) {
+  .usa-nav__secondary-item {
+    color: black;
+  }
+
+  .text_color-white {
+    color: gray !important;
+  }
+}
