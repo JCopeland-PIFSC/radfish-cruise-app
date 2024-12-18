@@ -6,9 +6,9 @@ const HeaderWithEdit = ({
   actionCheck,
   activeAction,
   handleSetAction,
-  handleCancelAction
+  handleCancelAction,
+  statusLock = false
 }) => {
-
   return (
     <Grid row className="flex-justify margin-bottom-1">
       <h1 className="app-sec-header">{title}</h1>
@@ -25,7 +25,7 @@ const HeaderWithEdit = ({
         <Button
           className="margin-right-0"
           onClick={handleSetAction}
-          disabled={activeAction !== null && activeAction !== actionCheck}
+          disabled={activeAction !== null && activeAction !== actionCheck || statusLock === true}
         >
           Edit {editLabel}
         </Button>
