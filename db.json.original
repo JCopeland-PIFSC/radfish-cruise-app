@@ -1005,5 +1005,38 @@
       "id": 5,
       "name": "Accepted"
     }
+  ],
+  "users": [
+    {
+      "id": "cf42",
+      "username": "demo-user-1",
+      "password": "123"
+    },
+    {
+      "id": "b239",
+      "username": "demo-user-2",
+      "password": "456"
+    },
+    {
+      "id": "a235",
+      "username": "demo-user-3",
+      "password": "789"
+    }
+  ],
+  "userCruises": [
+    {
+      "id": "cf42",
+      "cruises": [
+        "4ba87656-03c8-48e4-9048-5fd6423ee911",
+        "e5f0cdd2-92c8-4491-b683-1283292b201b"
+      ]
+    },
+    {
+      "id": "b239",
+      "cruises": [
+        "8377bbfb-a43d-493d-9563-31765959d8f8",
+        "64587ae6-9721-49a4-b39d-9d1dccbcc621"
+      ]
+    }
   ]
 }

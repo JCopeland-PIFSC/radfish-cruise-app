@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
-import DatabaseManager from "../utils/DatabaseManager";
 import { listDataKey } from "./useInitializeAndCacheListTables";
+import { useOfflineStorage } from "@nmfs-radfish/react-radfish";
 
 const HOUR_MS = 1000 * 60 * 60;
 
@@ -10,52 +10,28 @@ const sampleTypesTableName = "sampleTypes";
 const precipitationTableName = "precipitation";
 const speciesTableName = "species";
 
-export const usePortsList = () => {
-  const dbManager = DatabaseManager.getInstance();
-  return useQuery({
-    queryKey: [listDataKey, portsTableName],
-    queryFn: () => dbManager.getTableRecords(portsTableName, "name"),
-    staleTime: HOUR_MS * 1,
-    cacheTime: HOUR_MS * 24,
-  });
+export const useList = (
+  tableName,
+  options = { staleTime: HOUR_MS * 1, cacheTime: HOUR_MS * 24 },
+) => {
+  return () => {
+    const { find } = useOfflineStorage();
+
+    return useQuery({
+      queryKey: [listDataKey, tableName],
+      queryFn: () => find(tableName),
+      staleTime: options.staleTime,
+      cacheTime: options.cacheTime,
+    });
+  };
 };
 
-export const useCruiseStatusesList = () => {
-  const dbManager = DatabaseManager.getInstance();
-  return useQuery({
-    queryKey: [listDataKey, cruiseStatusesTableName],
-    queryFn: () => dbManager.getTableRecords(cruiseStatusesTableName),
-    staleTime: HOUR_MS * 1,
-    cacheTime: HOUR_MS * 24,
-  });
-};
+export const usePortsList = useList(portsTableName);
 
-export const useSampleTypesList = () => {
-  const dbManager = DatabaseManager.getInstance();
-  return useQuery({
-    queryKey: [listDataKey, sampleTypesTableName],
-    queryFn: () => dbManager.getTableRecords(sampleTypesTableName),
-    staleTime: HOUR_MS * 1,
-    cacheTime: HOUR_MS * 24,
-  });
-};
+export const useCruiseStatusesList = useList(cruiseStatusesTableName);
 
-export const usePrecipitationList = () => {
-  const dbManager = DatabaseManager.getInstance();
-  return useQuery({
-    queryKey: [listDataKey, precipitationTableName],
-    queryFn: () => dbManager.getTableRecords(precipitationTableName),
-    staleTime: HOUR_MS * 1,
-    cacheTime: HOUR_MS * 24,
-  });
-};
+export const useSampleTypesList = useList(sampleTypesTableName);
 
-export const useSpeciesList = () => {
-  const dbManager = DatabaseManager.getInstance();
-  return useQuery({
-    queryKey: [listDataKey, speciesTableName],
-    queryFn: () => dbManager.getTableRecords(speciesTableName, "name"),
-    staleTime: HOUR_MS * 1,
-    cacheTime: HOUR_MS * 24,
-  });
-};
+export const usePrecipitationList = useList(precipitationTableName);
+
+export const useSpeciesList = useList(speciesTableName);

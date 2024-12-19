@@ -1,11 +1,11 @@
-import React from "react";
 import { useNavigate } from "react-router-dom";
 import { Button, Grid } from "@trussworks/react-uswds";
 import CatchSummary from "./CatchSummary";
-import { getSoakTime, displayTzDateTime } from "../utils/dateTimeHelpers";
+import AppCard from "./AppCard";
 import DescriptionListItem from "./DescriptionListItem";
+import { getSoakTime, displayTzDateTime } from "../utils/dateTimeHelpers";
 
-const StationSummary = ({ cruiseId, station, activeAction }) => {
+const StationSummary = ({ cruiseId, station, activeAction, stationRef }) => {
   const { id, stationName, events, catch: catchList } = station;
   const { latitude, longitude } = events.beginSet;
   const navigate = useNavigate();
@@ -15,11 +15,12 @@ const StationSummary = ({ cruiseId, station, activeAction }) => {
   };
 
   return (
-    <div className="border padding-1 margin-y-2 radius-lg app-card">
+    <AppCard ref={stationRef}>
       <Grid row>
         <Grid col={12} tablet={{ col: true }}>
           <DescriptionListItem term="Station Name:" description={stationName} />
         </Grid>
+        <Grid col={12} tablet={{ col: true }} />
       </Grid>
       <Grid row>
         <Grid col={12} tablet={{ col: true }}>
@@ -52,20 +53,18 @@ const StationSummary = ({ cruiseId, station, activeAction }) => {
           />
         </Grid>
       </Grid>
-      {/* <Grid row>
+      <Grid row>
         <Grid row className="width-full">
           <h3 className="app-sec-header">Catch Summary</h3>
         </Grid>
         <Grid col>
-          <div className="border padding-1 radius-md app-card">
-            {catchList && catchList.length
-              ? catchList.map((catchItem, idx) => (
-                <CatchSummary key={idx} catchItem={catchItem} />
-              ))
-              : ""}
-          </div>
+          {catchList?.length
+            ? catchList.map((catchItem, idx) => (
+              <CatchSummary key={idx} catchItem={catchItem} />
+            ))
+            : "No Catches Reported"}
         </Grid>
-      </Grid> */}
+      </Grid>
       <Grid row className="margin-top-2">
         <Button
           disabled={activeAction !== null}
@@ -74,7 +73,7 @@ const StationSummary = ({ cruiseId, station, activeAction }) => {
         >Station Details
         </Button>
       </Grid>
-    </div>
+    </AppCard>
   );
 };
 

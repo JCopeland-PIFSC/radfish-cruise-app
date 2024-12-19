@@ -1,11 +1,14 @@
 import { useEffect, useState } from "react";
-import { useQueries, useQuery } from "@tanstack/react-query";
+import { useQueries } from "@tanstack/react-query";
 import DatabaseManager from "../utils/DatabaseManager";
 import { get } from "../utils/requestMethods";
+import { useAuth } from "../context/AuthContext";
 
 const HOUR_MS = 1000 * 60 * 60;
+const DISABLE = 0;
 
 export const userDataKey = "userData";
+export const userCruisesTableName = "userCruises";
 export const cruiseTableName = "cruises";
 export const stationTableName = "stations";
 
@@ -13,23 +16,45 @@ export const useLoadCruisesAndStations = (listTablesReady, isOffline) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [warning, setWarning] = useState(false); // Warn if cruises/stations are missing and offline
-
+  const { user } = useAuth();
   const dbManager = DatabaseManager.getInstance();
 
+  const fetchAndStoreUserCruises = async (userId) => {
+    // Short circuit if not userId
+    if (!userId) return [];
+
+    const fetchedUserCruises = await get(
+      `/api/${userCruisesTableName}`,
+      `id=${userId}`,
+    ); //Only one record should have userId. Return only one record;
+    // Short circuit if no userCruises
+    if (!fetchedUserCruises?.length) return [];
+    // if fetchedUserCruises are  found just return the first record.
+    const userCruises = fetchedUserCruises[0];
+    const table = dbManager.db.table(userCruisesTableName);
+
+    // if fetched records does not exist locally, save it locally.
+    const localRecord = await table.get(userCruises.id);
+    if (!localRecord) {
+      await table.put(userCruises);
+    }
+
+    const { cruises } = userCruises;
+    return cruises?.length ? cruises : [];
+  };
+
   // Helper to fetch and store cruises/stations
-  const fetchAndStoreTable = async (tableName) => {
-    const fetchedData = await get(`/api/${tableName}`);
+  const fetchAndStoreFilteredSet = async (tableName, key, setList) => {
+    const queryParams = generateQueryParam(key, setList);
+    const fetchedData = await get(`/api/${tableName}`, queryParams);
     const table = dbManager.db.table(tableName);
 
+    // if fetched records does not exist locally, save it locally.
     await dbManager.db.transaction("rw", table, async () => {
-      for (const newRecord of fetchedData) {
-        const existingRecord = await table.get(newRecord.id); // Assume `id` is the primary key
-        if (
-          !existingRecord ||
-          JSON.stringify(existingRecord) !== JSON.stringify(newRecord)
-        ) {
-          // Update only if the record is new or has changed
-          await table.put(newRecord); // Adds new or updates existing record
+      for (const fetchedRecord of fetchedData) {
+        const localRecord = await table.get(fetchedRecord.id);
+        if (!localRecord) {
+          await table.put(fetchedRecord);
         }
       }
     });
@@ -60,8 +85,19 @@ export const useLoadCruisesAndStations = (listTablesReady, isOffline) => {
           }
         } else {
           // Online: Fetch and store cruises and stations
-          await fetchAndStoreTable(cruiseTableName);
-          await fetchAndStoreTable(stationTableName);
+          const userCruises = await fetchAndStoreUserCruises(user?.id);
+
+          // Only attemp fetchAndStore if authorized user has userCruises
+          if (userCruises?.length) {
+            await fetchAndStoreFilteredSet(cruiseTableName, "id", userCruises);
+            await fetchAndStoreFilteredSet(
+              stationTableName,
+              "cruiseId",
+              userCruises,
+            );
+          } else {
+            setWarning(true);
+          }
         }
       } catch (err) {
         setError(err);
@@ -80,13 +116,16 @@ export const useLoadCruisesAndStations = (listTablesReady, isOffline) => {
       {
         queryKey: [userDataKey, cruiseTableName],
         queryFn: () => dbManager.getTableRecords(cruiseTableName, "-startDate"),
-        staleTime: HOUR_MS,
         enabled: listTablesReady,
       },
       {
         queryKey: [userDataKey, stationTableName],
         queryFn: () => dbManager.getTableRecords(stationTableName),
-        staleTime: HOUR_MS,
+        enabled: listTablesReady,
+      },
+      {
+        queryKey: [userDataKey, "users"],
+        queryFn: () => dbManager.getTableRecords("users"),
         enabled: listTablesReady,
       },
     ],
@@ -110,3 +149,11 @@ export const useLoadCruisesAndStations = (listTablesReady, isOffline) => {
     errorDetails,
   };
 };
+
+function generateQueryParam(keyName, keyList) {
+  let paramStr = "";
+  for (const key of keyList) {
+    paramStr = paramStr.concat(`${keyName}=${key}&`);
+  }
+  return paramStr;
+}
