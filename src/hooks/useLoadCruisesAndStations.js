@@ -45,7 +45,7 @@ export const useLoadCruisesAndStations = (listTablesReady, isOffline) => {
 
   // Helper to fetch and store cruises/stations
   const fetchAndStoreFilteredSet = async (tableName, key, setList) => {
-    const queryParams = generateQueryParam(key, setList);
+    const queryParams = genListQueryParam(key, setList);
     const fetchedData = await get(`/api/${tableName}`, queryParams);
     const table = dbManager.db.table(tableName);
 
@@ -87,7 +87,7 @@ export const useLoadCruisesAndStations = (listTablesReady, isOffline) => {
           // Online: Fetch and store cruises and stations
           const userCruises = await fetchAndStoreUserCruises(user?.id);
 
-          // Only attemp fetchAndStore if authorized user has userCruises
+          // Only attempt fetchAndStore if authorized user has userCruises
           if (userCruises?.length) {
             await fetchAndStoreFilteredSet(cruiseTableName, "id", userCruises);
             await fetchAndStoreFilteredSet(
@@ -150,7 +150,7 @@ export const useLoadCruisesAndStations = (listTablesReady, isOffline) => {
   };
 };
 
-function generateQueryParam(keyName, keyList) {
+function genListQueryParam(keyName, keyList) {
   let paramStr = "";
   for (const key of keyList) {
     paramStr = paramStr.concat(`${keyName}=${key}&`);
