@@ -8,8 +8,7 @@ import {
   TextInput,
   Select,
 } from "@trussworks/react-uswds";
-import AppCard from "../components/AppCard";
-import ResponsiveRow from "../components/ResponsiveRow";
+import { AppCard, ResponsiveRow } from "../components";
 import { DatePicker } from "@nmfs-radfish/react-radfish";
 import { useNavigate } from "react-router-dom";
 import { usePortsList } from "../hooks/useListTables";

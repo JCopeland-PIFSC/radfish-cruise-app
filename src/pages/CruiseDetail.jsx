@@ -5,12 +5,14 @@ import {
   Grid,
   Tag,
 } from "@trussworks/react-uswds";
-import StationSummary from "../components/StationSummary";
-import StationNew from "../components/StationNew";
-import HeaderWithEdit from "../components/HeaderWithEdit";
-import CruiseView from "../components/CruiseView";
-import CruiseForm from "../components/CruiseForm";
-import AppCard from "../components/AppCard";
+import {
+  StationSummary,
+  StationNew,
+  HeaderWithEdit,
+  CruiseView,
+  CruiseForm,
+  AppCard,
+} from "../components"
 import { useNavigate, useLocation, useParams } from "react-router-dom";
 import { listValueLookup } from "../utils/listLookup";
 import { setStatusColor } from "../utils/setStatusColor";

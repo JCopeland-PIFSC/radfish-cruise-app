@@ -10,7 +10,6 @@ import {
   Button,
   GridContainer,
   Grid,
-  Select,
 } from "@trussworks/react-uswds";
 
 const Login = () => {

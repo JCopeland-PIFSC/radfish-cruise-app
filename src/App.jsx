@@ -1,19 +1,23 @@
 import "./index.css";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { GridContainer } from "@trussworks/react-uswds";
 import { Application } from "@nmfs-radfish/react-radfish";
 import { AuthProvider } from "./context/AuthContext";
-import AppInitStatusPage from "./pages/AppInitStatus";
-import CruiseListPage from "./pages/CruiseList";
-import CruiseNewPage from "./pages/CruiseNew";
-import CruiseDetailPage from "./pages/CruiseDetail";
-import StationDetailPage from "./pages/StationDetail";
-import CatchDetailPage from "./pages/CatchDetail";
-import SwitchAccounts from "./pages/SwitchAccounts";
-import Login from "./pages/Login";
-import PrivateRoute from "./components/PrivateRoute";
-import AuthenticatedApp from "./components/AuthenticatedApp";
-import MainHeader from "./components/MainHeader";
-import { GridContainer } from "@trussworks/react-uswds";
+import {
+  AppInitStatus,
+  CatchDetail,
+  CruiseDetail,
+  CruiseList,
+  CruiseNew,
+  Login,
+  StationDetail,
+  SwitchAccounts,
+} from "./pages";
+import {
+  PrivateRoute,
+  AuthenticatedApp,
+  MainHeader,
+} from "./components";
 
 function App({ application }) {
   return (
@@ -26,27 +30,27 @@ function App({ application }) {
               <GridContainer containerSize="tablet-lg">
                 <Routes>
                   <Route path="/" element={<Login />} />
-                   <Route path="/login" element={<Login />} />
+                  <Route path="/login" element={<Login />} />
                   <Route element={<PrivateRoute />}>
                     <Route path="/*" element={<AuthenticatedApp />}>
                       <Route
                         path="app-init-status"
-                        element={<AppInitStatusPage />}
+                        element={<AppInitStatus />}
                       />
-                      <Route path="cruises" element={<CruiseListPage />} />
-                      <Route path="cruises/new" element={<CruiseNewPage />} />
+                      <Route path="cruises" element={<CruiseList />} />
+                      <Route path="cruises/new" element={<CruiseNew />} />
                       <Route
                         path="cruises/:cruiseId"
-                        element={<CruiseDetailPage />}
+                        element={<CruiseDetail />}
                       />
                       <Route
                         path="cruises/:cruiseId/station/:stationId"
-                        element={<StationDetailPage />}
+                        element={<StationDetail />}
                       />
                     </Route>
                     <Route
                       path="/cruises/:cruiseId/station/:stationId/catch"
-                      element={<CatchDetailPage />}
+                      element={<CatchDetail />}
                     />
                     <Route path="switch-accounts" element={<SwitchAccounts />} />
                   </Route>

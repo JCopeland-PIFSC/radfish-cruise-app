@@ -1,7 +1,7 @@
 import "../index.css";
 import React from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { Button, Grid, Icon, Tag } from "@trussworks/react-uswds";
+import { useNavigate } from "react-router-dom";
+import { Button, Grid, Tag } from "@trussworks/react-uswds";
 import { Table } from "@nmfs-radfish/react-radfish";
 import { listValueLookup } from "../utils/listLookup";
 import { setStatusColor } from "../utils/setStatusColor";

@@ -1,9 +1,11 @@
 import { useState, useEffect } from "react";
 import { Grid, Button } from "@trussworks/react-uswds";
-import AppCard from "../components/AppCard";
-import CatchView from "../components/CatchView";
-import CatchForm from "../components/CatchForm";
-import HeaderWithEdit from "../components/HeaderWithEdit";
+import {
+  AppCard,
+  CatchView,
+  CatchForm,
+  HeaderWithEdit,
+} from "../components";
 import { useParams, useNavigate } from "react-router-dom";
 import { useSampleTypesList, useSpeciesList } from "../hooks/useListTables";
 import { useUpdateStation, useGetCruiseById, useGetStationById, useCruiseStatusLock } from "../hooks/useCruises";

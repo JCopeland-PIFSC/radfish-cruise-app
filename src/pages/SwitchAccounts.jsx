@@ -7,7 +7,7 @@ import {
   useResetCurrentUser,
 } from "../hooks/useUsers";
 import { useAuth } from "../context/AuthContext";
-import Spinner from "../components/Spinner";
+import { Spinner } from "../components";
 
 const SwitchAccounts = () => {
   const [users, setUsers] = useState([]);
