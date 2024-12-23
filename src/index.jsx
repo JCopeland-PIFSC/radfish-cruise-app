@@ -33,10 +33,11 @@ app.on("ready", async () => {
   const dbManager = DatabaseManager.getInstance(dbConfig);
   dbManager.initMetadataTable();
 
+  // Change debugTable to target table name string "cruises"
+  // to enable DB debugging of create and update events.
+  const debugTable = null;
   // Dexie debugging create and update events
-  if (import.meta.env.MODE === "development") {
-    // Set the table events to listen for.
-    const debugTable = "stations"
+  if (import.meta.env.MODE === "development" && debugTable) {
     dbManager.db.table(debugTable).hook("creating", (primKey, obj, transaction) => {
       console.log(`Local ${debugTable} Create: ${JSON.stringify(obj)}`);
     });
