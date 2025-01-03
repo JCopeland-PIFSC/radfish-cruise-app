@@ -1,6 +1,5 @@
 import { useMemo } from "react";
 import { useMutation, useQueryClient, useQuery } from "@tanstack/react-query";
-import DatabaseManager from "../utils/DatabaseManager";
 import {
   userDataKey,
   cruiseTableName,
@@ -14,11 +13,10 @@ import { useAuth } from "../context/AuthContext";
 const HOUR_MS = 1000 * 60 * 60;
 
 export const useGetCruises = () => {
-  const dbManager = DatabaseManager.getInstance();
+  const { find } = useOfflineStorage();
   return useQuery({
     queryKey: [userDataKey, cruiseTableName],
-    queryFn: async () =>
-      await dbManager.getTableRecords(cruiseTableName, "-startDate"),
+    queryFn: async () => await find(cruiseTableName),
     staleTime: 0,
     cacheTime: 0,
   });
@@ -67,12 +65,12 @@ export const useAddCruise = () => {
 };
 
 export const useUpdateCruise = () => {
-  const dbManager = DatabaseManager.getInstance();
+  const { update } = useOfflineStorage();
   const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: async ({ cruiseId, updates }) => {
-      await dbManager.db.table(cruiseTableName).update(cruiseId, updates);
+      await update(cruiseTableName, updates);
       return { cruiseId, updates };
     },
     onSuccess: ({ cruiseId, updates }) => {
@@ -89,47 +87,42 @@ export const useUpdateCruise = () => {
 };
 
 export const useGetCruiseById = (cruiseId) => {
-  const dbManager = DatabaseManager.getInstance();
+  const { findOne } = useOfflineStorage();
   return useQuery({
     queryKey: [userDataKey, cruiseTableName, cruiseId],
-    queryFn: async () =>
-      await dbManager.getTableRecords(cruiseTableName, { id: cruiseId }),
-    select: (data) => data?.[0] || null,
+    queryFn: async () => await findOne(cruiseTableName, { id: cruiseId }),
     staleTime: 0,
     cacheTime: 0,
   });
 };
 
 export const useGetStationsByCruiseId = (cruiseId) => {
-  const dbManager = DatabaseManager.getInstance();
+  const { find } = useOfflineStorage();
   return useQuery({
     queryKey: [userDataKey, stationTableName, cruiseId],
-    queryFn: async () =>
-      await dbManager.getTableRecords(stationTableName, { cruiseId }),
+    queryFn: async () => await find(stationTableName, { cruiseId }),
     staleTime: 0,
     cacheTime: 0,
   });
 };
 
 export const useGetStationById = (stationId) => {
-  const dbManager = DatabaseManager.getInstance();
+  const { findOne } = useOfflineStorage();
   return useQuery({
     queryKey: [userDataKey, stationTableName, stationId],
-    queryFn: async () =>
-      await dbManager.getTableRecords(stationTableName, { id: stationId }),
-    select: (data) => data?.[0] || null,
+    queryFn: async () => await find(stationTableName, { id: stationId }),
     staleTime: 0,
     cacheTime: 0,
   });
 };
 
 export const useAddStation = () => {
-  const dbManager = DatabaseManager.getInstance();
+  const { create } = useOfflineStorage();
   const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: async ({ cruiseId, newStation }) => {
-      await dbManager.db.table(stationTableName).add(newStation);
+      await create(stationTableName, newStation);
       return { cruiseId, newStation };
     },
     onSuccess: ({ cruiseId, newStation }) => {
@@ -142,12 +135,12 @@ export const useAddStation = () => {
 };
 
 export const useUpdateStation = () => {
-  const dbManager = DatabaseManager.getInstance();
+  const { update } = useOfflineStorage();
   const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: async ({ cruiseId, stationId, updates }) => {
-      await dbManager.db.table(stationTableName).update(stationId, updates);
+      await update(stationTableName, stationId, updates);
       return { cruiseId, stationId, updates };
     },
     onSuccess: ({ cruiseId, stationId, updates }) => {

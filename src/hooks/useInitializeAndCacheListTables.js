@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import { useQueries } from "@tanstack/react-query";
-import DatabaseManager from "../utils/DatabaseManager";
 import { get } from "../utils/requestMethods";
 
 const HOUR_MS = 1000 * 60 * 60;
@@ -15,9 +14,6 @@ export const useInitializeAndCacheListTables = (isOffline) => {
 
   const sortByNameList = ["ports", "species", "sampleType"];
 
-  const dbManager = DatabaseManager.getInstance();
-  const listTableNames = dbManager.listTablesNamesList;
-
   // Step 1: Initialize list tables
   useEffect(() => {
     const initialize = async () => {
@@ -26,25 +22,25 @@ export const useInitializeAndCacheListTables = (isOffline) => {
       setIsError(false);
 
       try {
-        const emptyTables = await dbManager.getEmptyListTablesList();
+        const emptyTables = await getEmptyListTablesList(db);
         if (isOffline && emptyTables?.length) {
           // Offline and tables are not initialized
           throw new Error("Offline and list tables are uninitialized.");
         } else if (!isOffline) {
-          const updateTables = await dbManager.getUpdateListTablesList();
+          const updateTables = await getUpdateListTablesList(db);
           if (updateTables.length) {
             const now = new Date();
             await Promise.all(
               updateTables.map(async (table) => {
                 const data = await get(`/api/${table}`);
-                await dbManager.db.transaction(
+                await db.transaction(
                   "rw",
-                  [table, dbManager.tablesMetadata],
+                  [table, tablesMetadataName],
                   async () => {
-                    await dbManager.db.table(table).clear();
-                    await dbManager.db.table(table).bulkAdd(data);
-                    await dbManager.db
-                      .table(dbManager.tablesMetadata)
+                    await db.table(table).clear();
+                    await db.table(table).bulkAdd(data);
+                    await db
+                      .table(tablesMetadataName)
                       .update(table, { lastUpdate: now });
                   },
                 );
@@ -65,12 +61,8 @@ export const useInitializeAndCacheListTables = (isOffline) => {
   }, [isOffline]);
 
   // Step 2: Cache list tables into React Query
-  const listTablesQueries = listTableNames.map((tableName) => {
-    const queryFn = () =>
-      dbManager.getTableRecords(
-        tableName,
-        sortByNameList.includes(tableName) ? "name" : null,
-      );
+  const listTablesQueries = listTablesNamesList.map((tableName) => {
+    const queryFn = () => find(tableName);
 
     return {
       queryKey: [listDataKey, tableName],

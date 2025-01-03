@@ -1,11 +1,7 @@
 import { useEffect, useState } from "react";
-import { useQueries } from "@tanstack/react-query";
-import DatabaseManager from "../utils/DatabaseManager";
-import { get } from "../utils/requestMethods";
+import { useOfflineStorage } from "@nmfs-radfish/react-radfish";
+import { get, genListQueryParams } from "../utils/requestMethods";
 import { useAuth } from "../context/AuthContext";
-
-const HOUR_MS = 1000 * 60 * 60;
-const DISABLE = 0;
 
 export const userDataKey = "userData";
 export const userCruisesTableName = "userCruises";
@@ -26,17 +22,17 @@ export const useLoadCruisesAndStations = (listTablesReady, isOffline) => {
     const fetchedUserCruises = await get(
       `/api/${userCruisesTableName}`,
       `id=${userId}`,
-    ); //Only one record should have userId. Return only one record;
+    );
+    //Only one record should have userId. Return only one record;
     // Short circuit if no userCruises
     if (!fetchedUserCruises?.length) return [];
     // if fetchedUserCruises are  found just return the first record.
     const userCruises = fetchedUserCruises[0];
-    const table = dbManager.db.table(userCruisesTableName);
 
     // if fetched records does not exist locally, save it locally.
-    const localRecord = await table.get(userCruises.id);
+    const localRecord = await findOne(userCruisesTableName, { id: userId });
     if (!localRecord) {
-      await table.put(userCruises);
+      await create(userCruisesTableName, userCruises);
     }
 
     const { cruises } = userCruises;
@@ -47,10 +43,10 @@ export const useLoadCruisesAndStations = (listTablesReady, isOffline) => {
   const fetchAndStoreFilteredSet = async (tableName, key, setList) => {
     const queryParams = genListQueryParam(key, setList);
     const fetchedData = await get(`/api/${tableName}`, queryParams);
-    const table = dbManager.db.table(tableName);
+    const table = db.table(tableName);
 
     // if fetched records does not exist locally, save it locally.
-    await dbManager.db.transaction("rw", table, async () => {
+    await db.transaction("rw", table, async () => {
       for (const fetchedRecord of fetchedData) {
         const localRecord = await table.get(fetchedRecord.id);
         if (!localRecord) {
@@ -72,12 +68,8 @@ export const useLoadCruisesAndStations = (listTablesReady, isOffline) => {
       try {
         if (isOffline) {
           // Check IndexedDB for cruises and stations
-          const cruisesCount = await dbManager.db
-            .table(cruiseTableName)
-            .count();
-          const stationsCount = await dbManager.db
-            .table(stationTableName)
-            .count();
+          const cruisesCount = await db.table(cruiseTableName).count();
+          const stationsCount = await db.table(stationTableName).count();
 
           // Warn if offline and no cruises or stations
           if (cruisesCount === 0 || stationsCount === 0) {
