@@ -62,7 +62,7 @@ export async function put(endpoint, payload) {
   }
 }
 
-export function genListQueryParam(keyName, keyList) {
+export function genListQueryParams(keyName, keyList) {
   let paramStr = "";
   if (!keyList.length) return paramStr;
   for (const key of keyList) {
