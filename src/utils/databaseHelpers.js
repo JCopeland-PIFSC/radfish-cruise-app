@@ -2,6 +2,7 @@ import store from "../db/store.js";
 import { tablesMetadataTableName, tablesMetadataSeed } from "../db/config.js";
 import { updateNeeded } from "./dateTimeHelpers.js";
 
+// Initialized DB instance
 const { db } = store;
 
 export const tablesMetadataName = tablesMetadataTableName;
@@ -45,7 +46,7 @@ async function getListTablesMetadataRecords() {
  */
 export async function getEmptyListTablesList() {
   try {
-    const listTablesMetadataRecords = await getListTablesMetadataRecords(db);
+    const listTablesMetadataRecords = await getListTablesMetadataRecords();
     return listTablesMetadataRecords
       .map((tableRecord, index) => {
         if (!tableRecord) return listTablesNamesList[index];
@@ -72,7 +73,7 @@ export async function getEmptyListTablesList() {
  */
 export async function getUpdateListTablesList(db) {
   try {
-    const listTablesMetadataRecords = await getListTablesMetadataRecords(db);
+    const listTablesMetadataRecords = await getListTablesMetadataRecords();
     return listTablesMetadataRecords
       .map((tableRecord, index) => {
         if (!tableRecord) return listTablesNamesList[index];
