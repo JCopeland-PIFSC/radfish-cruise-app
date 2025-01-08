@@ -1,11 +1,20 @@
 import { useState, useEffect } from "react";
 import { useQueries } from "@tanstack/react-query";
 import { get } from "../utils/requestMethods";
+import { useOfflineStorage } from "@nmfs-radfish/react-radfish";
+import {
+  tablesMetadataName,
+  listTablesNamesList,
+  getEmptyListTablesList,
+  getUpdateListTablesList,
+} from "../utils/databaseHelpers";
 
 const HOUR_MS = 1000 * 60 * 60;
 export const listDataKey = "listTableData";
 
 export const useInitializeAndCacheListTables = (isOffline) => {
+  // Get db instance
+  const { find, storageMethod } = useOfflineStorage();
   const [isReady, setIsReady] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [isError, setIsError] = useState(false);
@@ -22,24 +31,24 @@ export const useInitializeAndCacheListTables = (isOffline) => {
       setIsError(false);
 
       try {
-        const emptyTables = await getEmptyListTablesList(db);
+        const emptyTables = await getEmptyListTablesList();
         if (isOffline && emptyTables?.length) {
           // Offline and tables are not initialized
           throw new Error("Offline and list tables are uninitialized.");
         } else if (!isOffline) {
-          const updateTables = await getUpdateListTablesList(db);
+          const updateTables = await getUpdateListTablesList();
           if (updateTables.length) {
             const now = new Date();
             await Promise.all(
               updateTables.map(async (table) => {
                 const data = await get(`/api/${table}`);
-                await db.transaction(
+                await storageMethod.db.transaction(
                   "rw",
                   [table, tablesMetadataName],
                   async () => {
-                    await db.table(table).clear();
-                    await db.table(table).bulkAdd(data);
-                    await db
+                    await storageMethod.db.table(table).clear();
+                    await storageMethod.db.table(table).bulkAdd(data);
+                    await storageMethod.db
                       .table(tablesMetadataName)
                       .update(table, { lastUpdate: now });
                   },
@@ -78,7 +87,7 @@ export const useInitializeAndCacheListTables = (isOffline) => {
   const cacheError = queries.some((query) => query.isError);
   const cacheLoadError = queries.find((query) => query.isError)?.error || null;
   const data = queries.reduce((acc, query, index) => {
-    acc[listTableNames[index]] = query.data || null;
+    acc[listTablesNamesList[index]] = query.data || null;
     return acc;
   }, {});
 
