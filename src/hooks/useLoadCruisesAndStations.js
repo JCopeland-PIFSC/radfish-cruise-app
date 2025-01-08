@@ -9,11 +9,12 @@ export const cruiseTableName = "cruises";
 export const stationTableName = "stations";
 
 export const useLoadCruisesAndStations = (listTablesReady, isOffline) => {
+  // Get db instance
+  const { create, findOne, storageMethod } = useOfflineStorage();
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
   const [warning, setWarning] = useState(false); // Warn if cruises/stations are missing and offline
+  const [error, setError] = useState(null);
   const { user } = useAuth();
-  const dbManager = DatabaseManager.getInstance();
 
   const fetchAndStoreUserCruises = async (userId) => {
     // Short circuit if not userId
@@ -28,25 +29,24 @@ export const useLoadCruisesAndStations = (listTablesReady, isOffline) => {
     if (!fetchedUserCruises?.length) return [];
     // if fetchedUserCruises are  found just return the first record.
     const userCruises = fetchedUserCruises[0];
-
     // if fetched records does not exist locally, save it locally.
-    const localRecord = await findOne(userCruisesTableName, { id: userId });
-    if (!localRecord) {
-      await create(userCruisesTableName, userCruises);
-    }
+    const localRecord = await findOne(userCruisesTableName, {
+      where: { id: userId },
+    });
 
-    const { cruises } = userCruises;
-    return cruises?.length ? cruises : [];
+    if (!localRecord) await create(userCruisesTableName, userCruises);
+
+    return userCruises?.cruises?.length ? userCruises.cruises : [];
   };
 
   // Helper to fetch and store cruises/stations
   const fetchAndStoreFilteredSet = async (tableName, key, setList) => {
-    const queryParams = genListQueryParam(key, setList);
+    const queryParams = genListQueryParams(key, setList);
     const fetchedData = await get(`/api/${tableName}`, queryParams);
-    const table = db.table(tableName);
+    const table = storageMethod.db.table(tableName);
 
     // if fetched records does not exist locally, save it locally.
-    await db.transaction("rw", table, async () => {
+    await storageMethod.db.transaction("rw", table, async () => {
       for (const fetchedRecord of fetchedData) {
         const localRecord = await table.get(fetchedRecord.id);
         if (!localRecord) {
@@ -68,8 +68,12 @@ export const useLoadCruisesAndStations = (listTablesReady, isOffline) => {
       try {
         if (isOffline) {
           // Check IndexedDB for cruises and stations
-          const cruisesCount = await db.table(cruiseTableName).count();
-          const stationsCount = await db.table(stationTableName).count();
+          const cruisesCount = await storageMethod.db
+            .table(cruiseTableName)
+            .count();
+          const stationsCount = await storageMethod.db
+            .table(stationTableName)
+            .count();
 
           // Warn if offline and no cruises or stations
           if (cruisesCount === 0 || stationsCount === 0) {
@@ -78,7 +82,6 @@ export const useLoadCruisesAndStations = (listTablesReady, isOffline) => {
         } else {
           // Online: Fetch and store cruises and stations
           const userCruises = await fetchAndStoreUserCruises(user?.id);
-
           // Only attempt fetchAndStore if authorized user has userCruises
           if (userCruises?.length) {
             await fetchAndStoreFilteredSet(cruiseTableName, "id", userCruises);
@@ -100,52 +103,11 @@ export const useLoadCruisesAndStations = (listTablesReady, isOffline) => {
     };
 
     initialize();
-  }, [listTablesReady, isOffline, dbManager]);
-
-  // React Query for caching
-  const queries = useQueries({
-    queries: [
-      {
-        queryKey: [userDataKey, cruiseTableName],
-        queryFn: () => dbManager.getTableRecords(cruiseTableName, "-startDate"),
-        enabled: listTablesReady,
-      },
-      {
-        queryKey: [userDataKey, stationTableName],
-        queryFn: () => dbManager.getTableRecords(stationTableName),
-        enabled: listTablesReady,
-      },
-      {
-        queryKey: [userDataKey, "users"],
-        queryFn: () => dbManager.getTableRecords("users"),
-        enabled: listTablesReady,
-      },
-    ],
-  });
-
-  const cruiseQuery = queries[0];
-  const stationQuery = queries[1];
-
-  const cruises = cruiseQuery.data || [];
-  const stations = stationQuery.data || [];
-  const isError = cruiseQuery.isError || stationQuery.isError;
-  const errorDetails = cruiseQuery.error || stationQuery.error;
+  }, [listTablesReady, isOffline, user]);
 
   return {
     loading,
     warning,
     error,
-    cruises,
-    stations,
-    isError,
-    errorDetails,
   };
 };
-
-function genListQueryParam(keyName, keyList) {
-  let paramStr = "";
-  for (const key of keyList) {
-    paramStr = paramStr.concat(`${keyName}=${key}&`);
-  }
-  return paramStr;
-}
