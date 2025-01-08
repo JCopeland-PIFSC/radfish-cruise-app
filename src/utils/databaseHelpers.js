@@ -1,8 +1,10 @@
+import store from "../db/store.js";
 import { tablesMetadataTableName, tablesMetadataSeed } from "../db/config.js";
 import { updateNeeded } from "./dateTimeHelpers.js";
 
-export const tablesMetadataName = tablesMetadataTableName;
+const { db } = store;
 
+export const tablesMetadataName = tablesMetadataTableName;
 export const listTablesNamesList = tablesMetadataSeed.map(
   (table) => table.tableName,
 );
@@ -17,7 +19,7 @@ export const listTablesNamesList = tablesMetadataSeed.map(
  * @returns {Promise<Array>} A promise that resolves to an array of records from the list tables.
  * @throws {Error} Throws an error if the records cannot be fetched from the `tablesMetadata` table.
  */
-async function getListTablesMetadataRecords(db) {
+async function getListTablesMetadataRecords() {
   try {
     return await Promise.all(
       listTablesNamesList.map(async (tableName) => {
@@ -41,7 +43,7 @@ async function getListTablesMetadataRecords(db) {
  * @returns {Promise<string[]>} A promise that resolves to a list of table names for list tables that have not been initialized.
  * @throws {Error} Throws an error if there is an issue fetching the list table records.
  */
-export async function getEmptyListTablesList(db) {
+export async function getEmptyListTablesList() {
   try {
     const listTablesMetadataRecords = await getListTablesMetadataRecords(db);
     return listTablesMetadataRecords
@@ -103,17 +105,16 @@ export async function getUpdateListTablesList(db) {
  */
 
 export async function initMetadataTable(
-  db,
   seedRecords,
   metadataName = "tablesMetadata",
 ) {
   try {
     // Check if the metadata table has any records
-    const hasListTables = await tableExistsHasRecords(db, metadataName);
+    const hasListTables = await tableExistsHasRecords(metadataName);
 
     // If the table doesn't have records, proceed with initialization
     if (!hasListTables) {
-      await clearTableData(db, metadataName);
+      await clearTableData(metadataName);
 
       // Bulk add the seed records
       const bulkAdd = await db
@@ -149,7 +150,7 @@ export async function initMetadataTable(
  * @throws {Error} Throws an error if there is a problem with the database query other than a "NoSuchTable" error.
  */
 
-async function tableExistsHasRecords(db, tableName) {
+async function tableExistsHasRecords(tableName) {
   try {
     const count = await db.table(tableName).count();
     return count > 0;
@@ -174,11 +175,25 @@ async function tableExistsHasRecords(db, tableName) {
  *
  */
 
-async function clearTableData(db, tableName) {
+async function clearTableData(tableName) {
   try {
     await db.table(tableName).clear();
     console.log(`Table "${tableName}" cleared.`);
   } catch (error) {
     throw new Error(`Failed to clear table "${tableName}": ${error.message}`);
   }
+}
+
+export async function getUserCruisesList(userId) {
+  try {
+    const userCruises = await db.table("userCruises").get(userId);
+    return userCruises?.cruises?.length ? userCruises.cruises : [];
+  } catch (error) {
+    throw new Error(`Error getting User Cruises List: ${error}`);
+  }
+}
+
+export async function userHasCruiseAccess(userId, cruiseId) {
+  const cruisesList = await getUserCruisesList(userId);
+  return cruisesList.includes(cruiseId);
 }
