@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { useMutation, useQueryClient, useQuery } from "@tanstack/react-query";
 import {
   userDataKey,
@@ -8,18 +8,41 @@ import {
 } from "./useLoadCruisesAndStations";
 import { useOfflineStorage } from "@nmfs-radfish/react-radfish";
 import { CruiseStatus } from "../utils/listLookup";
+import { getUserCruisesList } from "../utils/databaseHelpers.js";
 import { useAuth } from "../context/AuthContext";
-
 const HOUR_MS = 1000 * 60 * 60;
 
-export const useGetCruises = () => {
-  const { find } = useOfflineStorage();
-  return useQuery({
-    queryKey: [userDataKey, cruiseTableName],
-    queryFn: async () => await find(cruiseTableName),
-    staleTime: 0,
-    cacheTime: 0,
-  });
+export const useGetUserCruises = () => {
+  const { storageMethod } = useOfflineStorage();
+  const { user } = useAuth();
+  const [cruises, setCruises] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const loadUserCruises = async () => {
+      if (!user || !user.id) {
+        setError(new Error("Authorized User required to get Cruises"));
+      } else {
+        try {
+          setLoading(true);
+          const cruiseKeys = await getUserCruisesList(user.id);
+          const fetchedCruises = await storageMethod.db
+            .table(cruiseTableName)
+            .bulkGet(cruiseKeys);
+          setCruises(fetchedCruises);
+        } catch (error) {
+          setError(error);
+        } finally {
+          setLoading(false);
+        }
+      }
+    };
+
+    loadUserCruises();
+  }, [storageMethod, user]);
+
+  return { cruises, loading, error };
 };
 
 export const useAddCruise = () => {
@@ -27,41 +50,27 @@ export const useAddCruise = () => {
   if (!user || !user.id)
     throw new Error("Authorized User required to add Cruise!");
 
-  const queryClient = useQueryClient();
-  const { create, findOne, update } = useOfflineStorage();
+  const { create, update, findOne } = useOfflineStorage();
 
-  return useMutation({
-    mutationFn: async ({ newCruise }) => {
+  const addCruise = async (newCruise) => {
+    try {
       await create(cruiseTableName, newCruise);
-      const newLocalCruise = await findOne(cruiseTableName, {
-        id: newCruise.id,
+      const userCruises = await findOne(userCruisesTableName, {
+        where: { id: user.id },
       });
-      const userCruises = await findOne(userCruisesTableName, { id: user.id });
-      if (userCruises) {
-        const uuid = userCruises.uuid ? userCruises.uuid : crypto.randomUUID();
-        await update(userCruisesTableName, [
-          {
-            id: user.id,
-            uuid,
-            cruises: [...userCruises.cruises, newLocalCruise.id],
-          },
-        ]);
-      } else {
-        await create(userCruisesTableName, {
-          id: user.id,
-          uuid: crypto.randomUUID(),
-          cruises: [newLocalCruise.id],
-        });
-      }
-      return newLocalCruise;
-    },
-    onSuccess: (newCruise) => {
-      queryClient.setQueryData(
-        [userDataKey, cruiseTableName],
-        (oldData = []) => [newCruise, ...oldData],
-      );
-    },
-  });
+      await update(userCruisesTableName, [
+        {
+          ...userCruises,
+          cruises: [...userCruises.cruises, newCruise.id],
+        },
+      ]);
+      return newCruise;
+    } catch (error) {
+      throw new Error(`Error adding new cruise: ${error}`);
+    }
+  };
+
+  return { addCruise };
 };
 
 export const useUpdateCruise = () => {
