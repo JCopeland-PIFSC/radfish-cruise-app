@@ -20,7 +20,7 @@ const CruiseNewPage = () => {
     isLoading: portsLoading,
     isError: portsError,
     errorPorts } = usePortsList();
-  const { mutateAsync: addCruise } = useAddCruise();
+  const { addCruise } = useAddCruise();
   const navigate = useNavigate();
   const [resetToggle, setResetToggle] = useState(false);
   const inputFocus = useRef(null);
@@ -55,7 +55,7 @@ const CruiseNewPage = () => {
     }
 
     try {
-      const newCruise = await addCruise({ newCruise: values });
+      const newCruise = await addCruise(values);
       event.target.reset();
       setResetToggle(true);
       navigate(`/cruises/${newCruise.id}`);
