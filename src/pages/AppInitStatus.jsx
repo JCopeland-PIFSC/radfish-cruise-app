@@ -4,13 +4,14 @@ import { Button, GridContainer, Grid } from "@trussworks/react-uswds";
 
 const AppInitStatusPage = () => {
   const { state } = useLocation();
-  const { statuses, listsLoading, listsError, listsErrorMessage } = state || {};
+  const { statuses, listsLoading, listsError, listsErrorMessage, additionalWarning } = state || {};
   const navigate = useNavigate();
 
   // Determine if all statuses are "green"
   const allStatusesPass =
     !listsLoading &&
     !listsError &&
+    !!statuses &&
     Object.values(statuses).every((status) => status === "green");
 
   // Status Indicator Helper
@@ -50,10 +51,17 @@ const AppInitStatusPage = () => {
           <h1>Status Check</h1>
         </Grid>
       </Grid>
+      {additionalWarning && (
+        <Grid row>
+          <Grid col={12}>
+            <p>{additionalWarning}</p>
+          </Grid>
+        </Grid>
+      )}
       <Grid row>
         <Grid col={12}>
           <ul style={{ listStyleType: "none", paddingLeft: 0 }}>
-            {Object.entries(statuses).map(([statusName, statusValue]) => (
+            {statuses && Object.entries(statuses).map(([statusName, statusValue]) => (
               <li key={statusName} style={{ marginBottom: "12px" }}>
                 {renderStatusIndicator(statusValue)}
                 <strong>{statusName}</strong>
