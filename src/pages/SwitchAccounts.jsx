@@ -2,19 +2,15 @@ import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useOfflineStatus } from "@nmfs-radfish/react-radfish";
 import { Button, GridContainer, Grid } from "@trussworks/react-uswds";
-import {
-  useGetAuthenticatedUsers,
-  useResetCurrentUser,
-} from "../hooks/useUsers";
+import { useGetAuthenticatedUsers } from "../hooks/useUsers";
 import { useAuth } from "../context/AuthContext";
-import Spinner from "../components/Spinner";
+import { Spinner } from "../components";
 
 const SwitchAccounts = () => {
   const [users, setUsers] = useState([]);
   const { getAllAuthenticatedUsers } = useGetAuthenticatedUsers();
-  const { resetAndSetCurrentUser } = useResetCurrentUser();
   const navigate = useNavigate();
-  const { loadUserFromDB } = useAuth();
+  const { setCurrentUser } = useAuth();
   const { isOffline } = useOfflineStatus();
 
   // Fetch authenticated users on component mount
@@ -23,6 +19,16 @@ const SwitchAccounts = () => {
       try {
         const fetchedUsers = await getAllAuthenticatedUsers();
         setUsers(fetchedUsers);
+        if (!isOffline && !fetchedUsers?.length) {
+          navigate("/login");
+        }
+        if (isOffline && !fetchedUsers?.length) {
+          navigate("/app-init-status", {
+            state: {
+              additionalWarning: "No Authorized users stored. Please connect to the network. At least one authorized user required to use offline."
+            }
+          });
+        }
       } catch (error) {
         console.error("Error fetching users:", error);
       }
@@ -32,8 +38,7 @@ const SwitchAccounts = () => {
   }, [getAllAuthenticatedUsers]);
 
   const handleSelectedUserClick = async (user) => {
-    await resetAndSetCurrentUser(user.id);
-    await loadUserFromDB();
+    await setCurrentUser(user.id);
     navigate("/cruises");
   };
 
@@ -56,6 +61,9 @@ const SwitchAccounts = () => {
                   Switch Accounts
                 </h1>
                 {/* Render fetched users dynamically */}
+                {isOffline && !users?.length && (
+                  <p>Warning: The app cannot be used offline without an authenticated user.</p>
+                )}
                 {users.length > 0 ? (
                   <div>
                     {users.map((user, index) => (

@@ -4,15 +4,11 @@ import { useAuth } from "../context/AuthContext";
 import Spinner from "./Spinner";
 
 const PrivateRoute = () => {
-  const { user, loading } = useAuth();
-
-  if (loading) {
-    return <Spinner/>;
-  }
+  const { user } = useAuth();
 
   // Redirect to login if not authenticated
   if (!user?.isAuthenticated) {
-    return <Navigate to="/" replace />;
+    return <Navigate to="/switch-accounts" replace />;
   }
 
   return <Outlet />;

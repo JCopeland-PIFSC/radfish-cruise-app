@@ -1,16 +1,20 @@
 import "../index.css";
 import React from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { Button, Grid, Icon, Tag } from "@trussworks/react-uswds";
+import { useNavigate } from "react-router-dom";
+import { Button, Grid, Tag } from "@trussworks/react-uswds";
 import { Table } from "@nmfs-radfish/react-radfish";
 import { listValueLookup } from "../utils/listLookup";
 import { setStatusColor } from "../utils/setStatusColor";
 import { usePortsList, useCruiseStatusesList } from "../hooks/useListTables";
-import { useGetCruises } from "../hooks/useCruises";
+import { useGetUserCruises } from "../hooks/useCruises";
+import { useAuth } from "../context/AuthContext";
 
 const CruiseListPage = () => {
   const navigate = useNavigate();
-
+  const { user } = useAuth();
+  if (!user?.isAuthenticated) {
+    navigate("/switch-user")
+  }
   const {
     data: ports,
     isError: portsError,
@@ -19,11 +23,10 @@ const CruiseListPage = () => {
     data: cruiseStatuses,
     isError: cruiseStatusesError,
     errorCruiseStatuses } = useCruiseStatusesList();
-  const { data: cruises, isLoading: cruisesLoading, isError: cruisesError, errorCruises } = useGetCruises();
-
-  if (cruisesLoading) return <div>Loading Cruises...</div>;
+  const { cruises, loading, error } = useGetUserCruises();
+  if (loading) return <div>Loading Cruises...</div>;
   if (portsError || cruiseStatusesError) return <div>Error Loading List Data: {portsError ? errorPorts.message : errorCruiseStatuses.message}</div>;
-  if (cruisesError) return <div>Error Loading Cruise Data: {errorCruises?.message}</div>;
+  if (error) return <div>Error Loading Cruise Data: {errorCruises?.message}</div>;
 
   const handleNavNewCruise = () => {
     navigate("/cruises/new");
@@ -78,8 +81,8 @@ const CruiseListPage = () => {
         </Button>
       </Grid>
       <Grid row className="margin-top-2">
-        <Table columns={columns} data={cruises} onRowClick={handleRowClick} className="margin-top-0" bordered striped />
-        {!cruises.length && <p>No Cruises Recorded!</p>}
+        <Table columns={columns} data={cruises?.length ? cruises : []} onRowClick={handleRowClick} className="margin-top-0" bordered striped />
+        {!cruises?.length && <p>No Cruises Recorded!</p>}
       </Grid>
     </>
   );

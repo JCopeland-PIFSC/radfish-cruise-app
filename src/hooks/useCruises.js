@@ -1,6 +1,5 @@
-import { useMemo } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { useMutation, useQueryClient, useQuery } from "@tanstack/react-query";
-import DatabaseManager from "../utils/DatabaseManager";
 import {
   userDataKey,
   cruiseTableName,
@@ -9,19 +8,41 @@ import {
 } from "./useLoadCruisesAndStations";
 import { useOfflineStorage } from "@nmfs-radfish/react-radfish";
 import { CruiseStatus } from "../utils/listLookup";
+import { getUserCruisesList } from "../utils/databaseHelpers.js";
 import { useAuth } from "../context/AuthContext";
-
 const HOUR_MS = 1000 * 60 * 60;
 
-export const useGetCruises = () => {
-  const dbManager = DatabaseManager.getInstance();
-  return useQuery({
-    queryKey: [userDataKey, cruiseTableName],
-    queryFn: async () =>
-      await dbManager.getTableRecords(cruiseTableName, "-startDate"),
-    staleTime: 0,
-    cacheTime: 0,
-  });
+export const useGetUserCruises = () => {
+  const { storageMethod } = useOfflineStorage();
+  const { user } = useAuth();
+  const [cruises, setCruises] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const loadUserCruises = async () => {
+      if (!user || !user.id) {
+        setError(new Error("Authorized User required to get Cruises"));
+      } else {
+        try {
+          setLoading(true);
+          const cruiseKeys = await getUserCruisesList(user.id);
+          const fetchedCruises = await storageMethod.db
+            .table(cruiseTableName)
+            .bulkGet(cruiseKeys);
+          setCruises(fetchedCruises);
+        } catch (error) {
+          setError(error);
+        } finally {
+          setLoading(false);
+        }
+      }
+    };
+
+    loadUserCruises();
+  }, [storageMethod, user]);
+
+  return { cruises, loading, error };
 };
 
 export const useAddCruise = () => {
@@ -29,50 +50,36 @@ export const useAddCruise = () => {
   if (!user || !user.id)
     throw new Error("Authorized User required to add Cruise!");
 
-  const queryClient = useQueryClient();
-  const { create, findOne, update } = useOfflineStorage();
+  const { create, update, findOne } = useOfflineStorage();
 
-  return useMutation({
-    mutationFn: async ({ newCruise }) => {
+  const addCruise = async (newCruise) => {
+    try {
       await create(cruiseTableName, newCruise);
-      const newLocalCruise = await findOne(cruiseTableName, {
-        id: newCruise.id,
+      const userCruises = await findOne(userCruisesTableName, {
+        where: { id: user.id },
       });
-      const userCruises = await findOne(userCruisesTableName, { id: user.id });
-      if (userCruises) {
-        const uuid = userCruises.uuid ? userCruises.uuid : crypto.randomUUID();
-        await update(userCruisesTableName, [
-          {
-            id: user.id,
-            uuid,
-            cruises: [...userCruises.cruises, newLocalCruise.id],
-          },
-        ]);
-      } else {
-        await create(userCruisesTableName, {
-          id: user.id,
-          uuid: crypto.randomUUID(),
-          cruises: [newLocalCruise.id],
-        });
-      }
-      return newLocalCruise;
-    },
-    onSuccess: (newCruise) => {
-      queryClient.setQueryData(
-        [userDataKey, cruiseTableName],
-        (oldData = []) => [newCruise, ...oldData],
-      );
-    },
-  });
+      await update(userCruisesTableName, [
+        {
+          ...userCruises,
+          cruises: [...userCruises.cruises, newCruise.id],
+        },
+      ]);
+      return newCruise;
+    } catch (error) {
+      throw new Error(`Error adding new cruise: ${error}`);
+    }
+  };
+
+  return { addCruise };
 };
 
 export const useUpdateCruise = () => {
-  const dbManager = DatabaseManager.getInstance();
+  const { update } = useOfflineStorage();
   const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: async ({ cruiseId, updates }) => {
-      await dbManager.db.table(cruiseTableName).update(cruiseId, updates);
+      await update(cruiseTableName, updates);
       return { cruiseId, updates };
     },
     onSuccess: ({ cruiseId, updates }) => {
@@ -89,47 +96,42 @@ export const useUpdateCruise = () => {
 };
 
 export const useGetCruiseById = (cruiseId) => {
-  const dbManager = DatabaseManager.getInstance();
+  const { findOne } = useOfflineStorage();
   return useQuery({
     queryKey: [userDataKey, cruiseTableName, cruiseId],
-    queryFn: async () =>
-      await dbManager.getTableRecords(cruiseTableName, { id: cruiseId }),
-    select: (data) => data?.[0] || null,
+    queryFn: async () => await findOne(cruiseTableName, { id: cruiseId }),
     staleTime: 0,
     cacheTime: 0,
   });
 };
 
 export const useGetStationsByCruiseId = (cruiseId) => {
-  const dbManager = DatabaseManager.getInstance();
+  const { find } = useOfflineStorage();
   return useQuery({
     queryKey: [userDataKey, stationTableName, cruiseId],
-    queryFn: async () =>
-      await dbManager.getTableRecords(stationTableName, { cruiseId }),
+    queryFn: async () => await find(stationTableName, { cruiseId }),
     staleTime: 0,
     cacheTime: 0,
   });
 };
 
 export const useGetStationById = (stationId) => {
-  const dbManager = DatabaseManager.getInstance();
+  const { findOne } = useOfflineStorage();
   return useQuery({
     queryKey: [userDataKey, stationTableName, stationId],
-    queryFn: async () =>
-      await dbManager.getTableRecords(stationTableName, { id: stationId }),
-    select: (data) => data?.[0] || null,
+    queryFn: async () => await find(stationTableName, { id: stationId }),
     staleTime: 0,
     cacheTime: 0,
   });
 };
 
 export const useAddStation = () => {
-  const dbManager = DatabaseManager.getInstance();
+  const { create } = useOfflineStorage();
   const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: async ({ cruiseId, newStation }) => {
-      await dbManager.db.table(stationTableName).add(newStation);
+      await create(stationTableName, newStation);
       return { cruiseId, newStation };
     },
     onSuccess: ({ cruiseId, newStation }) => {
@@ -142,12 +144,12 @@ export const useAddStation = () => {
 };
 
 export const useUpdateStation = () => {
-  const dbManager = DatabaseManager.getInstance();
+  const { update } = useOfflineStorage();
   const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: async ({ cruiseId, stationId, updates }) => {
-      await dbManager.db.table(stationTableName).update(stationId, updates);
+      await update(stationTableName, stationId, updates);
       return { cruiseId, stationId, updates };
     },
     onSuccess: ({ cruiseId, stationId, updates }) => {

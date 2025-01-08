@@ -61,3 +61,12 @@ export async function put(endpoint, payload) {
     throw error;
   }
 }
+
+export function genListQueryParams(keyName, keyList) {
+  let paramStr = "";
+  if (!keyList.length) return paramStr;
+  for (const key of keyList) {
+    paramStr = paramStr.concat(`${keyName}=${key}&`);
+  }
+  return paramStr;
+}

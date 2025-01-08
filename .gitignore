@@ -27,3 +27,7 @@ yarn-error.log*
 
 # Working DB file
 db.json
+
+# Rest Client Request files
+*.http
+*.rest

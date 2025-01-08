@@ -1,10 +1,12 @@
 import React, { useEffect, useState, useRef } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Grid, Button, } from "@trussworks/react-uswds";
-import EventView from "../components/EventView";
-import EventForm from "../components/EventForm";
-import HeaderWithEdit from "../components/HeaderWithEdit";
-import AppCard from "../components/AppCard";
+import {
+  EventView,
+  EventForm,
+  HeaderWithEdit,
+  AppCard,
+} from "../components";
 import { EventType } from "../utils/listLookup";
 import { camelStrToTitle } from "../utils/stringUtilities";
 import { getLocationTz, generateTzDateTime } from "../utils/dateTimeHelpers";
