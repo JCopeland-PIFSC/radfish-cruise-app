@@ -29,14 +29,12 @@ function App({ application }) {
             <div className="flex-justify-center">
               <GridContainer containerSize="tablet-lg">
                 <Routes>
-                  <Route path="/" element={<Login />} />
+                  <Route path="/" element={<SwitchAccounts />} />
+                  <Route path="/switch-accounts" element={<SwitchAccounts />} />
                   <Route path="/login" element={<Login />} />
+                  <Route path="/app-init-status" element={<AppInitStatus />} />
                   <Route element={<PrivateRoute />}>
                     <Route path="/*" element={<AuthenticatedApp />}>
-                      <Route
-                        path="app-init-status"
-                        element={<AppInitStatus />}
-                      />
                       <Route path="cruises" element={<CruiseList />} />
                       <Route path="cruises/new" element={<CruiseNew />} />
                       <Route
@@ -52,7 +50,6 @@ function App({ application }) {
                       path="/cruises/:cruiseId/station/:stationId/catch"
                       element={<CatchDetail />}
                     />
-                    <Route path="switch-accounts" element={<SwitchAccounts />} />
                   </Route>
                   <Route path="*" element={<Navigate to="/" />} />
                 </Routes>
