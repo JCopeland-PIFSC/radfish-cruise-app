@@ -16,6 +16,8 @@ export const stores = {
   userCruises: "id",
 };
 
+export const store = new IndexedDBMethod(name, version, stores);
+
 // A tableMetadata table is used to track when certain tables were last updated.
 export const tablesMetadataTableName = "tablesMetadata";
 
