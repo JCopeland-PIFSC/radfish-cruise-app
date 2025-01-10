@@ -12,9 +12,7 @@ import { useAuth } from "../context/AuthContext";
 const CruiseListPage = () => {
   const navigate = useNavigate();
   const { user } = useAuth();
-  if (!user?.isAuthenticated) {
-    navigate("/switch-user")
-  }
+
   const {
     data: ports,
     isError: portsError,
