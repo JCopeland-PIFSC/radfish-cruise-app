@@ -1,5 +1,5 @@
-import store from "../db/store.js";
-import { tablesMetadataTableName, tablesMetadataSeed } from "../db/config.js";
+import store, { tablesMetadataTableName } from "../db/store.js";
+import { tablesMetadataSeed } from "../db/seeds.js";
 import { updateNeeded } from "./dateTimeHelpers.js";
 
 // Initialized DB instance

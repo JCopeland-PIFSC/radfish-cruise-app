@@ -13,11 +13,7 @@ import {
   StationDetail,
   SwitchAccounts,
 } from "./pages";
-import {
-  PrivateRoute,
-  AuthenticatedApp,
-  MainHeader,
-} from "./components";
+import { PrivateRoute, AuthenticatedApp, MainHeader } from "./components";
 
 function App({ application }) {
   return (
@@ -32,20 +28,18 @@ function App({ application }) {
                   <Route path="/" element={<SwitchAccounts />} />
                   <Route path="/switch-accounts" element={<SwitchAccounts />} />
                   <Route path="/login" element={<Login />} />
-                  <Route path="/app-init-status" element={<AppInitStatus />} />
-                  <Route element={<PrivateRoute />}>
-                    <Route path="/*" element={<AuthenticatedApp />}>
-                      <Route path="cruises" element={<CruiseList />} />
-                      <Route path="cruises/new" element={<CruiseNew />} />
-                      <Route
-                        path="cruises/:cruiseId"
-                        element={<CruiseDetail />}
-                      />
-                      <Route
-                        path="cruises/:cruiseId/station/:stationId"
-                        element={<StationDetail />}
-                      />
-                    </Route>
+                  <Route element={<AuthenticatedApp />}>
+                    <Route path="/app-init-status" element={<AppInitStatus />} />
+                    <Route path="/cruises" element={<CruiseList />} />
+                    <Route path="/cruises/new" element={<CruiseNew />} />
+                    <Route
+                      path="/cruises/:cruiseId"
+                      element={<CruiseDetail />}
+                    />
+                    <Route
+                      path="/cruises/:cruiseId/station/:stationId"
+                      element={<StationDetail />}
+                    />
                     <Route
                       path="/cruises/:cruiseId/station/:stationId/catch"
                       element={<CatchDetail />}

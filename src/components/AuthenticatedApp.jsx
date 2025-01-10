@@ -1,11 +1,20 @@
 import React, { useEffect, useMemo } from "react";
-import { Outlet, useNavigate } from "react-router-dom";
+import { Navigate, Outlet, useNavigate } from "react-router-dom";
 import { useOfflineStatus } from "@nmfs-radfish/react-radfish";
 import { useInitializeAndCacheListTables } from "../hooks/useInitializeAndCacheListTables";
 import { useLoadCruisesAndStations } from "../hooks/useLoadCruisesAndStations";
+import { useAuth } from "../context/AuthContext";
 import Spinner from "./Spinner";
 
 const AuthenticatedApp = () => {
+  const { user } = useAuth();
+
+  // Redirect to login if not authenticated
+  if (!user?.isAuthenticated) {
+    console.log({ user });
+    return <Navigate to="/switch-accounts" replace />;
+  }
+
   // Initialize global data and caches
   const { isOffline } = useOfflineStatus();
   const navigate = useNavigate();
@@ -39,7 +48,7 @@ const AuthenticatedApp = () => {
   // The useEffect hook ensures this logic only runs when an error is detected,
   // preventing unnecessary re-renders or navigation loops.
   useEffect(() => {
-    if (isListsError || cruisesError) {
+    if (isListsError || cruisesError || cruisesWarning) {
       navigate("/app-init-status", {
         state: {
           statuses,

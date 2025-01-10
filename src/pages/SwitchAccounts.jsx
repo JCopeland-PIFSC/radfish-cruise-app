@@ -88,7 +88,7 @@ const SwitchAccounts = () => {
                       {"Log in to store a new account"}
                     </p>
                     <p>
-                      <Link to="/login?addAccount=true">
+                      <Link to="/login">
                         <Button type="button" className="width-full">
                           Add Account
                         </Button>
