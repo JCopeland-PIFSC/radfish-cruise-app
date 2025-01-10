@@ -18,7 +18,8 @@ import { listValueLookup } from "../utils/listLookup";
 import { setStatusColor } from "../utils/setStatusColor";
 import { generateTzDateTime, getLocationTz } from "../utils/dateTimeHelpers";
 import { usePortsList, useCruiseStatusesList } from "../hooks/useListTables";
-import { useGetCruiseById, useGetStationsByCruiseId, useUpdateCruise, useAddStation, useCruiseStatusLock } from "../hooks/useCruises";
+import { useGetCruiseById, useGetStationsByCruiseId, useUpdateCruise, useCruiseStatusLock } from "../hooks/useCruises";
+import { useAuth } from "../context/AuthContext";
 
 const CruiseAction = {
   NEW: "NEW",
@@ -44,9 +45,11 @@ const InitializedStation = {
 
 const CruiseDetailPage = () => {
   const { cruiseId } = useParams();
+  const { user } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
   const stationRefs = useRef({});
+  const [refetch, setRefetch] = useState(false);
   const {
     data: ports,
     isError: portsError,
@@ -57,20 +60,18 @@ const CruiseDetailPage = () => {
     error: errorCruiseStatuses } = useCruiseStatusesList();
   const {
     data: cruise,
-    isLoading: cruiseLoading,
-    isError: cruiseError,
-    error: errorCruise
-  } = useGetCruiseById(cruiseId);
+    loading: cruiseLoading,
+    error: cruiseError
+  } = useGetCruiseById(user.id, cruiseId, refetch);
   const {
     data: stations,
-    isLoading: stationsLoading,
-    isError: stationsError,
-    error: errorStations
-  } = useGetStationsByCruiseId(cruiseId);
+    loading: stationsLoading,
+    error: stationsError
+  } = useGetStationsByCruiseId(user.id, cruiseId);
 
   const [activeAction, setActiveAction] = useState(null);
-  const { mutateAsync: updateCruise } = useUpdateCruise();
-  const { mutateAsync: addStation } = useAddStation();
+  const { updateCruise } = useUpdateCruise();
+  // const { mutateAsync: addStation } = useAddStation();
   const { isStatusLocked } = useCruiseStatusLock(cruiseId);
 
   useEffect(() => {
@@ -85,8 +86,10 @@ const CruiseDetailPage = () => {
 
   if (cruiseLoading || stationsLoading) return <div>Loading Cruise Data...</div>;
   if (portsError || cruiseStatusesError) return <div>Error Loading List Data: {portsError ? errorPorts.message : errorCruiseStatuses.message}</div>;
-  if (cruiseError) return <div>Error Loading Cruise Data: {errorCruise.message}</div>;
+  if (cruiseError) return <div>Error Loading Cruise Data: {cruiseError.message}</div>;
+  if (stationsError) return <div>Error Loading Cruise Stations Data: {stationsError.message}</div>;
 
+  console.log("stations", stations);
   stations.forEach((station) => {
     stationRefs.current[station.id] = stationRefs.current[station.id] || React.createRef();
   });
@@ -100,6 +103,7 @@ const CruiseDetailPage = () => {
     endDate,
     departurePortId,
     returnPortId,
+    uuid,
   } = cruise;
   const cruiseStatus = listValueLookup(cruiseStatuses, cruiseStatusId);
 
@@ -118,7 +122,8 @@ const CruiseDetailPage = () => {
       startDate,
       endDate,
       departurePortId,
-      returnPortId
+      returnPortId,
+      uuid: uuid || crypto.randomUUID(),
     };
 
     for (const [key, value] of formData.entries()) {
@@ -126,8 +131,9 @@ const CruiseDetailPage = () => {
     }
 
     try {
-      await updateCruise({ cruiseId: id, updates: values });
-      setActiveAction(null);
+      await updateCruise(id, values);
+      setRefetch(!refetch);
+      setActiveAction(null)
     } catch (error) {
       console.error("Failed to update cruise: ", error);
     }
@@ -219,7 +225,7 @@ const CruiseDetailPage = () => {
         }
       </Grid>
       {activeAction === CruiseAction.NEW && <StationNew handleNewStation={handleNewStation} />}
-      {stations.length
+      {stations?.length
         ? stations.map((station) => (
           <StationSummary
             key={station.id}

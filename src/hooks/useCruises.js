@@ -1,4 +1,4 @@
-import { useEffect, useState, useMemo } from "react";
+import { useEffect, useState, useMemo, useCallback } from "react";
 import { useMutation, useQueryClient, useQuery } from "@tanstack/react-query";
 import {
   userDataKey,
@@ -8,7 +8,10 @@ import {
 } from "./useLoadCruisesAndStations";
 import { useOfflineStorage } from "@nmfs-radfish/react-radfish";
 import { CruiseStatus } from "../utils/listLookup";
-import { getUserCruisesList } from "../utils/databaseHelpers.js";
+import {
+  getUserCruisesList,
+  userHasCruiseAccess,
+} from "../utils/databaseHelpers.js";
 import { useAuth } from "../context/AuthContext";
 const HOUR_MS = 1000 * 60 * 60;
 
@@ -74,45 +77,85 @@ export const useAddCruise = () => {
 };
 
 export const useUpdateCruise = () => {
-  const { update } = useOfflineStorage();
-  const queryClient = useQueryClient();
+  const { user } = useAuth();
+  if (!user || !user.id)
+    throw new Error("Authorized User required to update Cruise!");
 
-  return useMutation({
-    mutationFn: async ({ cruiseId, updates }) => {
-      await update(cruiseTableName, updates);
-      return { cruiseId, updates };
-    },
-    onSuccess: ({ cruiseId, updates }) => {
-      queryClient.setQueryData(
-        [userDataKey, cruiseTableName, cruiseId],
-        (oldData = {}) => ({
-          ...oldData,
-          ...updates,
-        }),
-      );
-      queryClient.invalidateQueries([userDataKey, cruiseTableName]);
-    },
-  });
+  const { update, findOne } = useOfflineStorage();
+
+  const updateCruise = async (cruiseId, updates) => {
+    try {
+      await update(cruiseTableName, [updates]);
+      const updatedCruise = await findOne(cruiseTableName, {
+        where: { id: cruiseId },
+      });
+      return updatedCruise;
+    } catch (error) {
+      throw new Error(`Error updating cruise: ${error}`);
+    }
+  };
+
+  return { updateCruise };
 };
 
-export const useGetCruiseById = (cruiseId) => {
+export const useGetCruiseById = (userId, cruiseId, refetch) => {
   const { findOne } = useOfflineStorage();
-  return useQuery({
-    queryKey: [userDataKey, cruiseTableName, cruiseId],
-    queryFn: async () => await findOne(cruiseTableName, { id: cruiseId }),
-    staleTime: 0,
-    cacheTime: 0,
-  });
+  const [data, setData] = useState({});
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    async function loadCruise() {
+      setLoading(true);
+      try {
+        const userHasAccess = await userHasCruiseAccess(userId, cruiseId);
+        if (!userHasAccess)
+          throw new Error(`User does not have access to cruise: ${cruiseId}`);
+        const fetchedCruise = await findOne(cruiseTableName, {
+          where: { id: cruiseId },
+        });
+        setData(fetchedCruise);
+      } catch (error) {
+        console.log(error);
+        setError(error);
+      } finally {
+        setLoading(false);
+      }
+    }
+    if (userId && cruiseId) loadCruise();
+  }, [userId, cruiseId, refetch]);
+
+  return { data, loading, error };
 };
 
-export const useGetStationsByCruiseId = (cruiseId) => {
+export const useGetStationsByCruiseId = (userId, cruiseId) => {
   const { find } = useOfflineStorage();
-  return useQuery({
-    queryKey: [userDataKey, stationTableName, cruiseId],
-    queryFn: async () => await find(stationTableName, { cruiseId }),
-    staleTime: 0,
-    cacheTime: 0,
-  });
+  const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    async function loadStations() {
+      setLoading(true);
+      try {
+        const userHasAccess = await userHasCruiseAccess(userId, cruiseId);
+        if (!userHasAccess)
+          throw new Error(`User does not have access to cruise: ${cruiseId}`);
+        const fetchedStations = await find(stationTableName, {
+          where: { cruiseId },
+        });
+        setData(fetchedStations);
+      } catch (error) {
+        console.log(error);
+        setError(error);
+      } finally {
+        setLoading(false);
+      }
+    }
+    if (userId && cruiseId) loadStations();
+  }, [userId, cruiseId]);
+
+  return { data, loading, error };
 };
 
 export const useGetStationById = (stationId) => {
@@ -125,45 +168,71 @@ export const useGetStationById = (stationId) => {
   });
 };
 
+// export const useAddStation = () => {
+//   const { create, findOne } = useOfflineStorage();
+//   const queryClient = useQueryClient();
+
+//   return useMutation({
+//     mutationFn: async ({ cruiseId, newStation }) => {
+//       await create(stationTableName, newStation);
+//       return { cruiseId, newStation };
+//     },
+//     onSuccess: ({ cruiseId, newStation }) => {
+//       queryClient.setQueryData(
+//         [userDataKey, stationTableName, cruiseId],
+//         (oldData = []) => [newStation, ...oldData],
+//       );
+//     },
+//   });
+// };
+
 export const useAddStation = () => {
-  const { create } = useOfflineStorage();
-  const queryClient = useQueryClient();
+  const { user } = useAuth();
+  if (!user || !user.id)
+    throw new Error("Authorized User required to add Station!");
 
-  return useMutation({
-    mutationFn: async ({ cruiseId, newStation }) => {
+  const { create, update, findOne } = useOfflineStorage();
+
+  const addStation = async (userId, newStation) => {
+    const { cruiseId } = newStation;
+    if (!cruiseId)
+      throw new Error("Cruise ID required to add Station to a Cruise");
+    const userHasAccess = await userHasCruiseAccess(userId, cruiseId);
+    if (!userHasAccess)
+      throw new Error(`User does not have access to cruise: ${cruiseId}`);
+    try {
       await create(stationTableName, newStation);
-      return { cruiseId, newStation };
-    },
-    onSuccess: ({ cruiseId, newStation }) => {
-      queryClient.setQueryData(
-        [userDataKey, stationTableName, cruiseId],
-        (oldData = []) => [newStation, ...oldData],
-      );
-    },
-  });
+
+      return newCruise;
+    } catch (error) {
+      throw new Error(`Error adding new station: ${error}`);
+    }
+  };
+
+  return { addCruise };
 };
 
-export const useUpdateStation = () => {
-  const { update } = useOfflineStorage();
-  const queryClient = useQueryClient();
+// export const useUpdateStation = () => {
+//   const { update } = useOfflineStorage();
+//   const queryClient = useQueryClient();
 
-  return useMutation({
-    mutationFn: async ({ cruiseId, stationId, updates }) => {
-      await update(stationTableName, stationId, updates);
-      return { cruiseId, stationId, updates };
-    },
-    onSuccess: ({ cruiseId, stationId, updates }) => {
-      queryClient.setQueryData(
-        [userDataKey, stationTableName, stationId],
-        (oldData = {}) => ({
-          ...oldData,
-          ...updates,
-        }),
-      );
-      queryClient.invalidateQueries([userDataKey, stationTableName, cruiseId]);
-    },
-  });
-};
+//   return useMutation({
+//     mutationFn: async ({ cruiseId, stationId, updates }) => {
+//       await update(stationTableName, stationId, updates);
+//       return { cruiseId, stationId, updates };
+//     },
+//     onSuccess: ({ cruiseId, stationId, updates }) => {
+//       queryClient.setQueryData(
+//         [userDataKey, stationTableName, stationId],
+//         (oldData = {}) => ({
+//           ...oldData,
+//           ...updates,
+//         }),
+//       );
+//       queryClient.invalidateQueries([userDataKey, stationTableName, cruiseId]);
+//     },
+//   });
+// };
 
 export const useCruiseStatusLock = (cruiseId) => {
   const { data } = useGetCruiseById(cruiseId);

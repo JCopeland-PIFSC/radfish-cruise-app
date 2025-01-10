@@ -5,12 +5,12 @@ import { Application } from "@nmfs-radfish/react-radfish";
 import { AuthProvider } from "./context/AuthContext";
 import {
   AppInitStatus,
-  CatchDetail,
+  // CatchDetail,
   CruiseDetail,
   CruiseList,
   CruiseNew,
   Login,
-  StationDetail,
+  // StationDetail,
   SwitchAccounts,
 } from "./pages";
 import { PrivateRoute, AuthenticatedApp, MainHeader } from "./components";
