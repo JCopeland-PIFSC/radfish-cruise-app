@@ -4,14 +4,15 @@ import { useOfflineStatus } from "@nmfs-radfish/react-radfish";
 import { useInitializeAndCacheListTables } from "../hooks/useInitializeAndCacheListTables";
 import { useLoadCruisesAndStations } from "../hooks/useLoadCruisesAndStations";
 import { useAuth } from "../context/AuthContext";
+import { useStatus } from "../context/StatusContext";
 import Spinner from "./Spinner";
 
 const AuthenticatedApp = () => {
   const { user } = useAuth();
+  const { setStatusData } = useStatus();
 
   // Redirect to login if not authenticated
   if (!user?.isAuthenticated) {
-    console.log({ user });
     return <Navigate to="/switch-accounts" replace />;
   }
 
@@ -48,19 +49,14 @@ const AuthenticatedApp = () => {
   // The useEffect hook ensures this logic only runs when an error is detected,
   // preventing unnecessary re-renders or navigation loops.
   useEffect(() => {
-    if (isListsError || cruisesError || cruisesWarning) {
-      navigate("/app-init-status", {
-        state: {
-          statuses,
-          listsLoading,
-          isListsError,
-          listsErrorMessage,
-          additionalWarning:
-            cruisesWarning &&
-            "Cruises or stations are missing. Please connect to the network if you suspect data is incomplete.",
-        },
-      });
-    }
+    const status = {
+      statuses,
+      listsLoading,
+      isListsError,
+      listsErrorMessage,
+      cruisesWarning,
+    };
+    setStatusData(status);
   }, [
     isListsError,
     cruisesError,
@@ -69,11 +65,8 @@ const AuthenticatedApp = () => {
     listsLoading,
     listsErrorMessage,
     cruisesWarning,
+    setStatusData,
   ]);
-
-  if (listsLoading || cruisesLoading) {
-    return <Spinner />;
-  }
 
   return (
     <>

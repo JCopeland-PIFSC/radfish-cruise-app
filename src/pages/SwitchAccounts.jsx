@@ -2,27 +2,29 @@ import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useOfflineStatus } from "@nmfs-radfish/react-radfish";
 import { Button, GridContainer, Grid } from "@trussworks/react-uswds";
-import { useGetAuthenticatedUsers } from "../hooks/useUsers";
+import { useStoreUser } from "../hooks/useStoreUsers";
 import { useAuth } from "../context/AuthContext";
 import { Spinner } from "../components";
 
 const SwitchAccounts = () => {
   const [users, setUsers] = useState([]);
-  const { getAllAuthenticatedUsers } = useGetAuthenticatedUsers();
+  // const { useGetAuthenticatedUsers } = useStoreUser();
+  // const authenticatedUsers = useGetAuthenticatedUsers();
   const navigate = useNavigate();
-  const { setCurrentUser } = useAuth();
+  const { currentUser, getAllUsers } = useAuth();
   const { isOffline } = useOfflineStatus();
+  console.log('currentUser', currentUser);
+  console.log('getAllUsers', getAllUsers);
 
   // Fetch authenticated users on component mount
   useEffect(() => {
     const fetchUsersFromIndexedDB = async () => {
       try {
-        const fetchedUsers = await getAllAuthenticatedUsers();
-        setUsers(fetchedUsers);
-        if (!isOffline && !fetchedUsers?.length) {
+        setUsers(getAllUsers);
+        if (!isOffline && !getAllUsers?.length) {
           navigate("/login");
         }
-        if (isOffline && !fetchedUsers?.length) {
+        if (isOffline && !getAllUsers?.length) {
           navigate("/app-init-status", {
             state: {
               additionalWarning: "No Authorized users stored. Please connect to the network. At least one authorized user required to use offline."
@@ -35,7 +37,7 @@ const SwitchAccounts = () => {
     };
 
     fetchUsersFromIndexedDB();
-  }, [getAllAuthenticatedUsers]);
+  }, [getAllUsers, isOffline, navigate]);
 
   const handleSelectedUserClick = async (user) => {
     await setCurrentUser(user.id);

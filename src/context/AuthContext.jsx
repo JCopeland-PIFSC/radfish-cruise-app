@@ -1,18 +1,24 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { useOfflineStorage } from "@nmfs-radfish/react-radfish";
-import { useStoreUser } from "../hooks/useUsers";
+import { useStoreUser } from "../hooks/useStoreUsers";
 
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
-  const { persistNewUser } = useStoreUser();
+  const {
+    getCurrentUser,
+    getAllUsers,
+    loginUser,
+    switchUser,
+    resetAndSetCurrentUser,
+  } = useStoreUser();
   const { findOne } = useOfflineStorage();
 
   const login = async (authUserData) => {
     // Store the new user
-    const newUser = await persistNewUser(authUserData);
+    await loginUser(authUserData);
     // Reset other users' isCurrentUser and set the new user
     // await resetAndSetCurrentUser(newUser.id);
     try {
@@ -36,7 +42,16 @@ export const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user, login, loading, setCurrentUser }}>
+    <AuthContext.Provider
+      value={{
+        user,
+        login,
+        loading,
+        setCurrentUser,
+        getAllUsers: getAllUsers(),
+        currentUser: getCurrentUser(),
+      }}
+    >
       {children}
     </AuthContext.Provider>
   );

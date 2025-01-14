@@ -1,16 +1,23 @@
 import React from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { Button, GridContainer, Grid } from "@trussworks/react-uswds";
+import { useStatus } from "../context/StatusContext";
 
 const AppInitStatusPage = () => {
-  const { state } = useLocation();
-  const { statuses, listsLoading, listsError, listsErrorMessage, additionalWarning } = state || {};
   const navigate = useNavigate();
+  const { statusData } = useStatus();
+  const {
+    statuses,
+    listsLoading,
+    isListsError,
+    listsErrorMessage,
+    cruisesWarning,
+  } = statusData;
 
   // Determine if all statuses are "green"
   const allStatusesPass =
     !listsLoading &&
-    !listsError &&
+    !isListsError &&
     !!statuses &&
     Object.values(statuses).every((status) => status === "green");
 
@@ -51,10 +58,10 @@ const AppInitStatusPage = () => {
           <h1>Status Check</h1>
         </Grid>
       </Grid>
-      {additionalWarning && (
+      {cruisesWarning && (
         <Grid row>
           <Grid col={12}>
-            <p>{additionalWarning}</p>
+            <p>{cruisesWarning}</p>
           </Grid>
         </Grid>
       )}
@@ -77,7 +84,7 @@ const AppInitStatusPage = () => {
           </Grid>
         </Grid>
       )}
-      {listsError && (
+      {isListsError && (
         <Grid row>
           <Grid col={12}>
             <p style={{ color: "red" }}>

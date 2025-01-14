@@ -20,21 +20,21 @@ const Login = () => {
   const searchParams = new URLSearchParams(location.search);
   const addAccountMode = searchParams.get("addAccount");
 
-  useEffect(() => {
-    if (user?.isAuthenticated && !addAccountMode) {
-      navigate("/cruises");
-    }
-  }, [user, navigate, addAccountMode]);
+  // useEffect(() => {
+  //   if (user?.isAuthenticated && !addAccountMode) {
+  //     navigate("/cruises");
+  //   }
+  // }, [user, navigate, addAccountMode]);
 
   const handleLogin = async (event) => {
     event.preventDefault();
     const formData = new FormData(event.target);
-
+  
     try {
       const endpoint = "/api/login";
       const payload = Object.fromEntries(formData.entries());
       const data = await post(endpoint, payload);
-
+      
       if (data) {
         await login(data.user);
         event.target.reset();

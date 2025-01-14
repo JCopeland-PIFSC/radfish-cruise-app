@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { GridContainer } from "@trussworks/react-uswds";
 import { Application } from "@nmfs-radfish/react-radfish";
 import { AuthProvider } from "./context/AuthContext";
+import { StatusProvider } from "./context/StatusContext";
 import {
   AppInitStatus,
   CatchDetail,
@@ -21,6 +22,7 @@ function App({ application }) {
       <main id="main-content">
         <BrowserRouter>
           <AuthProvider>
+            <StatusProvider>
             <MainHeader />
             <div className="flex-justify-center">
               <GridContainer containerSize="tablet-lg">
@@ -49,6 +51,7 @@ function App({ application }) {
                 </Routes>
               </GridContainer>
             </div>
+            </StatusProvider>
           </AuthProvider>
         </BrowserRouter>
       </main>
