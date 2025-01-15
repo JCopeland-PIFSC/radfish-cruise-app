@@ -67,7 +67,7 @@ const AuthenticatedApp = () => {
     return <Spinner />;
   }
 
-  if (!user || !user.isAuthenticated) {
+  if ((!user || !user.isAuthenticated) && !isOffline) {
     return <Navigate to="/switch-accounts" replace />;
   }
 

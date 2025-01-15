@@ -5,7 +5,10 @@ import { useStatus } from "../context/StatusContext";
 
 const AppInitStatusPage = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const { statusData } = useStatus();
+  const { additionalWarning } = location.state || {};
+
   const {
     statuses,
     listsLoading,
@@ -58,6 +61,13 @@ const AppInitStatusPage = () => {
           <h1>Status Check</h1>
         </Grid>
       </Grid>
+      {additionalWarning && (
+        <Grid row>
+          <Grid col={12}>
+            <p style={{ color: "red" }}>{additionalWarning}</p>
+          </Grid>
+        </Grid>
+      )}
       {cruisesWarning && (
         <Grid row>
           <Grid col={12}>

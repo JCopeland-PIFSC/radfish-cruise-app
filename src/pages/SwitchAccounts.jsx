@@ -1,14 +1,28 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useOfflineStatus } from "@nmfs-radfish/react-radfish";
-import { Button, Icon, GridContainer, Grid } from "@trussworks/react-uswds";
+import {
+  Button,
+  Icon,
+  GridContainer,
+  Grid,
+  Modal,
+  ModalHeading,
+  ModalFooter,
+  ModalToggleButton,
+  ButtonGroup,
+} from "@trussworks/react-uswds";
 import { useAuth } from "../context/AuthContext";
 import { Spinner } from "../components";
 
 const SwitchAccounts = () => {
-  const [users, setUsers] = useState([]);
+  const { user: currentUser, allUsers, switchUser, signOut } = useAuth();
   const navigate = useNavigate();
   const { isOffline } = useOfflineStatus();
+  const [pendingSignOutUserId, setPendingSignOutUserId] = useState(null);
+  const modalRef = useRef(null);
+  const additionalWarning =
+    "No Authorized users stored. Please connect to the network. At least one authorized user required to use offline.";
 
   // Fetch authenticated users on component mount
   useEffect(() => {
@@ -18,8 +32,7 @@ const SwitchAccounts = () => {
           if (isOffline) {
             navigate("/app-init-status", {
               state: {
-                additionalWarning:
-                  "No Authorized users stored. Please connect to the network. At least one authorized user required to use offline.",
+                additionalWarning,
               },
             });
           } else {
@@ -30,12 +43,11 @@ const SwitchAccounts = () => {
         console.error("Error handling offline navigation:", error);
       }
     };
-  
+
     if (!allUsers?.length) {
       handleOfflineNavigation();
     }
-  }, [allUsers?.length, isOffline, navigate]);
-  
+  }, [allUsers, isOffline, navigate]);
 
   const handleSelectedUserClick = (user) => {
     switchUser(user);
@@ -43,7 +55,21 @@ const SwitchAccounts = () => {
   };
 
   const handleUserSignOut = (userId) => {
-    signOut(userId);
+    if (isOffline) {
+      setPendingSignOutUserId(userId);
+      modalRef.current?.toggleModal?.();
+    } else {
+      signOut(userId);
+    }
+  };
+
+  const confirmSignOut = () => {
+    if (pendingSignOutUserId) {
+      signOut(pendingSignOutUserId);
+      setPendingSignOutUserId(null);
+    }
+    // Close the modal after confirming
+    modalRef.current?.toggleModal?.();
   };
 
   return (
@@ -153,6 +179,32 @@ const SwitchAccounts = () => {
             </Grid>
           </Grid>
         </GridContainer>
+        {/* -------------- OFFLINE SIGN-OUT WARNING MODAL -------------- */}
+        <Modal
+          ref={modalRef}
+          id="offline-signout-modal"
+          aria-labelledby="offline-signout-modal-heading"
+          aria-describedby="offline-signout-modal-description"
+        >
+          <ModalHeading id="offline-signout-modal-heading">
+            You are offline!
+          </ModalHeading>
+          <div className="usa-prose">
+            <p id="offline-signout-modal-description">
+              You will not be able to log back in while offline. Are you sure
+              you want to sign out?
+            </p>
+          </div>
+          <ModalFooter>
+            <ButtonGroup>
+              <Button onClick={confirmSignOut}>Sign Out Anyway</Button>
+              <ModalToggleButton modalRef={modalRef} closer unstyled>
+                Cancel
+              </ModalToggleButton>
+            </ButtonGroup>
+          </ModalFooter>
+        </Modal>
+        {/* ----------------------------------------------------------- */}
       </div>
     </main>
   );
