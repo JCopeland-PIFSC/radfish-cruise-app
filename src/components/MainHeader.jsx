@@ -11,25 +11,29 @@ import {
 const MainHeader = () => {
   const [isExpanded, setExpanded] = useState(false);
   const { user } = useAuth();
-  const menuItems = [
-    <Link to="/cruises" style={{ color: `${isExpanded ? "black" : "white"}` }}>
-      Cruises
-    </Link>,
-  ];
+  const menuItems = user?.username
+    ? [
+        <Link
+          to="/cruises"
+          style={{ color: `${isExpanded ? "black" : "white"}` }}
+        >
+          Cruises
+        </Link>,
+      ]
+    : [];
   const accountItems = user?.username
-  ? [
-      <p className="text_transform-capitalize" key="one">
-        {user.username}
-      </p>,
-      <Link
-        className="text_color-white"
-        to="/switch-accounts"
-        key="two"
-      >
-        Switch Accounts
-      </Link>,
-    ]
-  : [];
+    ? [
+        <p className="text_transform-capitalize" key="one">
+          {user.username}
+        </p>,
+        <Link className="text_color-white" to="/app-init-status" key="two">
+          App Status
+        </Link>,
+        <Link className="text_color-white" to="/switch-accounts" key="three">
+          Switch Accounts
+        </Link>,
+      ]
+    : [];
   return (
     <Header
       basic={true}

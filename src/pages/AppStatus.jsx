@@ -58,7 +58,7 @@ const AppInitStatusPage = () => {
     <GridContainer>
       <Grid row>
         <Grid col={12}>
-          <h1>Status Check</h1>
+          <h1>Application Status</h1>
         </Grid>
       </Grid>
       {additionalWarning && (

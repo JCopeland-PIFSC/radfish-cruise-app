@@ -63,7 +63,7 @@ body {
 }
 
 .text_color-white {
-  color: lightgray !important;
+  color: dimgray !important;
 }
 
 @media (max-width: 768px) {

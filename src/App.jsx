@@ -5,7 +5,7 @@ import { Application } from "@nmfs-radfish/react-radfish";
 import { AuthProvider } from "./context/AuthContext";
 import { StatusProvider } from "./context/StatusContext";
 import {
-  AppInitStatus,
+  AppStatus,
   CatchDetail,
   CruiseDetail,
   CruiseList,
@@ -31,7 +31,7 @@ function App({ application }) {
                   <Route path="/switch-accounts" element={<SwitchAccounts />} />
                   <Route path="/login" element={<Login />} />
                   <Route element={<AuthenticatedApp />}>
-                    <Route path="/app-init-status" element={<AppInitStatus />} />
+                    <Route path="/app-init-status" element={<AppStatus />} />
                     <Route path="/cruises" element={<CruiseList />} />
                     <Route path="/cruises/new" element={<CruiseNew />} />
                     <Route
