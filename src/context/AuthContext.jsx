@@ -4,8 +4,13 @@ import { useStoreUser } from "../hooks/useStoreUsers";
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-  const { loginUser, resetAndSetCurrentUser, getAllUsers, getCurrentUser } =
-    useStoreUser();
+  const {
+    loginUser,
+    resetAndSetCurrentUser,
+    signOutUser,
+    getAllUsers,
+    getCurrentUser,
+  } = useStoreUser();
   const [userLoading, setUserLoading] = useState(true);
 
   useEffect(() => {
@@ -34,6 +39,17 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  const signOut = async (userId) => {
+    try {
+      await signOutUser(userId);
+    } catch (err) {
+      console.error("Error in signOut:", err);
+      throw err;
+    } finally {
+      setUserLoading(false);
+    }
+  };
+
   const user = getCurrentUser();
 
   const allUsers = getAllUsers();
@@ -45,6 +61,7 @@ export const AuthProvider = ({ children }) => {
         allUsers,
         login,
         switchUser,
+        signOut,
         userLoading,
       }}
     >
