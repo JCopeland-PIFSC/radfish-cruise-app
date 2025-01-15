@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { Navigate, Outlet, useNavigate } from "react-router-dom";
 import { useOfflineStatus } from "@nmfs-radfish/react-radfish";
 import { useInitializeAndCacheListTables } from "../hooks/useInitializeAndCacheListTables";
@@ -8,13 +8,8 @@ import { useStatus } from "../context/StatusContext";
 import Spinner from "./Spinner";
 
 const AuthenticatedApp = () => {
-  const { user } = useAuth();
+  const { user, userLoading } = useAuth();
   const { setStatusData } = useStatus();
-
-  // Redirect to login if not authenticated
-  if (!user?.isAuthenticated) {
-    return <Navigate to="/switch-accounts" replace />;
-  }
 
   // Initialize global data and caches
   const { isOffline } = useOfflineStatus();
@@ -67,6 +62,14 @@ const AuthenticatedApp = () => {
     cruisesWarning,
     setStatusData,
   ]);
+
+  if (userLoading) {
+    return <Spinner />;
+  }
+
+  if (!user || !user.isAuthenticated) {
+    return <Navigate to="/switch-accounts" replace />;
+  }
 
   return (
     <>

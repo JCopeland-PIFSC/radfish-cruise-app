@@ -2,33 +2,29 @@ import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useOfflineStatus } from "@nmfs-radfish/react-radfish";
 import { Button, GridContainer, Grid } from "@trussworks/react-uswds";
-import { useStoreUser } from "../hooks/useStoreUsers";
 import { useAuth } from "../context/AuthContext";
 import { Spinner } from "../components";
 
 const SwitchAccounts = () => {
   const [users, setUsers] = useState([]);
-  // const { useGetAuthenticatedUsers } = useStoreUser();
-  // const authenticatedUsers = useGetAuthenticatedUsers();
   const navigate = useNavigate();
-  const { currentUser, getAllUsers } = useAuth();
+  const { allUsers, switchUser } = useAuth();
   const { isOffline } = useOfflineStatus();
-  console.log('currentUser', currentUser);
-  console.log('getAllUsers', getAllUsers);
 
   // Fetch authenticated users on component mount
   useEffect(() => {
     const fetchUsersFromIndexedDB = async () => {
       try {
-        setUsers(getAllUsers);
-        if (!isOffline && !getAllUsers?.length) {
+        setUsers(allUsers);
+        if (!isOffline && !allUsers?.length) {
           navigate("/login");
         }
-        if (isOffline && !getAllUsers?.length) {
+        if (isOffline && !allUsers?.length) {
           navigate("/app-init-status", {
             state: {
-              additionalWarning: "No Authorized users stored. Please connect to the network. At least one authorized user required to use offline."
-            }
+              additionalWarning:
+                "No Authorized users stored. Please connect to the network. At least one authorized user required to use offline.",
+            },
           });
         }
       } catch (error) {
@@ -37,10 +33,10 @@ const SwitchAccounts = () => {
     };
 
     fetchUsersFromIndexedDB();
-  }, [getAllUsers, isOffline, navigate]);
+  }, [allUsers, isOffline, navigate]);
 
-  const handleSelectedUserClick = async (user) => {
-    await setCurrentUser(user.id);
+  const handleSelectedUserClick = (user) => {
+    switchUser(user);
     navigate("/cruises");
   };
 
@@ -64,7 +60,10 @@ const SwitchAccounts = () => {
                 </h1>
                 {/* Render fetched users dynamically */}
                 {isOffline && !users?.length && (
-                  <p>Warning: The app cannot be used offline without an authenticated user.</p>
+                  <p>
+                    Warning: The app cannot be used offline without an
+                    authenticated user.
+                  </p>
                 )}
                 {users.length > 0 ? (
                   <div>

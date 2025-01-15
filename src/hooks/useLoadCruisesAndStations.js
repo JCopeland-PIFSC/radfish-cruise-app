@@ -27,7 +27,7 @@ export const useLoadCruisesAndStations = (listTablesReady, isOffline) => {
     //Only one record should have userId. Return only one record;
     // Short circuit if no userCruises
     if (!fetchedUserCruises?.length) return [];
-    // if fetchedUserCruises are found just return the first record.
+    // if fetchedUserCruises are  found just return the first record.
     const userCruises = fetchedUserCruises[0];
     // if fetched records does not exist locally, save it locally.
     const localRecord = await findOne(userCruisesTableName, {
