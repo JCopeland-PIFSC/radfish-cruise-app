@@ -76,9 +76,9 @@ body {
 }
 
 @media (max-width: 768px) {
-  /* .usa-nav__secondary-item {
-    color: green;
-  } */
+  .usa-navbar {
+   border-bottom: none !important;
+  }
 
   .text_color-white {
     color: #000 !important;
