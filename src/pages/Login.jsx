@@ -21,12 +21,12 @@ const Login = () => {
   const handleLogin = async (event) => {
     event.preventDefault();
     const formData = new FormData(event.target);
-  
+
     try {
       const endpoint = "/api/login";
       const payload = Object.fromEntries(formData.entries());
       const data = await post(endpoint, payload);
-      
+
       if (data) {
         await login(data.user);
         event.target.reset();

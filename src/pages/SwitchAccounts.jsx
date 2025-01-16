@@ -179,7 +179,7 @@ const SwitchAccounts = () => {
             </Grid>
           </Grid>
         </GridContainer>
-        {/* -------------- OFFLINE SIGN-OUT WARNING MODAL -------------- */}
+        {/*OFFLINE SIGN-OUT WARNING MODAL*/}
         <Modal
           ref={modalRef}
           id="offline-signout-modal"
@@ -204,7 +204,6 @@ const SwitchAccounts = () => {
             </ButtonGroup>
           </ModalFooter>
         </Modal>
-        {/* ----------------------------------------------------------- */}
       </div>
     </main>
   );
