@@ -11,11 +11,17 @@ import {
 const MainHeader = () => {
   const [isExpanded, setExpanded] = useState(false);
   const { user } = useAuth();
+
+  const closeMobileNav = () => {
+    setExpanded(false);
+  };
+
   const menuItems = user?.username
     ? [
         <Link
           to="/cruises"
           style={{ color: `${isExpanded ? "black" : "white"}` }}
+          onClick={closeMobileNav}
         >
           Cruises
         </Link>,
@@ -26,10 +32,20 @@ const MainHeader = () => {
         <p className="text_transform-capitalize" key="one">
           {user.username}
         </p>,
-        <Link className="text_color-white" to="/app-init-status" key="two">
+        <Link
+          className="text_color-white"
+          to="/app-init-status"
+          key="two"
+          onClick={closeMobileNav}
+        >
           App Status
         </Link>,
-        <Link className="text_color-white" to="/switch-accounts" key="three">
+        <Link
+          className="text_color-white"
+          to="/switch-accounts"
+          key="three"
+          onClick={closeMobileNav}
+        >
           Switch Accounts
         </Link>,
       ]
