@@ -32,7 +32,7 @@ export const useStoreUser = () => {
       users.push(existingUser);
     }
 
-    // Mark all users as not authenticated, then authenticate this user
+    // Mark all users as not authenticated
     users = users.map((u) => ({ ...u, isAuthenticated: false }));
     // Update the existing user in the array
     users = users.map((u) =>
@@ -73,12 +73,9 @@ export const useStoreUser = () => {
       }
     }
   
-    // Save the updated user list to localStorage
     saveUserToLocalStorage(users);
   };
   
-  
-
   // Get the currently logged-in user
   const getCurrentUser = () => currentUser;
 
