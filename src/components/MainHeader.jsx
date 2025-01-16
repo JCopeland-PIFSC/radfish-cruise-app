@@ -29,13 +29,10 @@ const MainHeader = () => {
     : [];
   const accountItems = user?.username
     ? [
-        <p className="text_transform-capitalize" key="one">
-          {user.username}
-        </p>,
         <Link
-          className="text_color-white"
+          className="text_color-white text_margin-bottom"
           to="/app-init-status"
-          key="two"
+          key="one"
           onClick={closeMobileNav}
         >
           App Status
@@ -43,11 +40,14 @@ const MainHeader = () => {
         <Link
           className="text_color-white"
           to="/switch-accounts"
-          key="three"
+          key="two"
           onClick={closeMobileNav}
         >
           Switch Accounts
         </Link>,
+        <p className="text_username text_transform-capitalize" key="three">
+          {user.username}
+        </p>,
       ]
     : [];
   return (
@@ -59,10 +59,12 @@ const MainHeader = () => {
       <div className="usa-nav-container">
         <div className="usa-navbar">
           <Title className="header-title">RADFish Cruise App</Title>
-          <NavMenuButton
-            onClick={() => setExpanded((prvExpanded) => !prvExpanded)}
-            label="Menu"
-          />
+          {user?.username && (
+            <NavMenuButton
+              onClick={() => setExpanded((prvExpanded) => !prvExpanded)}
+              label="Menu"
+            />
+          )}
         </div>
         <ExtendedNav
           primaryItems={menuItems}
