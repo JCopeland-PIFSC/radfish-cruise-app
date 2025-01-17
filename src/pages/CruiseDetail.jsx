@@ -6,7 +6,7 @@ import {
   Tag,
 } from "@trussworks/react-uswds";
 import {
-  StationSummary,
+  // StationSummary,
   StationNew,
   HeaderWithEdit,
   CruiseView,
@@ -17,8 +17,7 @@ import { useNavigate, useLocation, useParams } from "react-router-dom";
 import { listValueLookup } from "../utils/listLookup";
 import { setStatusColor } from "../utils/setStatusColor";
 import { generateTzDateTime, getLocationTz } from "../utils/dateTimeHelpers";
-import { usePortsList, useCruiseStatusesList } from "../hooks/useListTables";
-import { useGetCruiseById, useGetStationsByCruiseId, useUpdateCruise, useCruiseStatusLock } from "../hooks/useCruises";
+import { useListTablesContext, useCruisesAndStationsContext } from "../context";
 import { useAuth } from "../context/AuthContext";
 
 const CruiseAction = {
@@ -46,34 +45,17 @@ const InitializedStation = {
 const CruiseDetailPage = () => {
   const { cruiseId } = useParams();
   const { user } = useAuth();
+  const { loading: listsLoading, error: listsError, lists } = useListTablesContext();
+  const { ports, cruiseStatuses } = lists;
+  const { loading: cruisesLoading, error: cruisesError, cruises } = useCruisesAndStationsContext();
   const navigate = useNavigate();
   const location = useLocation();
   const stationRefs = useRef({});
   const [refetch, setRefetch] = useState(false);
-  const {
-    data: ports,
-    isError: portsError,
-    error: errorPorts } = usePortsList();
-  const {
-    data: cruiseStatuses,
-    isError: cruiseStatusesError,
-    error: errorCruiseStatuses } = useCruiseStatusesList();
-  const {
-    data: cruise,
-    loading: cruiseLoading,
-    error: cruiseError
-  } = useGetCruiseById(user.id, cruiseId, refetch);
-  const {
-    data: stations,
-    loading: stationsLoading,
-    error: stationsError
-  } = useGetStationsByCruiseId(user.id, cruiseId);
 
   const [activeAction, setActiveAction] = useState(null);
-  const { updateCruise } = useUpdateCruise();
-  // const { mutateAsync: addStation } = useAddStation();
-  const { isStatusLocked } = useCruiseStatusLock(cruiseId);
-
+  // const { isStatusLocked } = useCruiseStatusLock(cruiseId);
+  const isStatusLocked = false;
   useEffect(() => {
     if (location.state?.scrollToStation) {
       const stationId = location.state.scrollToStation;
@@ -84,16 +66,18 @@ const CruiseDetailPage = () => {
     }
   }, [location])
 
-  if (cruiseLoading || stationsLoading) return <div>Loading Cruise Data...</div>;
-  if (portsError || cruiseStatusesError) return <div>Error Loading List Data: {portsError ? errorPorts.message : errorCruiseStatuses.message}</div>;
-  if (cruiseError) return <div>Error Loading Cruise Data: {cruiseError.message}</div>;
-  if (stationsError) return <div>Error Loading Cruise Stations Data: {stationsError.message}</div>;
+  if (listsLoading) return <div>Loading List Data...</div>;
+  if (listsError) return <div>Error Loading List Data: {listsError.message}</div>;
 
-  console.log("stations", stations);
-  stations.forEach((station) => {
-    stationRefs.current[station.id] = stationRefs.current[station.id] || React.createRef();
-  });
+  if (cruisesLoading) return <div>Loading Cruise Data...</div>;
+  if (cruisesError) return <div>Error Loading Cruise Data: {cruiseError.message}</div>;
 
+  // console.log("stations", stations);
+  // stations.forEach((station) => {
+  //   stationRefs.current[station.id] = stationRefs.current[station.id] || React.createRef();
+  // });
+
+  const cruise = cruises.find((cruise) => cruise.id === cruiseId);
   const {
     id,
     cruiseName,
@@ -225,7 +209,7 @@ const CruiseDetailPage = () => {
         }
       </Grid>
       {activeAction === CruiseAction.NEW && <StationNew handleNewStation={handleNewStation} />}
-      {stations?.length
+      {/* {stations?.length
         ? stations.map((station) => (
           <StationSummary
             key={station.id}
@@ -234,7 +218,7 @@ const CruiseDetailPage = () => {
             station={station}
             activeAction={activeAction} />
         ))
-        : ""}
+        : ""} */}
     </>
   );
 }
