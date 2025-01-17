@@ -22,3 +22,7 @@ export default new IndexedDBMethod(name, version, stores);
 
 // A tableMetadata table is used to track when certain tables were last updated.
 export const tablesMetadataTableName = "tablesMetadata";
+export const tableNames = Object.keys(stores).reduce((acc, key) => {
+  acc[key] = key;
+  return acc;
+}, {});
