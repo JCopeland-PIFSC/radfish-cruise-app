@@ -1,33 +1,28 @@
-import React, { useMemo } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { Button, GridContainer, Grid } from "@trussworks/react-uswds";
-import { useListTablesContext, useCruisesAndStationsContext } from "../context";
 import { useOfflineStatus } from "@nmfs-radfish/react-radfish";
-import { useAuth } from "../context/AuthContext";
+import { useAuth, useStatus } from "../context";
 
 const AppInitStatusPage = () => {
   const { state } = useLocation();
-  const { isOffline } = useOfflineStatus();
-  // const { statuses, listsLoading, listsError, listsErrorMessage, additionalWarning } = state || {};
-  const navigate = useNavigate();
   const { user } = useAuth();
-  const { listsReady, loading: listsLoading, error: listsError } = useListTablesContext();
-  const { loading: cruisesLoading, warning: cruisesWarning, error: cruisesError } = useCruisesAndStationsContext();
+  const navigate = useNavigate();
+  const location = useLocation();
+  const { statusData } = useStatus();
+  const { additionalWarning } = location.state || {};
 
-  // Memoize statuses to prevent unnecessary re-renders
-  const statuses = useMemo(
-    () => ({
-      "Authenticated User": user?.username ? "green" : "red",
-      "Network Status": isOffline ? "red" : "green",
-      "List Tables Initialized": listsError ? "red" : listsReady ? "green" : "yellow",
-      "Cruises & Stations Loaded": cruisesError ? "red" : cruisesWarning ? "yellow" : cruisesLoading ? "blue" : "green",
-    }),
-    [user, isOffline, listsReady, cruisesLoading, cruisesError],
-  );
+  const {
+    statuses,
+    listsLoading,
+    isListsError,
+    listsErrorMessage,
+    cruisesWarning,
+  } = statusData;
+
   // Determine if all statuses are "green"
   const allStatusesPass =
     !listsLoading &&
-    !listsError &&
+    !isListsError &&
     !!statuses &&
     Object.values(statuses).every((status) => status === "green");
 
@@ -65,9 +60,23 @@ const AppInitStatusPage = () => {
     <GridContainer>
       <Grid row>
         <Grid col={12}>
-          <h1>Status Check</h1>
+          <h1>Application Status</h1>
         </Grid>
       </Grid>
+      {additionalWarning && (
+        <Grid row>
+          <Grid col={12}>
+            <p style={{ color: "red" }}>{additionalWarning}</p>
+          </Grid>
+        </Grid>
+      )}
+      {cruisesWarning && (
+        <Grid row>
+          <Grid col={12}>
+            <p>{cruisesWarning}</p>
+          </Grid>
+        </Grid>
+      )}
       <Grid row>
         <Grid col={12}>
           <ul style={{ listStyleType: "none", paddingLeft: 0 }}>
@@ -88,7 +97,7 @@ const AppInitStatusPage = () => {
           </Grid>
         </Grid>
       )}
-      {listsError && (
+      {isListsError && (
         <Grid row>
           <Grid col={12}>
             <p style={{ color: "red" }}>

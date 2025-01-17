@@ -3,9 +3,13 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { GridContainer } from "@trussworks/react-uswds";
 import { Application } from "@nmfs-radfish/react-radfish";
 import { AuthProvider, ListTablesProvider, CruisesAndStationsProvider } from "./context";
+import { AuthProvider } from "./context/AuthContext";
+import { StatusProvider } from "./context/StatusContext";
 import {
   AppInitStatus,
   // CatchDetail,
+  AppStatus,
+  CatchDetail,
   CruiseDetail,
   CruiseList,
   CruiseNew,
@@ -21,28 +25,23 @@ function App({ application }) {
       <main id="main-content">
         <BrowserRouter>
           <AuthProvider>
-            <MainHeader />
-            <div className="flex-justify-center">
-              <GridContainer containerSize="tablet-lg">
-                <Routes>
-                  <Route path="/" element={<SwitchAccounts />} />
-                  <Route path="/switch-accounts" element={<SwitchAccounts />} />
-                  <Route path="/login" element={<Login />} />
-                  <Route element={
-                    <ListTablesProvider>
-                      <CruisesAndStationsProvider>
-                        <AuthenticatedApp />
-                      </CruisesAndStationsProvider>
-                    </ListTablesProvider>
-                  }>
-                    <Route path="/app-init-status" element={<AppInitStatus />} />
-                    <Route path="/cruises" element={<CruiseList />} />
-                    <Route path="/cruises/new" element={<CruiseNew />} />
-                    <Route
-                      path="/cruises/:cruiseId"
-                      element={<CruiseDetail />}
-                    />
-                    {/* <Route
+            <StatusProvider>
+              <MainHeader />
+              <div className="flex-justify-center">
+                <GridContainer containerSize="tablet-lg">
+                  <Routes>
+                    <Route path="/" element={<SwitchAccounts />} />
+                    <Route path="/switch-accounts" element={<SwitchAccounts />} />
+                    <Route path="/login" element={<Login />} />
+                    <Route element={<AuthenticatedApp />}>
+                      <Route path="/app-init-status" element={<AppStatus />} />
+                      <Route path="/cruises" element={<CruiseList />} />
+                      <Route path="/cruises/new" element={<CruiseNew />} />
+                      <Route
+                        path="/cruises/:cruiseId"
+                        element={<CruiseDetail />}
+                      />
+                      {/* <Route
                       path="/cruises/:cruiseId/station/:stationId"
                       element={<StationDetail />}
                     />
@@ -50,11 +49,12 @@ function App({ application }) {
                       path="/cruises/:cruiseId/station/:stationId/catch"
                       element={<CatchDetail />}
                     /> */}
-                  </Route>
-                  <Route path="*" element={<Navigate to="/" />} />
-                </Routes>
-              </GridContainer>
-            </div>
+                    </Route>
+                    <Route path="*" element={<Navigate to="/" />} />
+                  </Routes>
+                </GridContainer>
+              </div>
+            </StatusProvider>
           </AuthProvider>
         </BrowserRouter>
       </main>

@@ -1,4 +1,4 @@
-export { default as AppInitStatus } from "./AppInitStatus";
+export { default as AppStatus } from "./AppStatus";
 // export { default as CatchDetail } from "./CatchDetail";
 export { default as CruiseDetail } from "./CruiseDetail";
 export { default as CruiseList } from "./CruiseList";

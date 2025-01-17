@@ -1,47 +1,70 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
-import { useOfflineStorage } from "@nmfs-radfish/react-radfish";
-import { useStoreUser } from "../hooks/useUsers";
+import { useStoreUser } from "../hooks/useStoreUsers";
 
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const { persistNewUser } = useStoreUser();
-  const { findOne } = useOfflineStorage();
+  const {
+    loginUser,
+    resetAndSetCurrentUser,
+    signOutUser,
+    getAllUsers,
+    getCurrentUser,
+  } = useStoreUser();
+  const [userLoading, setUserLoading] = useState(true);
+
+  useEffect(() => {
+    setUserLoading(false);
+  }, [getCurrentUser]);
 
   const login = async (authUserData) => {
-    // Store the new user
-    const newUser = await persistNewUser(authUserData);
-    // Reset other users' isCurrentUser and set the new user
-    // await resetAndSetCurrentUser(newUser.id);
     try {
-      setUser(authUserData); // Ensure userData is valid
+      await loginUser(authUserData);
     } catch (err) {
-      console.error("Error in setUser:", err);
+      console.error("Error in login:", err);
       throw err;
     } finally {
-      setLoading(false);
+      setUserLoading(false);
     }
   };
 
-  const setCurrentUser = async (userId) => {
-    if (!userId) {
-      setUser(null);
-      setLoading(false);
-      return;
+  const switchUser = async (authUserData) => {
+    try {
+      await resetAndSetCurrentUser(authUserData.id);
+    } catch (err) {
+      console.error("Error in switchUser:", err);
+      throw err;
+    } finally {
+      setUserLoading(false);
     }
-    const foundUser = await findOne("users", { where: { id: userId } });
-    if (foundUser?.isAuthenticated) {
-      setUser(foundUser);
-    } else {
-      setUser(null);
-    }
-    setLoading(false);
   };
+
+  const signOut = async (userId) => {
+    try {
+      await signOutUser(userId);
+    } catch (err) {
+      console.error("Error in signOut:", err);
+      throw err;
+    } finally {
+      setUserLoading(false);
+    }
+  };
+
+  const user = getCurrentUser();
+
+  const allUsers = getAllUsers();
 
   return (
-    <AuthContext.Provider value={{ user, login, loading, setCurrentUser }}>
+    <AuthContext.Provider
+      value={{
+        user,
+        allUsers,
+        login,
+        switchUser,
+        signOut,
+        userLoading,
+      }}
+    >
       {children}
     </AuthContext.Provider>
   );

@@ -39,6 +39,10 @@ body {
   font-weight: 500;
 }
 
+.usa-nav-container {
+  padding: 1rem 0;
+}
+
 .usa-nav__secondary {
   bottom: 3rem !important;
   right: 1rem !important;
@@ -54,6 +58,11 @@ body {
   color: white;
 }
 
+.text_username {
+  color: #ebe6e6;
+  font-weight: 600;
+}
+
 .text_align-center {
   text-align: center;
 }
@@ -63,15 +72,24 @@ body {
 }
 
 .text_color-white {
-  color: lightgray !important;
+  color: #ebe6e6 !important;
 }
 
 @media (max-width: 768px) {
-  .usa-nav__secondary-item {
-    color: black;
+  .usa-navbar {
+   border-bottom: none !important;
   }
 
   .text_color-white {
-    color: gray !important;
+    color: #000 !important;
+  }
+
+  .text_margin-bottom {
+    margin-bottom: 0.8rem;
+  }
+
+  .text_username {
+    color: #000;
+    font-weight: 600;
   }
 }

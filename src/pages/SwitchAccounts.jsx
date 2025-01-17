@@ -1,52 +1,76 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { useOfflineStatus } from "@nmfs-radfish/react-radfish";
-import { Button, GridContainer, Grid } from "@trussworks/react-uswds";
-import { useGetAuthenticatedUsers } from "../hooks/useUsers";
+import {
+  Button,
+  Icon,
+  GridContainer,
+  Grid,
+  Modal,
+  ModalHeading,
+  ModalFooter,
+  ModalToggleButton,
+  ButtonGroup,
+} from "@trussworks/react-uswds";
 import { useAuth } from "../context/AuthContext";
 import { Spinner } from "../components";
 
 const SwitchAccounts = () => {
-  const [users, setUsers] = useState([]);
-  const { getAllAuthenticatedUsers } = useGetAuthenticatedUsers();
+  const { user: currentUser, allUsers, switchUser, signOut } = useAuth();
   const navigate = useNavigate();
-  const { setCurrentUser } = useAuth();
   const { isOffline } = useOfflineStatus();
+  const [pendingSignOutUserId, setPendingSignOutUserId] = useState(null);
+  const modalRef = useRef(null);
+  const additionalWarning =
+    "No Authorized users stored. Please connect to the network. At least one authorized user required to use offline.";
 
   // Fetch authenticated users on component mount
   useEffect(() => {
-    const fetchUsersFromIndexedDB = async () => {
+    const handleOfflineNavigation = async () => {
       try {
-        const fetchedUsers = await getAllAuthenticatedUsers();
-        setUsers(fetchedUsers);
-        if (!isOffline && !fetchedUsers?.length) {
-          navigate("/login");
-        }
-        if (isOffline && !fetchedUsers?.length) {
-          navigate("/app-init-status", {
-            state: {
-              additionalWarning: "No Authorized users stored. Please connect to the network. At least one authorized user required to use offline."
-            }
-          });
+        if (!allUsers?.length) {
+          if (isOffline) {
+            navigate("/app-init-status", {
+              state: {
+                additionalWarning,
+              },
+            });
+          } else {
+            navigate("/login");
+          }
         }
       } catch (error) {
-        console.error("Error fetching users:", error);
+        console.error("Error handling offline navigation:", error);
       }
     };
 
-    fetchUsersFromIndexedDB();
-  }, [getAllAuthenticatedUsers]);
+    if (!allUsers?.length) {
+      handleOfflineNavigation();
+    }
+  }, [allUsers, isOffline, navigate]);
 
-  const handleSelectedUserClick = async (user) => {
-    await setCurrentUser(user.id);
+  const handleSelectedUserClick = (user) => {
+    switchUser(user);
     navigate("/cruises");
   };
 
-  const handleAddAccountClick = () => {
-    setCurrentUser(null);
-    navigate("/login");
+  const handleUserSignOut = (userId) => {
+    if (isOffline) {
+      setPendingSignOutUserId(userId);
+      modalRef.current?.toggleModal?.();
+    } else {
+      signOut(userId);
+    }
   };
 
+  const confirmSignOut = () => {
+    if (pendingSignOutUserId) {
+      signOut(pendingSignOutUserId);
+      setPendingSignOutUserId(null);
+    }
+    // Close the modal after confirming
+    modalRef.current?.toggleModal?.();
+  };
 
   return (
     <main id="main-content">
@@ -67,22 +91,71 @@ const SwitchAccounts = () => {
                   Switch Accounts
                 </h1>
                 {/* Render fetched users dynamically */}
-                {isOffline && !users?.length && (
-                  <p>Warning: The app cannot be used offline without an authenticated user.</p>
+                {isOffline && !allUsers?.length && (
+                  <p>
+                    Warning: The app cannot be used offline without an
+                    authenticated user.
+                  </p>
                 )}
-                {users.length > 0 ? (
+                {allUsers.length > 0 ? (
                   <div>
-                    {users.map((user, index) => (
-                      <p key={index}>
-                        <Button
+                    {allUsers.map((user, index) => (
+                      <div
+                        key={index}
+                        className="usa-button width-full text_transform-capitalize position-relative"
+                        onClick={() => handleSelectedUserClick(user)}
+                        style={{
+                          padding: "10px",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "space-between",
+                          cursor: "pointer",
+                          border: "2px solid #005ea2",
+                          borderRadius: "4px",
+                          marginBottom: "8px",
+                          position: "relative",
+                          color: "#005ea2",
+                          backgroundColor: "#fff",
+                        }}
+                      >
+                        {/* Check Icon for the current user */}
+                        {currentUser?.id === user.id && (
+                          <Icon.CheckCircle
+                            size={3}
+                            aria-label="Selected user"
+                            style={{
+                              left: "20px",
+                              position: "absolute",
+                            }}
+                          />
+                        )}
+
+                        {/* Username */}
+                        <span style={{ flex: 1 }}>{user.username}</span>
+
+                        {/* Sign Out Button */}
+                        <button
                           type="button"
-                          outline={true}
-                          className="width-full text_transform-capitalize"
-                          onClick={() => handleSelectedUserClick(user)}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleUserSignOut(user.id);
+                          }}
+                          style={{
+                            position: "absolute",
+                            top: "5px",
+                            right: "5px",
+                            backgroundColor: "transparent",
+                            border: "none",
+                            color: "dimgray",
+                            cursor: "pointer",
+                            fontSize: "0.7rem",
+                            fontWeight: "bold",
+                          }}
+                          aria-label={`Sign out ${user.username}`}
                         >
-                          {user.username}
-                        </Button>
-                      </p>
+                          Sign Out
+                        </button>
+                      </div>
                     ))}
                   </div>
                 ) : (
@@ -104,6 +177,31 @@ const SwitchAccounts = () => {
             </Grid>
           </Grid>
         </GridContainer>
+        {/*OFFLINE SIGN-OUT WARNING MODAL*/}
+        <Modal
+          ref={modalRef}
+          id="offline-signout-modal"
+          aria-labelledby="offline-signout-modal-heading"
+          aria-describedby="offline-signout-modal-description"
+        >
+          <ModalHeading id="offline-signout-modal-heading">
+            You are offline!
+          </ModalHeading>
+          <div className="usa-prose">
+            <p id="offline-signout-modal-description">
+              You will not be able to log back in while offline. Are you sure
+              you want to sign out?
+            </p>
+          </div>
+          <ModalFooter>
+            <ButtonGroup>
+              <Button onClick={confirmSignOut}>Sign Out Anyway</Button>
+              <ModalToggleButton modalRef={modalRef} closer unstyled>
+                Cancel
+              </ModalToggleButton>
+            </ButtonGroup>
+          </ModalFooter>
+        </Modal>
       </div>
     </main>
   );

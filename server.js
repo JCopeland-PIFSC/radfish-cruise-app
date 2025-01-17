@@ -27,7 +27,7 @@ server.post("/login", (req, res) => {
     // If user exists, send success response with user data (e.g., token)
     return res.status(200).json({
       message: "Login successful",
-      user: { id: user.id, username: user.username, isAuthenticated: 1 },
+      user: { id: user.id, username: user.username, isAuthenticated: true },
     });
   });
 

@@ -14,7 +14,7 @@ export const stores = {
   cruiseStatuses: "id, name",
   cruises: "id, cruiseName, startDate",
   stations: "id, cruiseId, stationName",
-  users: "id, username, isAuthenticated",
+  users: "id",
   userCruises: "id",
 };
 
