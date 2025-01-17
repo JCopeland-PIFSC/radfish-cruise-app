@@ -1,12 +1,29 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { Button, GridContainer, Grid } from "@trussworks/react-uswds";
+import { useListTablesContext, useCruisesAndStationsContext } from "../context";
+import { useOfflineStatus } from "@nmfs-radfish/react-radfish";
+import { useAuth } from "../context/AuthContext";
 
 const AppInitStatusPage = () => {
   const { state } = useLocation();
-  const { statuses, listsLoading, listsError, listsErrorMessage, additionalWarning } = state || {};
+  const { isOffline } = useOfflineStatus();
+  // const { statuses, listsLoading, listsError, listsErrorMessage, additionalWarning } = state || {};
   const navigate = useNavigate();
+  const { user } = useAuth();
+  const { listsReady, loading: listsLoading, error: listsError } = useListTablesContext();
+  const { loading: cruisesLoading, warning: cruisesWarning, error: cruisesError } = useCruisesAndStationsContext();
 
+  // Memoize statuses to prevent unnecessary re-renders
+  const statuses = useMemo(
+    () => ({
+      "Authenticated User": user?.username ? "green" : "red",
+      "Network Status": isOffline ? "red" : "green",
+      "List Tables Initialized": listsError ? "red" : listsReady ? "green" : "yellow",
+      "Cruises & Stations Loaded": cruisesError ? "red" : cruisesWarning ? "yellow" : cruisesLoading ? "blue" : "green",
+    }),
+    [user, isOffline, listsReady, cruisesLoading, cruisesError],
+  );
   // Determine if all statuses are "green"
   const allStatusesPass =
     !listsLoading &&
@@ -51,13 +68,6 @@ const AppInitStatusPage = () => {
           <h1>Status Check</h1>
         </Grid>
       </Grid>
-      {additionalWarning && (
-        <Grid row>
-          <Grid col={12}>
-            <p>{additionalWarning}</p>
-          </Grid>
-        </Grid>
-      )}
       <Grid row>
         <Grid col={12}>
           <ul style={{ listStyleType: "none", paddingLeft: 0 }}>
@@ -65,6 +75,7 @@ const AppInitStatusPage = () => {
               <li key={statusName} style={{ marginBottom: "12px" }}>
                 {renderStatusIndicator(statusValue)}
                 <strong>{statusName}</strong>
+                {(statusName === "Authenticated User") && <span style={{ marginLeft: "8px" }}>{user?.username ? user.username : "Invalid User"}</span>}
               </li>
             ))}
           </ul>

@@ -17,7 +17,7 @@ const MainHeader = () => {
     </Link>,
   ];
   const accountItems = user?.username
-  ? [
+    ? [
       <p className="text_transform-capitalize" key="one">
         {user.username}
       </p>,
@@ -28,8 +28,15 @@ const MainHeader = () => {
       >
         Switch Accounts
       </Link>,
+      <Link
+        className="text_color-white"
+        to="/app-init-status"
+        key="three"
+      >
+        App Init Status
+      </Link>,
     ]
-  : [];
+    : [];
   return (
     <Header
       basic={true}

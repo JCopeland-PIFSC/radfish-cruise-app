@@ -22,7 +22,7 @@ const Login = () => {
 
   useEffect(() => {
     if (user?.isAuthenticated && !addAccountMode) {
-      navigate("/cruises");
+      navigate("/app-init-status");
     }
   }, [user, navigate, addAccountMode]);
 
