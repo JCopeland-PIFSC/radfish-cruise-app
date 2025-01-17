@@ -26,6 +26,11 @@ export const AuthProvider = ({ children }) => {
   };
 
   const setCurrentUser = async (userId) => {
+    if (!userId) {
+      setUser(null);
+      setLoading(false);
+      return;
+    }
     const foundUser = await findOne("users", { where: { id: userId } });
     if (foundUser?.isAuthenticated) {
       setUser(foundUser);

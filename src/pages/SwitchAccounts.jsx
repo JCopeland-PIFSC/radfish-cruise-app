@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useOfflineStatus } from "@nmfs-radfish/react-radfish";
 import { Button, GridContainer, Grid } from "@trussworks/react-uswds";
 import { useGetAuthenticatedUsers } from "../hooks/useUsers";
@@ -41,6 +41,12 @@ const SwitchAccounts = () => {
     await setCurrentUser(user.id);
     navigate("/cruises");
   };
+
+  const handleAddAccountClick = () => {
+    setCurrentUser(null);
+    navigate("/login");
+  };
+
 
   return (
     <main id="main-content">
@@ -88,11 +94,9 @@ const SwitchAccounts = () => {
                       {"Log in to store a new account"}
                     </p>
                     <p>
-                      <Link to="/login">
-                        <Button type="button" className="width-full">
-                          Add Account
-                        </Button>
-                      </Link>
+                      <Button type="button" className="width-full" onClick={handleAddAccountClick}>
+                        Add Account
+                      </Button>
                     </p>
                   </div>
                 )}
