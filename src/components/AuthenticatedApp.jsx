@@ -1,19 +1,15 @@
-import React, { useEffect, useMemo } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { Navigate, Outlet, useNavigate } from "react-router-dom";
 import { useOfflineStatus } from "@nmfs-radfish/react-radfish";
 import { useInitializeAndCacheListTables } from "../hooks/useInitializeAndCacheListTables";
 import { useLoadCruisesAndStations } from "../hooks/useLoadCruisesAndStations";
 import { useAuth } from "../context/AuthContext";
+import { useStatus } from "../context/StatusContext";
 import Spinner from "./Spinner";
 
 const AuthenticatedApp = () => {
-  const { user } = useAuth();
-
-  // Redirect to login if not authenticated
-  if (!user?.isAuthenticated) {
-    console.log({ user });
-    return <Navigate to="/switch-accounts" replace />;
-  }
+  const { user, userLoading } = useAuth();
+  const { setStatusData } = useStatus();
 
   // Initialize global data and caches
   const { isOffline } = useOfflineStatus();
@@ -48,19 +44,14 @@ const AuthenticatedApp = () => {
   // The useEffect hook ensures this logic only runs when an error is detected,
   // preventing unnecessary re-renders or navigation loops.
   useEffect(() => {
-    if (isListsError || cruisesError || cruisesWarning) {
-      navigate("/app-init-status", {
-        state: {
-          statuses,
-          listsLoading,
-          isListsError,
-          listsErrorMessage,
-          additionalWarning:
-            cruisesWarning &&
-            "Cruises or stations are missing. Please connect to the network if you suspect data is incomplete.",
-        },
-      });
-    }
+    const status = {
+      statuses,
+      listsLoading,
+      isListsError,
+      listsErrorMessage,
+      cruisesWarning,
+    };
+    setStatusData(status);
   }, [
     isListsError,
     cruisesError,
@@ -69,10 +60,15 @@ const AuthenticatedApp = () => {
     listsLoading,
     listsErrorMessage,
     cruisesWarning,
+    setStatusData,
   ]);
 
-  if (listsLoading || cruisesLoading) {
+  if (userLoading) {
     return <Spinner />;
+  }
+
+  if ((!user || !user.isAuthenticated) && !isOffline) {
+    return <Navigate to="/switch-accounts" replace />;
   }
 
   return (

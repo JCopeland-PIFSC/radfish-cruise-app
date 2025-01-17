@@ -15,16 +15,8 @@ import {
 const Login = () => {
   const [error, setError] = useState("");
   const [showPassword, setShowPassword] = React.useState(false);
-  const { login, user } = useAuth();
+  const { login } = useAuth();
   const navigate = useNavigate();
-  const searchParams = new URLSearchParams(location.search);
-  const addAccountMode = searchParams.get("addAccount");
-
-  useEffect(() => {
-    if (user?.isAuthenticated && !addAccountMode) {
-      navigate("/cruises");
-    }
-  }, [user, navigate, addAccountMode]);
 
   const handleLogin = async (event) => {
     event.preventDefault();

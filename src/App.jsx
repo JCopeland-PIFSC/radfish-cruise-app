@@ -3,8 +3,9 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { GridContainer } from "@trussworks/react-uswds";
 import { Application } from "@nmfs-radfish/react-radfish";
 import { AuthProvider } from "./context/AuthContext";
+import { StatusProvider } from "./context/StatusContext";
 import {
-  AppInitStatus,
+  AppStatus,
   CatchDetail,
   CruiseDetail,
   CruiseList,
@@ -21,6 +22,7 @@ function App({ application }) {
       <main id="main-content">
         <BrowserRouter>
           <AuthProvider>
+            <StatusProvider>
             <MainHeader />
             <div className="flex-justify-center">
               <GridContainer containerSize="tablet-lg">
@@ -29,7 +31,7 @@ function App({ application }) {
                   <Route path="/switch-accounts" element={<SwitchAccounts />} />
                   <Route path="/login" element={<Login />} />
                   <Route element={<AuthenticatedApp />}>
-                    <Route path="/app-init-status" element={<AppInitStatus />} />
+                    <Route path="/app-init-status" element={<AppStatus />} />
                     <Route path="/cruises" element={<CruiseList />} />
                     <Route path="/cruises/new" element={<CruiseNew />} />
                     <Route
@@ -49,6 +51,7 @@ function App({ application }) {
                 </Routes>
               </GridContainer>
             </div>
+            </StatusProvider>
           </AuthProvider>
         </BrowserRouter>
       </main>
