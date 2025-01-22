@@ -16,7 +16,7 @@ export const useCruiseAndStations = () => {
     try {
       const fetchedUserCruises = await get(
         `/api/${tableNames.userCruises}`,
-        `userId=${userId}`,
+        `id=${userId}`,
       );
       const userCruises = fetchedUserCruises[0];
 
