@@ -12,15 +12,12 @@ import {
   Fieldset
 } from "@trussworks/react-uswds";
 import AppCard from "./AppCard";
-import { usePrecipitationList } from "../hooks/useListTables";
+import { useListTablesContext } from "../context";
 import ResponsiveRow from "./ResponsiveRow";
 
 const StationNew = ({ handleNewStation }) => {
-  const {
-    data: precipitation,
-    isLoading: precipitationLoading,
-    isError: precipitationError,
-    error } = usePrecipitationList();
+  const { lists } = useListTablesContext();
+  const { precipitation } = lists;
   const inputFocus = useRef(null);
 
   useEffect(() => {
@@ -28,15 +25,6 @@ const StationNew = ({ handleNewStation }) => {
       inputFocus.current.focus();
     }
   }, []);
-
-  // Render loading/error states
-  if (precipitationLoading) {
-    return <div>Loading...</div>;
-  }
-
-  if (precipitationError) {
-    return <div>Error loading Species: {error.message}</div>;
-  }
 
   return (
     <AppCard>

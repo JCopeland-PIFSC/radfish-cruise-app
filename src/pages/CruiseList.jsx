@@ -5,27 +5,19 @@ import { Button, Grid, Tag } from "@trussworks/react-uswds";
 import { Table } from "@nmfs-radfish/react-radfish";
 import { listValueLookup } from "../utils/listLookup";
 import { setStatusColor } from "../utils/setStatusColor";
-import { usePortsList, useCruiseStatusesList } from "../hooks/useListTables";
-import { useGetUserCruises } from "../hooks/useCruises";
-import { useAuth } from "../context/AuthContext";
+import { useListTablesContext, useCruisesAndStationsContext } from "../context";
 
 const CruiseListPage = () => {
   const navigate = useNavigate();
-  const { user } = useAuth();
+  const { loading: listsLoading, error: listsError, lists } = useListTablesContext();
+  const { loading: cruisesLoading, error: cruisesError, cruises } = useCruisesAndStationsContext();
 
-  const {
-    data: ports,
-    isError: portsError,
-    errorPorts } = usePortsList();
-  const {
-    data: cruiseStatuses,
-    isError: cruiseStatusesError,
-    errorCruiseStatuses } = useCruiseStatusesList();
-  const { cruises, loading, error } = useGetUserCruises();
-  if (loading) return <div>Loading Cruises...</div>;
-  if (portsError || cruiseStatusesError) return <div>Error Loading List Data: {portsError ? errorPorts.message : errorCruiseStatuses.message}</div>;
-  if (error) return <div>Error Loading Cruise Data: {errorCruises?.message}</div>;
+  if (listsLoading) return <div>Loading Lists...</div>;
+  if (cruisesLoading) return <div>Loading Cruises...</div>;
+  if (listsError) return <div>Error Loading List Data: {listsError.message}</div>;
+  if (cruisesError) return <div>Error Loading Cruise Data: {cruisesError.message}</div>;
 
+  const { ports, cruiseStatuses } = lists;
   const handleNavNewCruise = () => {
     navigate("/cruises/new");
   };

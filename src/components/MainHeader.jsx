@@ -18,37 +18,37 @@ const MainHeader = () => {
 
   const menuItems = user?.username
     ? [
-        <Link
-          to="/cruises"
-          style={{ color: `${isExpanded ? "black" : "white"}` }}
-          onClick={closeMobileNav}
-        >
-          Cruises
-        </Link>,
-      ]
+      <Link
+        to="/cruises"
+        style={{ color: `${isExpanded ? "black" : "white"}` }}
+        onClick={closeMobileNav}
+      >
+        Cruises
+      </Link>,
+    ]
     : [];
   const accountItems = user?.username
     ? [
-        <Link
-          className="text_color-white text_margin-bottom"
-          to="/app-init-status"
-          key="one"
-          onClick={closeMobileNav}
-        >
-          App Status
-        </Link>,
-        <Link
-          className="text_color-white"
-          to="/switch-accounts"
-          key="two"
-          onClick={closeMobileNav}
-        >
-          Switch Accounts
-        </Link>,
-        <p className="text_username text_transform-capitalize" key="three">
-          {user.username}
-        </p>,
-      ]
+      <Link
+        className="text_color-white text_margin-bottom"
+        to="/app-init-status"
+        key="one"
+        onClick={closeMobileNav}
+      >
+        App Status
+      </Link>,
+      <Link
+        className="text_color-white"
+        to="/switch-accounts"
+        key="two"
+        onClick={closeMobileNav}
+      >
+        Switch Accounts
+      </Link>,
+      <p className="text_username text_transform-capitalize" key="three">
+        {user.username}
+      </p>,
+    ]
     : [];
   return (
     <Header

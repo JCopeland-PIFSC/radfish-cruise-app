@@ -11,16 +11,16 @@ import {
 import { AppCard, ResponsiveRow } from "../components";
 import { DatePicker } from "@nmfs-radfish/react-radfish";
 import { useNavigate } from "react-router-dom";
-import { usePortsList } from "../hooks/useListTables";
-import { useAddCruise } from "../hooks/useCruises";
+import { useAuth, useListTablesContext, useCruisesAndStationsContext } from "../context";
+import { useCruiseAndStations } from "../hooks/useCruisesAndStations";
+
 
 const CruiseNewPage = () => {
-  const {
-    data: ports,
-    isLoading: portsLoading,
-    isError: portsError,
-    errorPorts } = usePortsList();
-  const { addCruise } = useAddCruise();
+  const { user } = useAuth();
+  const { lists } = useListTablesContext();
+  const { refreshCruisesState } = useCruisesAndStationsContext();
+  const { addCruise } = useCruiseAndStations();
+  const { ports } = lists;
   const navigate = useNavigate();
   const [resetToggle, setResetToggle] = useState(false);
   const inputFocus = useRef(null);
@@ -32,15 +32,6 @@ const CruiseNewPage = () => {
     setResetToggle(false);
   }, [resetToggle]);
 
-  // Render loading/error states
-  if (portsLoading) {
-    return <div>Loading...</div>;
-  }
-
-  if (portsError) {
-    return <div>Error loading ports: {errorPorts.message}</div>;
-  }
-
   const handleNavCruisesList = () => {
     navigate("/cruises");
   };
@@ -48,14 +39,15 @@ const CruiseNewPage = () => {
   const handleNewCruise = async (event) => {
     event.preventDefault();
     const formData = new FormData(event.target);
-    const values = { id: crypto.randomUUID(), cruiseStatusId: 1, returnPort: null, endDate: null };
+    const newCruise = { id: crypto.randomUUID(), cruiseStatusId: 1, returnPort: null, endDate: null };
 
     for (const [key, value] of formData.entries()) {
-      values[key] = value;
+      newCruise[key] = value;
     }
 
     try {
-      const newCruise = await addCruise(values);
+      await addCruise(user.id, newCruise);
+      refreshCruisesState(user.id);
       event.target.reset();
       setResetToggle(true);
       navigate(`/cruises/${newCruise.id}`);
