@@ -20,16 +20,18 @@ export const CruisesAndStationsProvider = ({ children }) => {
   useEffect(() => {
     const initialize = async () => {
       try {
-        setState((prevState) => ({ ...prevState, loading: true }));
-        if (!isOffline) await initializeDataFromBackend(user.id);
-        const cruises = await fetchLocalCruises(user.id);
-        const stations = await fetchLocalStations(user.id);
+        if (user?.id) {
+          setState((prevState) => ({ ...prevState, loading: true }));
+          if (!isOffline) await initializeDataFromBackend(user.id);
+          const cruises = await fetchLocalCruises(user.id);
+          const stations = await fetchLocalStations(user.id);
 
-        setState((prevState) => ({
-          ...prevState,
-          cruises, stations,
-          warning: cruises.length === 0 || stations.length === 0
-        }));
+          setState((prevState) => ({
+            ...prevState,
+            cruises, stations,
+            warning: cruises.length === 0 || stations.length === 0
+          }));
+        }
       } catch (error) {
         console.error("Error initializing cruises and stations: ", error);
         setState((prevState) => ({ ...prevState, error }));
@@ -41,7 +43,7 @@ export const CruisesAndStationsProvider = ({ children }) => {
     initialize();
   }, [user, isOffline]);
 
-  const refreshCruises = async (userId) => {
+  const refreshCruisesState = async (userId) => {
     setState((prevState) => ({ ...prevState, loading: true }));
     try {
       const cruises = await fetchLocalCruises(userId);
@@ -56,10 +58,10 @@ export const CruisesAndStationsProvider = ({ children }) => {
     }
   }
 
-  const refreshStations = async (userId) => {
+  const refreshStationsState = async (userId) => {
     setState((prevState) => ({ ...prevState, loading: true }));
     try {
-      const stations = await fetchLocalCruises(userId);
+      const stations = await fetchLocalStations(userId);
       setState((prevState) => ({
         ...prevState,
         stations
@@ -71,8 +73,28 @@ export const CruisesAndStationsProvider = ({ children }) => {
     }
   }
 
+  const getCruiseById = (cruiseId) => {
+    return state.cruises.find((cruise) => cruise.id === cruiseId);
+  };
+
+  const getStationById = (stationId) => {
+    return state.stations.find((station) => station.id === stationId);
+  };
+
+  const getStationsByCruiseId = (cruiseId) => {
+    return state.stations.filter((station) => station.cruiseId === cruiseId);
+  };
+
   return (
-    <CruisesAndStationsContext.Provider value={{ ...state, refreshCruises, refreshStations }}>
+    <CruisesAndStationsContext.Provider
+      value={{
+        ...state,
+        refreshCruisesState,
+        refreshStationsState,
+        getCruiseById,
+        getStationById,
+        getStationsByCruiseId
+      }}>
       {children}
     </CruisesAndStationsContext.Provider>
   );

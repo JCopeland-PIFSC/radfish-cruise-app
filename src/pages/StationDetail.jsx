@@ -10,19 +10,21 @@ import {
 import { EventType } from "../utils/listLookup";
 import { camelStrToTitle } from "../utils/stringUtilities";
 import { getLocationTz, generateTzDateTime } from "../utils/dateTimeHelpers";
-import { useGetCruiseById, useGetStationById, useUpdateStation, useCruiseStatusLock } from "../hooks/useCruises";
+import { useAuth, useListTablesContext, useCruisesAndStationsContext } from "../context";
+import { useCruiseAndStations } from "../hooks/useCruisesAndStations";
 
 const StationDetailPage = () => {
   const { cruiseId, stationId } = useParams();
-  const { data: cruise, } = useGetCruiseById(cruiseId);
+  const { user } = useAuth();
+  // const { isStatusLocked } = useCruiseStatusLock(cruiseId);
+  const { loading: listsLoading, error: listsError, lists } = useListTablesContext();
+  const { ports, cruiseStatuses } = lists;
   const {
-    data: station,
-    isLoading: stationLoading,
-    isError: stationError,
-    error: errorStation
-  } = useGetStationById(stationId);
-  const { mutateAsync: updateStation } = useUpdateStation();
-  const { isStatusLocked } = useCruiseStatusLock(cruiseId);
+    loading: stationLoading,
+    error: stationError,
+    refreshStationsState,
+    getStationById, getCruiseById } = useCruisesAndStationsContext();
+  const { updateStation } = useCruiseAndStations();
   const inputFocus = useRef(null);
   const navigate = useNavigate();
   const [activeAction, setActiveAction] = useState(null);

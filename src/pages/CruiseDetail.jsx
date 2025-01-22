@@ -6,7 +6,7 @@ import {
   Tag,
 } from "@trussworks/react-uswds";
 import {
-  // StationSummary,
+  StationSummary,
   StationNew,
   HeaderWithEdit,
   CruiseView,
@@ -47,7 +47,14 @@ const CruiseDetailPage = () => {
   const { user } = useAuth();
   const { loading: listsLoading, error: listsError, lists } = useListTablesContext();
   const { ports, cruiseStatuses } = lists;
-  const { loading: cruisesLoading, error: cruisesError, cruises } = useCruisesAndStationsContext();
+  const {
+    loading: cruisesLoading,
+    error: cruisesError,
+    refreshCruisesState,
+    refreshStationsState,
+    getCruiseById,
+    getStationsByCruiseId } = useCruisesAndStationsContext();
+  const { updateCruise, addStation } = useCruiseAndStations();
   const navigate = useNavigate();
   const location = useLocation();
   const stationRefs = useRef({});

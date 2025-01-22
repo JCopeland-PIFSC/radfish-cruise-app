@@ -1,18 +1,12 @@
 import { Grid } from "@trussworks/react-uswds";
 import { listValueLookup } from "../utils/listLookup";
 import DescriptionListItem from "./DescriptionListItem";
-import { useSpeciesList } from "../hooks/useListTables";
+import { useListTablesContext } from "../context";
 
 const CatchSummary = ({ catchItem }) => {
+  const { lists } = useListTablesContext();
+  const { species } = lists;
   const { speciesId, aggregateWeightKg } = catchItem;
-  const {
-    data: species,
-    isError: speciesError,
-    error } = useSpeciesList();
-
-  if (speciesError) {
-    return <div>Error loading Species: {error.message}</div>;
-  }
 
   return (
     <Grid row>
