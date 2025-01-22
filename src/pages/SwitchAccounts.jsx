@@ -128,7 +128,7 @@ const SwitchAccounts = () => {
                             display: "flex",
                             alignItems: "center",
                             cursor: "pointer",
-                            justifyContent: "center",
+                            marginLeft: "3rem",
                             textTransform: "capitalize",
                             fontWeight: "600"
                           }}
