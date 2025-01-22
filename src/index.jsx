@@ -4,7 +4,6 @@ import "./styles/theme.css";
 import App from "./App";
 import { Application } from "@nmfs-radfish/radfish";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import store from "./db/store.js";
 import { tablesMetadataSeed as seed } from "./db/seeds.js";
 import { initMetadataTable } from "./utils/databaseHelpers.js";
@@ -52,7 +51,6 @@ app.on("ready", async () => {
     <React.StrictMode>
       <QueryClientProvider client={queryClient}>
         <App application={app} />
-        <ReactQueryDevtools initialIsOpen={false} />
       </QueryClientProvider>
     </React.StrictMode>,
   );
