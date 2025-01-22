@@ -17,7 +17,7 @@ export const useStoreUser = () => {
   // Helper: Save the updated array of users to localStorage
   const saveUserToLocalStorage = (users) => {
     localStorage.setItem("users", JSON.stringify(users));
-    setAllUsers(users); 
+    setAllUsers(users);
   };
 
   // Create or log in a user
@@ -38,7 +38,7 @@ export const useStoreUser = () => {
     users = users.map((u) =>
       u.id === existingUser.id ? { ...existingUser, isAuthenticated: true } : u,
     );
-    
+
     saveUserToLocalStorage(users);
     setCurrentUser(existingUser);
   };
@@ -55,27 +55,15 @@ export const useStoreUser = () => {
     setCurrentUser(newCurrent || null);
   };
 
-
   // Sign out a user by removing them from localStorage
   const signOutUser = async (userId) => {
     let users = JSON.parse(localStorage.getItem("users")) || [];
     users = users.filter((u) => u.id !== userId); // Remove the user by ID
-  
-    // If the current user is being signed out, promote another user
-    if (currentUser?.id === userId) {
-      if (users.length > 0) {
-        // Promote the first remaining user to be authenticated
-        users[0].isAuthenticated = true;
-        setCurrentUser(users[0]);
-      } else {
-        // No users left; clear the current user
-        setCurrentUser(null);
-      }
-    }
-  
+
+    setCurrentUser(null);
     saveUserToLocalStorage(users);
   };
-  
+
   // Get the currently logged-in user
   const getCurrentUser = () => currentUser;
 

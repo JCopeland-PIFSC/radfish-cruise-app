@@ -16,7 +16,13 @@ import { useAuth } from "../context/AuthContext";
 import { Spinner } from "../components";
 
 const SwitchAccounts = () => {
-  const { user: currentUser, allUsers, switchUser, signOut } = useAuth();
+  const {
+    user: currentUser,
+    allUsers,
+    switchUser,
+    signOut,
+    userLoading,
+  } = useAuth();
   const navigate = useNavigate();
   const { isOffline } = useOfflineStatus();
   const [pendingSignOutUserId, setPendingSignOutUserId] = useState(null);
@@ -26,28 +32,22 @@ const SwitchAccounts = () => {
 
   // Fetch authenticated users on component mount
   useEffect(() => {
-    const handleOfflineNavigation = async () => {
-      try {
-        if (!allUsers?.length) {
-          if (isOffline) {
-            navigate("/app-init-status", {
-              state: {
-                additionalWarning,
-              },
-            });
-          } else {
-            navigate("/login");
-          }
-        }
-      } catch (error) {
-        console.error("Error handling offline navigation:", error);
-      }
-    };
+    if (userLoading) return;
 
-    if (!allUsers?.length) {
-      handleOfflineNavigation();
+    if (allUsers?.length) return;
+
+    if (isOffline) {
+      navigate("/app-init-status", {
+        state: {
+          additionalWarning:
+            "No Authorized users stored. Please connect to the network.",
+        },
+      });
+      return;
     }
-  }, [allUsers, isOffline, navigate]);
+
+    navigate("/login");
+  }, [allUsers, isOffline, userLoading, navigate]);
 
   const handleSelectedUserClick = (user) => {
     switchUser(user);
@@ -153,7 +153,7 @@ const SwitchAccounts = () => {
                           }}
                           aria-label={`Sign out ${user.username}`}
                         >
-                          Sign Out
+                          <Icon.Close size={3} aria-label="close" />
                         </button>
                       </div>
                     ))}

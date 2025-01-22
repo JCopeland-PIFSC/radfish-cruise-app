@@ -75,11 +75,11 @@ body {
   color: #ebe6e6 !important;
 }
 
-@media (max-width: 768px) {
-  .usa-navbar {
-   border-bottom: none !important;
-  }
+.usa-navbar {
+  border-bottom: none !important;
+ }
 
+@media (max-width: 1023px) {
   .text_color-white {
     color: #000 !important;
   }
