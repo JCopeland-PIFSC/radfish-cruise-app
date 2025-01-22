@@ -6,7 +6,6 @@ const AuthenticatedApp = () => {
 
   // Redirect to login if not authenticated
   if (!user?.isAuthenticated) {
-    console.log({ user });
     return <Navigate to="/switch-accounts" replace />;
   }
 
