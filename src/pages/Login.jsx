@@ -17,14 +17,6 @@ const Login = () => {
   const [showPassword, setShowPassword] = React.useState(false);
   const { login } = useAuth();
   const navigate = useNavigate();
-  const searchParams = new URLSearchParams(location.search);
-  const addAccountMode = searchParams.get("addAccount");
-
-  useEffect(() => {
-    if (user?.isAuthenticated && !addAccountMode) {
-      navigate("/app-init-status");
-    }
-  }, [user, navigate, addAccountMode]);
 
   const handleLogin = async (event) => {
     event.preventDefault();

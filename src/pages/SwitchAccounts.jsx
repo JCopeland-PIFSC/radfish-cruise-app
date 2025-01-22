@@ -11,6 +11,7 @@ import {
   ModalFooter,
   ModalToggleButton,
   ButtonGroup,
+  Link,
 } from "@trussworks/react-uswds";
 import { useAuth } from "../context/AuthContext";
 import { Spinner } from "../components";
@@ -167,9 +168,11 @@ const SwitchAccounts = () => {
                       {"Log in to store a new account"}
                     </p>
                     <p>
-                      <Button type="button" className="width-full" onClick={handleAddAccountClick}>
-                        Add Account
-                      </Button>
+                      <Link href="/login">
+                        <Button type="button" className="width-full" >
+                          Add Account
+                        </Button>
+                      </Link>
                     </p>
                   </div>
                 )}
