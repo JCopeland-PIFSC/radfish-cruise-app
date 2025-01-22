@@ -10,12 +10,13 @@ import {
   Button,
   GridContainer,
   Grid,
+  Icon,
 } from "@trussworks/react-uswds";
 
 const Login = () => {
   const [error, setError] = useState("");
   const [showPassword, setShowPassword] = React.useState(false);
-  const { login } = useAuth();
+  const { login, user } = useAuth();
   const navigate = useNavigate();
 
   const handleLogin = async (event) => {
@@ -39,6 +40,10 @@ const Login = () => {
     }
   };
 
+  const handleNavigateSwitchAccounts = (user) => {
+    navigate("/switch-accounts");
+  };
+
   return (
     <main id="main-content">
       <div className="bg-base-lightest">
@@ -54,9 +59,28 @@ const Login = () => {
               }}
             >
               <div className="bg-white padding-y-3 padding-x-5 border border-base-lighter">
+                {user && (
+                  <div
+                    onClick={() => handleNavigateSwitchAccounts(user)}
+                    style={{
+                      display: "flex",
+                      color: "var(--noaa-dark-blue)",
+                      alignItems: "center",
+                      gap: "0.3rem",
+                      fontSize: "14px",
+                      fontWeight: "600",
+                    }}
+                  >
+                    <Icon.ArrowBack
+                      size={2}
+                      aria-label="Back to switch accounts"
+                    ></Icon.ArrowBack>
+                    Switch Accounts
+                  </div>
+                )}
                 <h1 className="margin-bottom-0">Sign in</h1>
                 <Form onSubmit={handleLogin}>
-                  <Fieldset legend="Access your account" legendStyle="large">
+                  <Fieldset legend="Access your account" legendStyle="medium">
                     <Label htmlFor="username">Username</Label>
                     <TextInput
                       id="username"

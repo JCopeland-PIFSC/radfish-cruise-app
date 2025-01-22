@@ -99,57 +99,59 @@ const SwitchAccounts = () => {
                 )}
                 {allUsers.length > 0 ? (
                   <div>
-                    {allUsers.map((user, index) => (
+                    {allUsers.map((user) => (
                       <div
-                        key={index}
-                        className="usa-button width-full text_transform-capitalize position-relative"
-                        onClick={() => handleSelectedUserClick(user)}
+                        key={user.id}
                         style={{
-                          padding: "10px",
-                          display: "flex",
-                          alignItems: "center",
-                          justifyContent: "space-between",
-                          cursor: "pointer",
-                          border: "2px solid #005ea2",
+                          border: "2px solid var(--noaa-dark-blue)",
                           borderRadius: "4px",
                           marginBottom: "8px",
-                          position: "relative",
-                          color: "#005ea2",
+                          display: "flex",
+                          alignItems: "center",
+                          padding: "10px",
                           backgroundColor: "#fff",
+                          color: "#005ea2",
                         }}
                       >
-                        {/* Check Icon for the current user */}
-                        {currentUser?.id === user.id && (
-                          <Icon.CheckCircle
-                            size={3}
-                            aria-label="Selected user"
-                            style={{
-                              left: "20px",
-                              position: "absolute",
-                            }}
-                          />
-                        )}
-
-                        {/* Username */}
-                        <span style={{ flex: 1 }}>{user.username}</span>
-
-                        {/* Sign Out Button */}
+                        <div
+                          role="button"
+                          tabIndex={0}
+                          onClick={() => handleSelectedUserClick(user)}
+                          onKeyDown={(e) => {
+                            if (e.key === "Enter" || e.key === " ") {
+                              handleSelectedUserClick(user);
+                            }
+                          }}
+                          style={{
+                            flex: 1,
+                            display: "flex",
+                            alignItems: "center",
+                            cursor: "pointer",
+                            justifyContent: "center",
+                            textTransform: "capitalize",
+                            fontWeight: "600"
+                          }}
+                        >
+                          {currentUser?.id === user.id && (
+                            <Icon.CheckCircle
+                              size={3}
+                              aria-label="Selected user"
+                              style={{ position: "absolute", left: "4rem" }}
+                            />
+                          )}
+                          <span>{user.username}</span>
+                        </div>
                         <button
                           type="button"
                           onClick={(e) => {
-                            e.stopPropagation();
+                            e.stopPropagation()
                             handleUserSignOut(user.id);
                           }}
                           style={{
-                            position: "absolute",
-                            top: "5px",
-                            right: "5px",
                             backgroundColor: "transparent",
                             border: "none",
-                            color: "dimgray",
                             cursor: "pointer",
-                            fontSize: "0.7rem",
-                            fontWeight: "bold",
+                            marginLeft: "16px",
                           }}
                           aria-label={`Sign out ${user.username}`}
                         >
