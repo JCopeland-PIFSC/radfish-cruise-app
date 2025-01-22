@@ -39,6 +39,9 @@ const StationDetailPage = () => {
     setActiveAction(null)
   }, []);
 
+  const cruise = getCruiseById(cruiseId);
+  const station = getStationById(stationId);
+
   useEffect(() => {
     if (station) {
       const { endSet: newEndSet, beginHaul: newBeginHaul, endHaul: newEndHaul } = newEvent;
@@ -117,6 +120,7 @@ const StationDetailPage = () => {
 
       try {
         await updateStation({ cruiseId, stationId: id, updates: stationUpdates })
+        refreshStationsState(user.id);
         setActiveAction(null);
       } catch (error) {
         console.error("Failed to update station: ", error);
@@ -142,7 +146,7 @@ const StationDetailPage = () => {
           activeAction={activeAction}
           handleSetAction={() => setActiveAction(EventType.BEGIN_SET)}
           handleCancelAction={handleCancelEvent(EventType.BEGIN_SET)}
-          statusLock={isStatusLocked} />
+          statusLock={false} />
         {activeAction === EventType.BEGIN_SET
           ? <EventForm
             event={beginSet}
@@ -163,7 +167,7 @@ const StationDetailPage = () => {
             activeAction={activeAction}
             handleSetAction={() => setActiveAction(EventType.END_SET)}
             handleCancelAction={handleCancelEvent(EventType.END_SET)}
-            statusLock={isStatusLocked} />
+            statusLock={false} />
           {activeAction === EventType.END_SET
             ? <EventForm
               event={endSet || newEvent[EventType.END_SET]}
@@ -186,7 +190,7 @@ const StationDetailPage = () => {
             activeAction={activeAction}
             handleSetAction={() => setActiveAction(EventType.BEGIN_HAUL)}
             handleCancelAction={handleCancelEvent(EventType.BEGIN_HAUL)}
-            statusLock={isStatusLocked} />
+            statusLock={false} />
           {activeAction === EventType.BEGIN_HAUL
             ? <EventForm
               event={beginHaul || newEvent[EventType.BEGIN_HAUL]}
@@ -209,7 +213,7 @@ const StationDetailPage = () => {
             activeAction={activeAction}
             handleSetAction={() => setActiveAction(EventType.END_HAUL)}
             handleCancelAction={handleCancelEvent(EventType.END_HAUL)}
-            statusLock={isStatusLocked} />
+            statusLock={false} />
           {activeAction === EventType.END_HAUL
             ? <EventForm
               event={endHaul || newEvent[EventType.END_HAUL]}

@@ -33,11 +33,17 @@ const CatchDetailPage = () => {
   const [catches, setCatches] = useState([]);
   const [activeAction, setActiveAction] = useState(null);
 
+  const cruise = getCruiseById(cruiseId);
+  const station = getStationById(stationId);
+
   useEffect(() => {
     if (station?.catch) {
       setCatches(station.catch);
+      if (station.catch.length === 0) {
+        setActiveAction(CatchAction.NEW);
+      }
     }
-  }, [station?.catch]);
+  }, [station]);
 
   if (stationLoading) return <div>Loading Station Data...</div>;
   if (stationError) return <div>Error Loading Station Data: {errorStation?.message}</div>;
@@ -74,6 +80,7 @@ const CatchDetailPage = () => {
         stationId,
         updates: { ...station, catch: updatedCatches },
       });
+      refreshStationsState(user.id);
       setActiveAction(null);
     } catch (error) {
       console.error("Failed to update station with new catch: ", error);

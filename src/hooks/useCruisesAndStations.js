@@ -116,7 +116,7 @@ export const useCruiseAndStations = () => {
           {
             id: userId,
             cruises: [...userCruises.cruises, newCruiseId],
-            uuid: userCruises.uuid ? userCruises.uuid : crypto.randomUUID(),
+            uuid: userCruises.uuid || crypto.randomUUID(),
           },
         ]);
       }
@@ -125,10 +125,46 @@ export const useCruiseAndStations = () => {
     }
   };
 
+  const updateCruise = async (cruiseId, updates) => {
+    try {
+      await update(tableNames.cruises, [
+        { id: cruiseId, ...updates, uuid: updates.uuid || crypto.randomUUID() },
+      ]);
+    } catch (error) {
+      throw new Error(`Error updating cruise: ${error}`);
+    }
+  };
+
+  const addStation = async (station) => {
+    try {
+      await create(tableNames.stations, station);
+    } catch (error) {
+      throw new Error(`Error adding station: ${error}`);
+    }
+  };
+
+  const updateStation = async ({ cruiseId, stationId, updates }) => {
+    try {
+      await update(tableNames.stations, [
+        {
+          id: stationId,
+          cruiseId,
+          ...updates,
+          uuid: updates.uuid || crypto.randomUUID(),
+        },
+      ]);
+    } catch (error) {
+      throw new Error(`Error updating station: ${error}`);
+    }
+  };
+
   return {
     initializeDataFromBackend,
     fetchLocalCruises,
     fetchLocalStations,
     addCruise,
+    updateCruise,
+    addStation,
+    updateStation,
   };
 };

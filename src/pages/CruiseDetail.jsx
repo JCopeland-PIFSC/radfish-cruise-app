@@ -19,6 +19,7 @@ import { setStatusColor } from "../utils/setStatusColor";
 import { generateTzDateTime, getLocationTz } from "../utils/dateTimeHelpers";
 import { useListTablesContext, useCruisesAndStationsContext } from "../context";
 import { useAuth } from "../context/AuthContext";
+import { useCruiseAndStations } from "../hooks/useCruisesAndStations";
 
 const CruiseAction = {
   NEW: "NEW",
@@ -58,11 +59,10 @@ const CruiseDetailPage = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const stationRefs = useRef({});
-  const [refetch, setRefetch] = useState(false);
-
   const [activeAction, setActiveAction] = useState(null);
   // const { isStatusLocked } = useCruiseStatusLock(cruiseId);
   const isStatusLocked = false;
+
   useEffect(() => {
     if (location.state?.scrollToStation) {
       const stationId = location.state.scrollToStation;
@@ -79,12 +79,13 @@ const CruiseDetailPage = () => {
   if (cruisesLoading) return <div>Loading Cruise Data...</div>;
   if (cruisesError) return <div>Error Loading Cruise Data: {cruiseError.message}</div>;
 
-  // console.log("stations", stations);
-  // stations.forEach((station) => {
-  //   stationRefs.current[station.id] = stationRefs.current[station.id] || React.createRef();
-  // });
+  const cruiseStations = getStationsByCruiseId(cruiseId);
 
-  const cruise = cruises.find((cruise) => cruise.id === cruiseId);
+  cruiseStations.forEach((station) => {
+    stationRefs.current[station.id] = stationRefs.current[station.id] || React.createRef();
+  });
+
+  const cruise = getCruiseById(cruiseId);
   const {
     id,
     cruiseName,
@@ -123,7 +124,8 @@ const CruiseDetailPage = () => {
 
     try {
       await updateCruise(id, values);
-      setRefetch(!refetch);
+      event.target.reset();
+      refreshCruisesState(user.id);
       setActiveAction(null)
     } catch (error) {
       console.error("Failed to update cruise: ", error);
@@ -160,8 +162,9 @@ const CruiseDetailPage = () => {
 
     // process date time
     try {
-      await addStation({ cruiseId: newStation.cruiseId, newStation });
+      await addStation(newStation);
       event.target.reset();
+      refreshStationsState(user.id);
       setActiveAction(null);
     } catch (error) {
       console.error("Failed to add new Station: ", error);
@@ -216,8 +219,8 @@ const CruiseDetailPage = () => {
         }
       </Grid>
       {activeAction === CruiseAction.NEW && <StationNew handleNewStation={handleNewStation} />}
-      {/* {stations?.length
-        ? stations.map((station) => (
+      {cruiseStations?.length
+        ? cruiseStations.map((station) => (
           <StationSummary
             key={station.id}
             stationRef={stationRefs.current[station.id]}
@@ -225,7 +228,7 @@ const CruiseDetailPage = () => {
             station={station}
             activeAction={activeAction} />
         ))
-        : ""} */}
+        : ""}
     </>
   );
 }
