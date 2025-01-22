@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useOfflineStatus } from "@nmfs-radfish/react-radfish";
 import {
   Button,
@@ -11,6 +11,7 @@ import {
   ModalFooter,
   ModalToggleButton,
   ButtonGroup,
+  Link,
 } from "@trussworks/react-uswds";
 import { useAuth } from "../context/AuthContext";
 import { Spinner } from "../components";
@@ -169,8 +170,8 @@ const SwitchAccounts = () => {
                       {"Log in to store a new account"}
                     </p>
                     <p>
-                      <Link to="/login">
-                        <Button type="button" className="width-full">
+                      <Link href="/login">
+                        <Button type="button" className="width-full" >
                           Add Account
                         </Button>
                       </Link>

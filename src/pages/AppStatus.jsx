@@ -1,9 +1,11 @@
-import React from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { Button, GridContainer, Grid } from "@trussworks/react-uswds";
-import { useStatus } from "../context/StatusContext";
+import { useOfflineStatus } from "@nmfs-radfish/react-radfish";
+import { useAuth, useStatus } from "../context";
 
 const AppInitStatusPage = () => {
+  const { state } = useLocation();
+  const { user } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
   const { statusData } = useStatus();
@@ -82,6 +84,7 @@ const AppInitStatusPage = () => {
               <li key={statusName} style={{ marginBottom: "12px" }}>
                 {renderStatusIndicator(statusValue)}
                 <strong>{statusName}</strong>
+                {(statusName === "Authenticated User") && <span style={{ marginLeft: "8px" }}>{user?.username ? user.username : "Invalid User"}</span>}
               </li>
             ))}
           </ul>

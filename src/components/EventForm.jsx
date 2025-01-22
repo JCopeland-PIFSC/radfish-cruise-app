@@ -9,10 +9,10 @@ import {
   Button,
   Textarea
 } from "@trussworks/react-uswds";
+import ResponsiveRow from "./ResponsiveRow";
 import { camelToDash, camelStrToTitle } from "../utils/stringUtilities";
 import { getTzDateTimeParts } from "../utils/dateTimeHelpers";
-import { usePrecipitationList } from "../hooks/useListTables";
-import ResponsiveRow from "./ResponsiveRow";
+import { useListTablesContext } from "../context";
 
 const EventForm = ({ event, handleSaveEvent, eventType }) => {
   const {
@@ -24,17 +24,11 @@ const EventForm = ({ event, handleSaveEvent, eventType }) => {
     visibilityKm,
     precipitationId,
     comments } = event;
-  const {
-    data: precipitation,
-    isError: precipitationError,
-    error } = usePrecipitationList();
+  const { lists } = useListTablesContext();
+  const { precipitation } = lists;
   const eventPrefix = camelToDash(eventType);
   const eventLabel = camelStrToTitle(eventType);
 
-  // Render loading/error states
-  if (precipitationError) {
-    return <div>Error loading Species: {error.message}</div>;
-  }
   return (
     <>
       <Form id={`${eventPrefix}-form`} name={`${eventType}Form`} className="maxw-full" onSubmit={handleSaveEvent}>

@@ -7,8 +7,8 @@ import {
   HeaderWithEdit,
 } from "../components";
 import { useParams, useNavigate } from "react-router-dom";
-import { useSampleTypesList, useSpeciesList } from "../hooks/useListTables";
-import { useUpdateStation, useGetCruiseById, useGetStationById, useCruiseStatusLock } from "../hooks/useCruises";
+import { useListTablesContext, useAuth, useCruisesAndStationsContext } from "../context";
+import { useCruiseAndStations } from "../hooks/useCruisesAndStations";
 
 const CatchAction = {
   NEW: "NEW",
@@ -23,26 +23,27 @@ const InitializedCatch = {
 
 const CatchDetailPage = () => {
   const { cruiseId, stationId } = useParams();
-  const { data: cruise, } = useGetCruiseById(cruiseId);
-  const {
-    data: station,
-    isLoading: stationLoading,
-    isError: stationError,
-    error: errorStation
-  } = useGetStationById(stationId);
-  const { data: species, } = useSpeciesList();
-  const { data: sampleTypes, } = useSampleTypesList();
-  const { mutateAsync: updateStation } = useUpdateStation();
-  const { isStatusLocked } = useCruiseStatusLock(cruiseId);
+  const { user } = useAuth();
+  const { lists } = useListTablesContext();
+  const { species, sampleTypes } = lists;
+  const { loading: stationLoading, error: stationError, getStationById, getCruiseById, refreshStationsState } = useCruisesAndStationsContext();
+  const { updateStation } = useCruiseAndStations();
+  const { isStatusLocked } = false;// useCruiseStatusLock(cruiseId);
   const navigate = useNavigate();
   const [catches, setCatches] = useState([]);
   const [activeAction, setActiveAction] = useState(null);
 
+  const cruise = getCruiseById(cruiseId);
+  const station = getStationById(stationId);
+
   useEffect(() => {
     if (station?.catch) {
       setCatches(station.catch);
+      if (station.catch.length === 0) {
+        setActiveAction(CatchAction.NEW);
+      }
     }
-  }, [station?.catch]);
+  }, [station]);
 
   if (stationLoading) return <div>Loading Station Data...</div>;
   if (stationError) return <div>Error Loading Station Data: {errorStation?.message}</div>;
@@ -79,6 +80,7 @@ const CatchDetailPage = () => {
         stationId,
         updates: { ...station, catch: updatedCatches },
       });
+      refreshStationsState(user.id);
       setActiveAction(null);
     } catch (error) {
       console.error("Failed to update station with new catch: ", error);

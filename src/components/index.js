@@ -10,7 +10,6 @@ export { default as EventForm } from "./EventForm";
 export { default as EventView } from "./EventView";
 export { default as HeaderWithEdit } from "./HeaderWithEdit";
 export { default as MainHeader } from "./MainHeader";
-export { default as PrivateRoute } from "./PrivateRoute";
 export { default as ResponsiveRow } from "./ResponsiveRow";
 export { default as SampleInput } from "./SampleInput";
 export { default as SampleView } from "./SampleView";
