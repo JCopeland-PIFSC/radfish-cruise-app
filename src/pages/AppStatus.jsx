@@ -1,28 +1,45 @@
+import React, { useMemo } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { Button, GridContainer, Grid } from "@trussworks/react-uswds";
 import { useOfflineStatus } from "@nmfs-radfish/react-radfish";
-import { useAuth, useStatus } from "../context";
+import { useAuth } from "../context";
+import { useListTablesContext, useCruisesAndStationsContext } from "../context";
 
 const AppInitStatusPage = () => {
-  const { state } = useLocation();
+  const { isOffline } = useOfflineStatus();
   const { user } = useAuth();
+  const {
+    loading: listsLoading,
+    error: listsError,
+    listsReady,
+  } = useListTablesContext();
+  const {
+    loading: cruisesLoading,
+    error: cruisesError,
+    warning: cruisesWarning,
+  } = useCruisesAndStationsContext();
   const navigate = useNavigate();
   const location = useLocation();
-  const { statusData } = useStatus();
   const { additionalWarning } = location.state || {};
 
-  const {
-    statuses,
-    listsLoading,
-    isListsError,
-    listsErrorMessage,
-    cruisesWarning,
-  } = statusData;
+  // Memoize statuses to prevent unnecessary re-renders
+  const statuses = useMemo(
+    () => ({
+      "Network Status": isOffline ? "red" : "green",
+      "List Tables Initialized": listsReady ? "green" : "yellow",
+      "Cruises & Stations Loaded": cruisesLoading
+        ? "yellow"
+        : cruisesError
+          ? "red"
+          : "green",
+    }),
+    [isOffline, listsReady, , cruisesLoading, cruisesError],
+  );
 
   // Determine if all statuses are "green"
   const allStatusesPass =
     !listsLoading &&
-    !isListsError &&
+    !listsError &&
     !!statuses &&
     Object.values(statuses).every((status) => status === "green");
 
@@ -80,13 +97,18 @@ const AppInitStatusPage = () => {
       <Grid row>
         <Grid col={12}>
           <ul style={{ listStyleType: "none", paddingLeft: 0 }}>
-            {statuses && Object.entries(statuses).map(([statusName, statusValue]) => (
-              <li key={statusName} style={{ marginBottom: "12px" }}>
-                {renderStatusIndicator(statusValue)}
-                <strong>{statusName}</strong>
-                {(statusName === "Authenticated User") && <span style={{ marginLeft: "8px" }}>{user?.username ? user.username : "Invalid User"}</span>}
-              </li>
-            ))}
+            {statuses &&
+              Object.entries(statuses).map(([statusName, statusValue]) => (
+                <li key={statusName} style={{ marginBottom: "12px" }}>
+                  {renderStatusIndicator(statusValue)}
+                  <strong>{statusName}</strong>
+                  {statusName === "Authenticated User" && (
+                    <span style={{ marginLeft: "8px" }}>
+                      {user?.username ? user.username : "Invalid User"}
+                    </span>
+                  )}
+                </li>
+              ))}
           </ul>
         </Grid>
       </Grid>
@@ -97,11 +119,11 @@ const AppInitStatusPage = () => {
           </Grid>
         </Grid>
       )}
-      {isListsError && (
+      {listsError && (
         <Grid row>
           <Grid col={12}>
             <p style={{ color: "red" }}>
-              List tables initialization failed: {listsErrorMessage || "Unknown error"}
+              List tables initialization failed: {listsError || "Unknown error"}
             </p>
           </Grid>
         </Grid>

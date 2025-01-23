@@ -53,12 +53,13 @@ export const useStoreUser = () => {
     const existing = await findOne(tableNames.users, {
       where: { id: userData.id },
     });
+
     if (!existing) {
       await create(tableNames.users, userData);
     } else {
       await update(tableNames.users, [
         {
-          ...userData,
+          ...existing,
           isAuthenticated: 1,
         },
       ]);

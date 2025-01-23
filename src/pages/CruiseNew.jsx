@@ -16,7 +16,7 @@ import { useAuth, useListTablesContext, useCruisesAndStationsContext } from "../
 const CruiseNewPage = () => {
   const { user } = useAuth();
   const { lists } = useListTablesContext();
-  const { refreshCruisesState, addCruise } = useCruisesAndStationsContext();
+  const { refreshCruisesState, addCruise, loading } = useCruisesAndStationsContext();
   const { ports } = lists;
   const navigate = useNavigate();
   const [resetToggle, setResetToggle] = useState(false);
