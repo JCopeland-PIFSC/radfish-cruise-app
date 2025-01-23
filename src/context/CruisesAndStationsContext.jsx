@@ -1,13 +1,21 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useState, useEffect, useMemo } from 'react';
 import { useOfflineStatus } from "@nmfs-radfish/react-radfish";
 import { useAuth } from './AuthContext';
 import { useCruiseAndStations } from '../hooks/useCruisesAndStations';
+import { CruiseStatus } from "../utils/listLookup";
 
 const CruisesAndStationsContext = createContext();
 
 export const CruisesAndStationsProvider = ({ children }) => {
+  const lockedStatuses = [CruiseStatus.SUBMITTED, CruiseStatus.ACCEPTED];
   const { isOffline } = useOfflineStatus();
-  const { initializeDataFromBackend, fetchLocalCruises, fetchLocalStations } = useCruiseAndStations();
+  const { initializeDataFromBackend,
+    fetchLocalCruises,
+    fetchLocalStations,
+    addCruise,
+    updateCruise,
+    addStation,
+    updateStation } = useCruiseAndStations();
   const { user } = useAuth();
   const [state, setState] = useState({
     loading: false,
@@ -85,6 +93,16 @@ export const CruisesAndStationsProvider = ({ children }) => {
     return state.stations.filter((station) => station.cruiseId === cruiseId);
   };
 
+  const useCruiseStatusLock = (cruiseId) => {
+    const cruise = getCruiseById(cruiseId);
+    const isStatusLocked = useMemo(() => {
+      if (!cruise || !cruise.cruiseStatusId) return false;
+      return lockedStatuses.includes(`${cruise.cruiseStatusId}`);
+    }, [cruise]);
+
+    return { isStatusLocked };
+  }
+
   return (
     <CruisesAndStationsContext.Provider
       value={{
@@ -93,7 +111,12 @@ export const CruisesAndStationsProvider = ({ children }) => {
         refreshStationsState,
         getCruiseById,
         getStationById,
-        getStationsByCruiseId
+        getStationsByCruiseId,
+        addCruise,
+        updateCruise,
+        addStation,
+        updateStation,
+        useCruiseStatusLock,
       }}>
       {children}
     </CruisesAndStationsContext.Provider>
