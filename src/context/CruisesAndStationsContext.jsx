@@ -7,7 +7,13 @@ const CruisesAndStationsContext = createContext();
 
 export const CruisesAndStationsProvider = ({ children }) => {
   const { isOffline } = useOfflineStatus();
-  const { initializeDataFromBackend, fetchLocalCruises, fetchLocalStations } = useCruiseAndStations();
+  const { initializeDataFromBackend,
+    fetchLocalCruises,
+    fetchLocalStations,
+    addCruise,
+    updateCruise,
+    addStation,
+    updateStation } = useCruiseAndStations();
   const { user } = useAuth();
   const [state, setState] = useState({
     loading: false,
@@ -93,7 +99,12 @@ export const CruisesAndStationsProvider = ({ children }) => {
         refreshStationsState,
         getCruiseById,
         getStationById,
-        getStationsByCruiseId
+        getStationsByCruiseId,
+        addCruise,
+        updateCruise,
+        addStation,
+        updateStation,
+        useCruiseStatusLock,
       }}>
       {children}
     </CruisesAndStationsContext.Provider>

@@ -11,7 +11,6 @@ import { EventType } from "../utils/listLookup";
 import { camelStrToTitle } from "../utils/stringUtilities";
 import { getLocationTz, generateTzDateTime } from "../utils/dateTimeHelpers";
 import { useAuth, useListTablesContext, useCruisesAndStationsContext } from "../context";
-import { useCruiseAndStations } from "../hooks/useCruisesAndStations";
 
 const StationDetailPage = () => {
   const { cruiseId, stationId } = useParams();

@@ -8,7 +8,6 @@ import {
 } from "../components";
 import { useParams, useNavigate } from "react-router-dom";
 import { useListTablesContext, useAuth, useCruisesAndStationsContext } from "../context";
-import { useCruiseAndStations } from "../hooks/useCruisesAndStations";
 
 const CatchAction = {
   NEW: "NEW",
