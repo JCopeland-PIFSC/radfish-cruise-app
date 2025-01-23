@@ -15,15 +15,14 @@ import { useAuth, useListTablesContext, useCruisesAndStationsContext } from "../
 const StationDetailPage = () => {
   const { cruiseId, stationId } = useParams();
   const { user } = useAuth();
-  // const { isStatusLocked } = useCruiseStatusLock(cruiseId);
   const { loading: listsLoading, error: listsError, lists } = useListTablesContext();
   const { ports, cruiseStatuses } = lists;
   const {
     loading: stationLoading,
     error: stationError,
     refreshStationsState,
-    getStationById, getCruiseById } = useCruisesAndStationsContext();
-  const { updateStation } = useCruiseAndStations();
+    getStationById, getCruiseById, updateStation, useCruiseStatusLock } = useCruisesAndStationsContext();
+  const { isStatusLocked } = useCruiseStatusLock(cruiseId);
   const inputFocus = useRef(null);
   const navigate = useNavigate();
   const [activeAction, setActiveAction] = useState(null);
@@ -55,9 +54,11 @@ const StationDetailPage = () => {
         setAddEvent(EventType.END_HAUL)
       } else {
         setAddEvent(null);
-        const buttonLabel = (catches?.length) ? "Edit Catches" : "Add Catches"
-        setShowCatchButton(buttonLabel);
       }
+      let buttonLabel = "Add Catches";
+      if (catches?.length) buttonLabel = "Edit Catches";
+      if (isStatusLocked) buttonLabel = "View Catches";
+      setShowCatchButton(buttonLabel);
     }
   }, [station, newEvent, showCatchButton])
 
@@ -145,7 +146,7 @@ const StationDetailPage = () => {
           activeAction={activeAction}
           handleSetAction={() => setActiveAction(EventType.BEGIN_SET)}
           handleCancelAction={handleCancelEvent(EventType.BEGIN_SET)}
-          statusLock={false} />
+          statusLock={isStatusLocked} />
         {activeAction === EventType.BEGIN_SET
           ? <EventForm
             event={beginSet}
@@ -166,7 +167,7 @@ const StationDetailPage = () => {
             activeAction={activeAction}
             handleSetAction={() => setActiveAction(EventType.END_SET)}
             handleCancelAction={handleCancelEvent(EventType.END_SET)}
-            statusLock={false} />
+            statusLock={isStatusLocked} />
           {activeAction === EventType.END_SET
             ? <EventForm
               event={endSet || newEvent[EventType.END_SET]}
@@ -189,7 +190,7 @@ const StationDetailPage = () => {
             activeAction={activeAction}
             handleSetAction={() => setActiveAction(EventType.BEGIN_HAUL)}
             handleCancelAction={handleCancelEvent(EventType.BEGIN_HAUL)}
-            statusLock={false} />
+            statusLock={isStatusLocked} />
           {activeAction === EventType.BEGIN_HAUL
             ? <EventForm
               event={beginHaul || newEvent[EventType.BEGIN_HAUL]}
@@ -212,7 +213,7 @@ const StationDetailPage = () => {
             activeAction={activeAction}
             handleSetAction={() => setActiveAction(EventType.END_HAUL)}
             handleCancelAction={handleCancelEvent(EventType.END_HAUL)}
-            statusLock={false} />
+            statusLock={isStatusLocked} />
           {activeAction === EventType.END_HAUL
             ? <EventForm
               event={endHaul || newEvent[EventType.END_HAUL]}

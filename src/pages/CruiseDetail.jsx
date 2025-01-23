@@ -19,7 +19,6 @@ import { setStatusColor } from "../utils/setStatusColor";
 import { generateTzDateTime, getLocationTz } from "../utils/dateTimeHelpers";
 import { useListTablesContext, useCruisesAndStationsContext } from "../context";
 import { useAuth } from "../context/AuthContext";
-import { useCruiseAndStations } from "../hooks/useCruisesAndStations";
 
 const CruiseAction = {
   NEW: "NEW",
@@ -54,15 +53,13 @@ const CruiseDetailPage = () => {
     refreshCruisesState,
     refreshStationsState,
     getCruiseById,
-    getStationsByCruiseId } = useCruisesAndStationsContext();
-  const { updateCruise, addStation } = useCruiseAndStations();
+    getStationsByCruiseId,
+    updateCruise, addStation, useCruiseStatusLock } = useCruisesAndStationsContext();
   const navigate = useNavigate();
   const location = useLocation();
   const stationRefs = useRef({});
   const [activeAction, setActiveAction] = useState(null);
-  // const { isStatusLocked } = useCruiseStatusLock(cruiseId);
-  const isStatusLocked = false;
-
+  const { isStatusLocked } = useCruiseStatusLock(cruiseId);
   useEffect(() => {
     if (location.state?.scrollToStation) {
       const stationId = location.state.scrollToStation;

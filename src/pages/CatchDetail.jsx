@@ -25,9 +25,8 @@ const CatchDetailPage = () => {
   const { user } = useAuth();
   const { lists } = useListTablesContext();
   const { species, sampleTypes } = lists;
-  const { loading: stationLoading, error: stationError, getStationById, getCruiseById, refreshStationsState } = useCruisesAndStationsContext();
-  const { updateStation } = useCruiseAndStations();
-  const { isStatusLocked } = false;// useCruiseStatusLock(cruiseId);
+  const { loading: stationLoading, error: stationError, getStationById, getCruiseById, refreshStationsState, updateStation, useCruiseStatusLock } = useCruisesAndStationsContext();
+  const { isStatusLocked } = useCruiseStatusLock(cruiseId);
   const navigate = useNavigate();
   const [catches, setCatches] = useState([]);
   const [activeAction, setActiveAction] = useState(null);
