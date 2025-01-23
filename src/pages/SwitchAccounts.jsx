@@ -20,7 +20,7 @@ const SwitchAccounts = () => {
   const {
     user: currentUser,
     allUsers,
-    switchUser,
+    setCurrentUser,
     signOut,
     userLoading,
   } = useAuth();
@@ -51,7 +51,7 @@ const SwitchAccounts = () => {
   }, [allUsers, isOffline, userLoading, navigate]);
 
   const handleSelectedUserClick = (user) => {
-    switchUser(user);
+    setCurrentUser(user);
     navigate("/cruises");
   };
 
