@@ -11,18 +11,12 @@ import {
 import { AppCard, ResponsiveRow } from "../components";
 import { DatePicker } from "@nmfs-radfish/react-radfish";
 import { useNavigate } from "react-router-dom";
-import {
-  useAuth,
-  useListTablesContext,
-  useCruisesAndStationsContext,
-} from "../context";
-import { useCruiseAndStations } from "../hooks/useCruisesAndStations";
+import { useAuth, useListTablesContext, useCruisesAndStationsContext } from "../context";
 
 const CruiseNewPage = () => {
   const { user } = useAuth();
-  const { loading, lists } = useListTablesContext();
-  const { refreshCruisesState } = useCruisesAndStationsContext();
-  const { addCruise } = useCruiseAndStations();
+  const { lists } = useListTablesContext();
+  const { refreshCruisesState, addCruise } = useCruisesAndStationsContext();
   const { ports } = lists;
   const navigate = useNavigate();
   const [resetToggle, setResetToggle] = useState(false);
