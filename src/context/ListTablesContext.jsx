@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useState, useEffect } from "react";
 import { useOfflineStorage } from "@nmfs-radfish/react-radfish";
 import { useOfflineStatus } from "@nmfs-radfish/react-radfish";
 import { get } from "../utils/requestMethods";
@@ -24,6 +24,13 @@ export const ListTablesProvider = ({ children }) => {
 
   // Step 1: Load list tables into Dexie from API
   useEffect(() => {
+
+    if (isOffline) {
+      setListTablesStored(true);
+      setState((prev) => ({ ...prev, loading: false }));
+      return;
+    }
+
     const fetchAndStoreToLocalDb = async () => {
       setState((prevState) => ({ ...prevState, loading: true, error: null }));
 
@@ -52,7 +59,7 @@ export const ListTablesProvider = ({ children }) => {
                       .update(table, { lastUpdate: now });
                   },
                 );
-              })
+              }),
             );
           }
         }
@@ -68,7 +75,6 @@ export const ListTablesProvider = ({ children }) => {
 
     fetchAndStoreToLocalDb();
   }, [isOffline]);
-
   // Step 2: Load list tables into context state from Dexie
   useEffect(() => {
     const loadListTablesStateFromLocalDb = async () => {
@@ -79,7 +85,7 @@ export const ListTablesProvider = ({ children }) => {
             listTablesNamesList.map(async (tableName) => {
               const data = await find(tableName);
               lists[tableName] = data;
-            })
+            }),
           );
           setState((prevState) => ({
             ...prevState,
