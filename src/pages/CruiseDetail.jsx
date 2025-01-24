@@ -1,10 +1,11 @@
 import "../index.css";
-import React, { useEffect, useState, useRef } from "react";
+import React, { useCallback, useEffect, useState, useRef } from "react";
 import {
   Button,
   Grid,
   Tag,
 } from "@trussworks/react-uswds";
+import { useOfflineStatus } from "@nmfs-radfish/react-radfish";
 import {
   StationSummary,
   StationNew,
@@ -14,11 +15,12 @@ import {
   AppCard,
 } from "../components"
 import { useNavigate, useLocation, useParams } from "react-router-dom";
-import { listValueLookup } from "../utils/listLookup";
+import { CruiseStatus, listValueLookup } from "../utils/listLookup";
 import { setStatusColor } from "../utils/setStatusColor";
 import { generateTzDateTime, getLocationTz } from "../utils/dateTimeHelpers";
 import { useListTablesContext, useCruisesAndStationsContext } from "../context";
 import { useAuth } from "../context/AuthContext";
+import { post } from "../utils/requestMethods";
 
 const CruiseAction = {
   NEW: "NEW",
@@ -42,10 +44,80 @@ const InitializedStation = {
   }
 };
 
+function canSubmit(user, cruise, stations) {
+  if (!user || !user.isAuthenticated) {
+    return false;
+  }
+
+  // Validate cruise data
+  const requiredCruiseFields = [
+    'id',
+    'cruiseName',
+    'cruiseStatusId',
+    'vesselName',
+    'startDate',
+    'endDate',
+    'departurePortId',
+    'returnPortId'
+  ];
+  for (const field of requiredCruiseFields) {
+    if (!cruise[field]) {
+      return false;
+    }
+  }
+
+  // Ensure startDate is before endDate
+  const startDate = new Date(cruise.startDate);
+  const endDate = new Date(cruise.endDate);
+  if (isNaN(startDate) || isNaN(endDate) || startDate >= endDate) {
+    return false;
+  }
+
+  // Validate stations array
+  if (!Array.isArray(stations) || stations.length === 0) {
+    return false;
+  }
+
+  for (const station of stations) {
+    // Check required station fields
+    const requiredStationFields = ['id', 'cruiseId', 'stationName'];
+    for (const field of requiredStationFields) {
+      if (!station[field]) {
+        return false;
+      }
+    }
+
+    // Check if station's cruiseId matches cruise.id
+    if (station.cruiseId !== cruise.id) {
+      return false;
+    }
+
+    // Validate station events
+    const requiredEventSets = ['beginSet', 'endSet', 'beginHaul', 'endHaul'];
+    for (const setName of requiredEventSets) {
+      const eventSet = station.events[setName];
+      if (!eventSet) {
+        return false;
+      }
+
+      // Check required event fields
+      const requiredEventFields = ['timestamp', 'latitude', 'longitude'];
+      for (const field of requiredEventFields) {
+        if (eventSet[field] === null || eventSet[field] === undefined || eventSet[field] === '') {
+          return false;
+        }
+      }
+    }
+  }
+
+  return true;
+}
+
 const CruiseDetailPage = () => {
   const { cruiseId } = useParams();
   const { user } = useAuth();
   const { loading: listsLoading, error: listsError, lists } = useListTablesContext();
+  const { isOffline } = useOfflineStatus();
   const { ports, cruiseStatuses } = lists;
   const {
     loading: cruisesLoading,
@@ -167,6 +239,36 @@ const CruiseDetailPage = () => {
       console.error("Failed to add new Station: ", error);
     }
   };
+  
+  const handleCruiseSubmit = useCallback(async (event) => {
+    event.preventDefault();
+
+    const users = JSON.parse(localStorage.getItem('users')) || [];
+    const user = users.find(u => u.isAuthenticated);
+
+    if (!user) {
+      console.error("No authenticated user found.");
+      return;
+    }
+
+    try {
+      const payload = {
+        data: {
+          cruise: cruise,
+          stations: cruiseStations,
+          user: user
+        }
+      };
+      
+      const data = await post(`${import.meta.env.VITE_API_HOST}/api/cruises`, payload);
+
+      console.debug("Cruise submitted successfully:", data);
+
+      navigate("/cruises");
+    } catch (err) {
+      console.error(err);
+    }
+  }, [cruise, cruiseStations, navigate]);
 
   return (
     <>
@@ -226,6 +328,14 @@ const CruiseDetailPage = () => {
             activeAction={activeAction} />
         ))
         : ""}
+      {!isStatusLocked && (
+        <Button
+          disabled={isOffline || !canSubmit(user, cruise, cruiseStations)}
+          onClick={handleCruiseSubmit}
+        >
+          Submit
+        </Button>
+      )}
     </>
   );
 }
