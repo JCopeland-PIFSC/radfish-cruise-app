@@ -1,5 +1,6 @@
 import "../index.css";
 import React, { useCallback, useEffect, useState, useRef } from "react";
+import { v4 as uuidv4 } from 'uuid';
 import {
   Button,
   Grid,
@@ -126,7 +127,12 @@ const CruiseDetailPage = () => {
     refreshStationsState,
     getCruiseById,
     getStationsByCruiseId,
-    updateCruise, addStation, useCruiseStatusLock } = useCruisesAndStationsContext();
+    addCruise,
+    addStation,
+    updateStation,
+    useCruiseStatusLock,
+    updateCruise,
+  } = useCruisesAndStationsContext();
   const navigate = useNavigate();
   const location = useLocation();
   const stationRefs = useRef({});
@@ -172,6 +178,7 @@ const CruiseDetailPage = () => {
     navigate("/cruises");
   };
 
+
   const handleSaveCruise = async (event) => {
     event.preventDefault();
     const formData = new FormData(event.target);
@@ -192,10 +199,48 @@ const CruiseDetailPage = () => {
     }
 
     try {
+      if (values.cruiseStatusId === CruiseStatus.REJECTED) {
+        // Duplicate the cruise with new UUIDs and update status
+        const newCruise = {
+          ...values,
+          id: uuidv4(),
+          uuid: uuidv4(),
+          cruiseStatusId: CruiseStatus.STARTED,
+        };
+
+        // Clone all associated stations with new UUIDs and assign to the new cruise
+        const newStations = cruiseStations.map(station => ({
+          ...station,
+          id: uuidv4(),
+          cruiseId: newCruise.id,
+        }));
+
+        try {
+          // Add the new cruise to the user
+          await addCruise(user.id, newCruise);
+
+          // Add each cloned station to the backend
+          for (const station of newStations) {
+            await addStation(station);
+          }
+
+          // Refresh the state to include the new cruise and stations
+          await refreshCruisesState(user.id);
+          await refreshStationsState(user.id);
+
+          // Navigate to the new cruise's detail page
+          navigate(`/cruises/${newCruise.id}`);
+          return;
+        } catch (error) {
+          console.error("Failed to duplicate cruise and stations:", error);
+          return;
+        }
+      }
+
       await updateCruise(id, values);
       event.target.reset();
-      refreshCruisesState(user.id);
-      setActiveAction(null)
+      await refreshCruisesState(user.id);
+      await setActiveAction(null)
     } catch (error) {
       console.error("Failed to update cruise: ", error);
     }
@@ -264,11 +309,32 @@ const CruiseDetailPage = () => {
 
       console.debug("Cruise submitted successfully:", data);
 
+      // Update cruise state with the returned cruise data
+      if (data.cruise) {
+        await updateCruise(data.cruise.id, data.cruise);
+      }
+
+      // Update stations state with the returned stations data
+      if (data.stations && Array.isArray(data.stations)) {
+        for (const station of data.stations) {
+          const { cruiseId, id: stationId, ...updates } = station;
+          await updateStation({
+            cruiseId,
+            stationId,
+            updates
+          });
+        }
+      }
+
+      // // Refresh the cruises and stations state to ensure consistency
+      // await refreshCruisesState(user.id);
+      // await refreshStationsState(user.id);
+
       navigate("/cruises");
     } catch (err) {
       console.error(err);
     }
-  }, [cruise, cruiseStations, navigate]);
+  }, [cruise, cruiseStations, navigate, updateCruise, updateStation, refreshCruisesState, refreshStationsState]);
 
   return (
     <>

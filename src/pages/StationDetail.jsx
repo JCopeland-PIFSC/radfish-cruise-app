@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
+import { v4 as uuidv4 } from 'uuid';
 import { useNavigate, useParams } from "react-router-dom";
 import { Grid, Button, } from "@trussworks/react-uswds";
 import {
@@ -7,6 +8,7 @@ import {
   HeaderWithEdit,
   AppCard,
 } from "../components";
+import { CruiseStatus } from "../utils/listLookup";
 import { EventType } from "../utils/listLookup";
 import { camelStrToTitle } from "../utils/stringUtilities";
 import { getLocationTz, generateTzDateTime } from "../utils/dateTimeHelpers";
@@ -21,7 +23,14 @@ const StationDetailPage = () => {
     loading: stationLoading,
     error: stationError,
     refreshStationsState,
-    getStationById, getCruiseById, updateStation, useCruiseStatusLock } = useCruisesAndStationsContext();
+    refreshCruisesState,
+    getStationById, 
+    getCruiseById, 
+    updateStation,
+    addCruise,
+    addStation,
+    getStationsByCruiseId,
+    useCruiseStatusLock } = useCruisesAndStationsContext();
   const { isStatusLocked } = useCruiseStatusLock(cruiseId);
   const inputFocus = useRef(null);
   const navigate = useNavigate();
@@ -119,8 +128,38 @@ const StationDetailPage = () => {
       stationUpdates.events[eventType] = newEventValues;
 
       try {
+        if (cruise.cruiseStatusId == CruiseStatus.REJECTED) {
+          // Duplicate the cruise with new UUIDs and update status
+          const newCruise = {
+            ...cruise,
+            id: uuidv4(),
+            uuid: uuidv4(),
+            cruiseStatusId: CruiseStatus.STARTED,
+          };
+
+          // Clone all associated stations with new UUIDs
+          const stations = getStationsByCruiseId(cruise.id);
+          const newStations = stations.map(station => ({
+            ...station,
+            id: uuidv4(),
+            cruiseId: newCruise.id,
+          }));
+
+          // Add the new cruise and stations
+          await addCruise(user.id, newCruise);
+          for (const station of newStations) {
+            await addStation(station);
+          }
+
+          // Refresh states and navigate
+          await refreshCruisesState(user.id);
+          await refreshStationsState(user.id);
+          navigate(`/cruises/${newCruise.id}`);
+          return;
+        }
+
         await updateStation({ cruiseId, stationId: id, updates: stationUpdates })
-        refreshStationsState(user.id);
+        await refreshStationsState(user.id);
         setActiveAction(null);
       } catch (error) {
         console.error("Failed to update station: ", error);
