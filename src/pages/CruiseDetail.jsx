@@ -83,6 +83,9 @@ const CruiseDetailPage = () => {
   });
 
   const cruise = getCruiseById(cruiseId);
+
+  if (!cruise) return <div>Cruise Not Found</div>;
+  
   const {
     id,
     cruiseName,
