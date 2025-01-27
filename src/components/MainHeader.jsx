@@ -20,7 +20,7 @@ const MainHeader = () => {
     ? [
       <Link
         to="/cruises"
-        style={{ color: `${isExpanded ? "black" : "white"}` }}
+        className={`header__menu-item--${isExpanded ? "expanded" : "collapsed"}`}
         onClick={closeMobileNav}
       >
         Cruises
@@ -30,7 +30,7 @@ const MainHeader = () => {
   const accountItems = user?.username
     ? [
       <Link
-        className="text_color-white text_margin-bottom"
+        className="header__submenu-item"
         to="/app-init-status"
         key="one"
         onClick={closeMobileNav}
@@ -38,14 +38,14 @@ const MainHeader = () => {
         App Status
       </Link>,
       <Link
-        className="text_color-white"
+        className="header__submenu-item"
         to="/switch-accounts"
         key="two"
         onClick={closeMobileNav}
       >
         Switch Accounts
       </Link>,
-      <p className="text_username text_transform-capitalize" key="three">
+      <p className="header__username" key="three">
         {user.username}
       </p>,
     ]
@@ -54,11 +54,11 @@ const MainHeader = () => {
     <Header
       basic={true}
       showMobileOverlay={isExpanded}
-      className="header-container"
+      className="header"
     >
       <div className="usa-nav-container">
         <div className="usa-navbar">
-          <Title className="header-title">RADFish Cruise App</Title>
+          <Title className="header__title ">RADFish Cruise App</Title>
           {user?.username && (
             <NavMenuButton
               onClick={() => setExpanded((prvExpanded) => !prvExpanded)}

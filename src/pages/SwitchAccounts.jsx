@@ -40,8 +40,7 @@ const SwitchAccounts = () => {
     if (isOffline) {
       navigate("/app-init-status", {
         state: {
-          additionalWarning:
-            "No Authorized users stored. Please connect to the network.",
+          additionalWarning,
         },
       });
       return;
@@ -88,7 +87,7 @@ const SwitchAccounts = () => {
               }}
             >
               <div className="bg-white padding-y-3 padding-x-5 border border-base-lighter">
-                <h1 className="margin-bottom-1 text_align-center">
+                <h1 className="margin-bottom-1 text-center">
                   Switch Accounts
                 </h1>
                 {/* Render fetched users dynamically */}
@@ -101,19 +100,7 @@ const SwitchAccounts = () => {
                 {allUsers.length > 0 ? (
                   <div>
                     {allUsers.map((user) => (
-                      <div
-                        key={user.id}
-                        style={{
-                          border: "2px solid var(--noaa-dark-blue)",
-                          borderRadius: "4px",
-                          marginBottom: "8px",
-                          display: "flex",
-                          alignItems: "center",
-                          padding: "10px",
-                          backgroundColor: "#fff",
-                          color: "#005ea2",
-                        }}
-                      >
+                      <div key={user.id} className="switch-accounts__button">
                         <div
                           role="button"
                           tabIndex={0}
@@ -123,15 +110,7 @@ const SwitchAccounts = () => {
                               handleSelectedUserClick(user);
                             }
                           }}
-                          style={{
-                            flex: 1,
-                            display: "flex",
-                            alignItems: "center",
-                            cursor: "pointer",
-                            marginLeft: "3rem",
-                            textTransform: "capitalize",
-                            fontWeight: "600"
-                          }}
+                          className="switch-accounts__username"
                         >
                           {currentUser?.id === user.id && (
                             <Icon.CheckCircle
@@ -145,15 +124,10 @@ const SwitchAccounts = () => {
                         <button
                           type="button"
                           onClick={(e) => {
-                            e.stopPropagation()
+                            e.stopPropagation();
                             handleUserSignOut(user.id);
                           }}
-                          style={{
-                            backgroundColor: "transparent",
-                            border: "none",
-                            cursor: "pointer",
-                            marginLeft: "16px",
-                          }}
+                          className="switch-accounts__close-button"
                           aria-label={`Sign out ${user.username}`}
                         >
                           <Icon.Close size={3} aria-label="close" />
@@ -166,12 +140,12 @@ const SwitchAccounts = () => {
                 )}
                 {!isOffline && (
                   <div className="border-top border-base-lighter margin-top-6 padding-top-1">
-                    <p className="text_align-center">
+                    <p className="text-align-center">
                       {"Log in to store a new account"}
                     </p>
                     <p>
                       <Link href="/login">
-                        <Button type="button" className="width-full" >
+                        <Button type="button" className="width-full">
                           Add Account
                         </Button>
                       </Link>

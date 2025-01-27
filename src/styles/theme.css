@@ -1,3 +1,6 @@
+/* -------------------------------------------------------------------------- */
+/* CSS Variables (Theme Colors, etc.)                                      */
+/* -------------------------------------------------------------------------- */
 :root {
   --noaa-dark-blue: #0054a4;
   --noaa-light-blue: #0093d0;
@@ -13,6 +16,9 @@
   --noaa-border-light: #ddd;
 }
 
+/* -------------------------------------------------------------------------- */
+/* Global Resets / Base Styles                                             */
+/* -------------------------------------------------------------------------- */
 body {
   font-family:
     Arial Narrow,
@@ -22,23 +28,47 @@ body {
   border-radius: 4px;
 }
 
-.header-container {
+/* -------------------------------------------------------------------------- */
+/* Header Styles                                                           */
+/* -------------------------------------------------------------------------- */
+.header {
   background: var(--noaa-dark-blue);
 }
 
-.header-title {
+.header__title {
   color: white;
 }
 
-/* Minimum size for NOAA logo must be 72px (0.75 in) */
-.header-logo {
-  width: 72px;
+.header__username {
+  font-weight: 600;
+  color: #ebe6e6;
+  text-transform: capitalize;
 }
 
-.header-username {
-  font-weight: 500;
+.header__menu-item--expanded {
+  color: black;
 }
 
+.header__menu-item--collapsed {
+  color: white !important;
+}
+
+.header__submenu-item {
+  color: #ebe6e6 !important;
+}
+
+@media (max-width: 1023px) {
+  .header__username {
+    color: #000;
+  }
+
+  .header__submenu-item {
+    color: #000 !important;
+    margin-bottom: 0.8rem;
+  }
+}
+
+/* USWDS Navigation Overrides (customizing default USWDS nav classes)         */
 .usa-nav-container {
   padding: 1rem 0;
 }
@@ -58,38 +88,89 @@ body {
   color: white;
 }
 
-.text_username {
-  color: #ebe6e6;
+.usa-navbar {
+  border-bottom: none !important;
+}
+
+/* -------------------------------------------------------------------------- */
+/* Status Indicator Styles                                                 */
+/* -------------------------------------------------------------------------- */
+/*
+  Used for small colored circles that indicate different statuses
+  (green, yellow, red, or loading = blue).
+*/
+.status-indicator {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  margin-right: 8px;
+}
+
+.status-indicator.green {
+  background-color: green;
+}
+
+.status-indicator.yellow {
+  background-color: yellow;
+}
+
+.status-indicator.red {
+  background-color: var(--noaa-error-color);
+}
+
+.status-indicator.loading {
+  background-color: blue;
+}
+
+/* -------------------------------------------------------------------------- */
+/* Login                                                */
+/* -------------------------------------------------------------------------- */
+
+.login__go-back-button {
+  display: flex;
+  color: var(--noaa-dark-blue);
+  align-items: center;
+  gap: 0.3rem;
+  font-size: 14px;
   font-weight: 600;
 }
 
-.text_align-center {
-  text-align: center;
+/* -------------------------------------------------------------------------- */
+/* Switch Accounts                                               */
+/* -------------------------------------------------------------------------- */
+
+.switch-accounts__button {
+  border: 2px solid var(--noaa-dark-blue);
+  border-radius: 4px;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  background-color: #fff;
+  color: #005ea2;
 }
 
-.text_transform-capitalize {
+.switch-accounts__username {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  margin-left: 3rem;
   text-transform: capitalize;
+  font-weight: 600;
 }
 
-.text_color-white {
-  color: #ebe6e6 !important;
+.switch-accounts__close-button {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  margin-left: 16px;
 }
 
-.usa-navbar {
-  border-bottom: none !important;
- }
-
-@media (max-width: 1023px) {
-  .text_color-white {
-    color: #000 !important;
-  }
-
-  .text_margin-bottom {
-    margin-bottom: 0.8rem;
-  }
-
-  .text_username {
-    color: #000;
-    font-weight: 600;
-  }
+/* -------------------------------------------------------------------------- */
+/* Utility & Helper Classes                                                */
+/* -------------------------------------------------------------------------- */
+.text-error {
+  color: var(--noaa-error-color);
 }

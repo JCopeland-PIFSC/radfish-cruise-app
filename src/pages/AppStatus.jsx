@@ -45,25 +45,7 @@ const AppInitStatusPage = () => {
 
   // Status Indicator Helper
   const renderStatusIndicator = (status) => {
-    const colorMap = {
-      green: "green",
-      yellow: "yellow",
-      red: "red",
-      loading: "blue", // Optional: Indicator for loading state
-    };
-
-    return (
-      <span
-        style={{
-          display: "inline-block",
-          width: "12px",
-          height: "12px",
-          borderRadius: "50%",
-          backgroundColor: colorMap[status],
-          marginRight: "8px",
-        }}
-      />
-    );
+    return <span className={`status-indicator ${status}`} />;
   };
 
   // Navigate to Cruises
@@ -83,7 +65,7 @@ const AppInitStatusPage = () => {
       {additionalWarning && (
         <Grid row>
           <Grid col={12}>
-            <p style={{ color: "red" }}>{additionalWarning}</p>
+            <p class="text-error">{additionalWarning}</p>
           </Grid>
         </Grid>
       )}
@@ -96,17 +78,12 @@ const AppInitStatusPage = () => {
       )}
       <Grid row>
         <Grid col={12}>
-          <ul style={{ listStyleType: "none", paddingLeft: 0 }}>
+          <ul class="usa-list--unstyled padding-left-0">
             {statuses &&
               Object.entries(statuses).map(([statusName, statusValue]) => (
-                <li key={statusName} style={{ marginBottom: "12px" }}>
+                <li key={statusName} class="margin-bottom-2">
                   {renderStatusIndicator(statusValue)}
                   <strong>{statusName}</strong>
-                  {statusName === "Authenticated User" && (
-                    <span style={{ marginLeft: "8px" }}>
-                      {user?.username ? user.username : "Invalid User"}
-                    </span>
-                  )}
                 </li>
               ))}
           </ul>
@@ -122,7 +99,7 @@ const AppInitStatusPage = () => {
       {listsError && (
         <Grid row>
           <Grid col={12}>
-            <p style={{ color: "red" }}>
+            <p className="text-error">
               List tables initialization failed: {listsError || "Unknown error"}
             </p>
           </Grid>

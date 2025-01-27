@@ -62,14 +62,7 @@ const Login = () => {
                 {user && (
                   <div
                     onClick={() => handleNavigateSwitchAccounts(user)}
-                    style={{
-                      display: "flex",
-                      color: "var(--noaa-dark-blue)",
-                      alignItems: "center",
-                      gap: "0.3rem",
-                      fontSize: "14px",
-                      fontWeight: "600",
-                    }}
+                   className="login__go-back-button"
                   >
                     <Icon.ArrowBack
                       size={2}
@@ -115,7 +108,7 @@ const Login = () => {
                     <Button type="submit">Sign in</Button>
                   </Fieldset>
                 </Form>
-                {error && <p style={{ color: "red" }}>{error}</p>}
+                {error && <p className="text-error">{error}</p>}
               </div>
             </Grid>
           </Grid>
