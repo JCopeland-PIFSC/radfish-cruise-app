@@ -31,7 +31,7 @@ const MainHeader = () => {
     ? [
       <Link
         className="header__submenu-item"
-        to="/app-init-status"
+        to="/app-status"
         key="one"
         onClick={closeMobileNav}
       >

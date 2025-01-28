@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import { useOfflineStatus } from "@nmfs-radfish/react-radfish";
+import { Spinner, useOfflineStatus } from "@nmfs-radfish/react-radfish";
 import {
   Button,
   Icon,
@@ -14,7 +14,6 @@ import {
   Link,
 } from "@trussworks/react-uswds";
 import { useAuth } from "../context/AuthContext";
-import { Spinner } from "../components";
 
 const SwitchAccounts = () => {
   const {
@@ -38,7 +37,7 @@ const SwitchAccounts = () => {
     if (allUsers?.length) return;
 
     if (isOffline) {
-      navigate("/app-init-status", {
+      navigate("/app-status", {
         state: {
           additionalWarning,
         },
@@ -87,9 +86,7 @@ const SwitchAccounts = () => {
               }}
             >
               <div className="bg-white padding-y-3 padding-x-5 border border-base-lighter">
-                <h1 className="margin-bottom-1 text-center">
-                  Switch Accounts
-                </h1>
+                <h1 className="margin-bottom-1 text-center">Switch Accounts</h1>
                 {/* Render fetched users dynamically */}
                 {isOffline && !allUsers?.length && (
                   <p>
@@ -140,7 +137,7 @@ const SwitchAccounts = () => {
                 )}
                 {!isOffline && (
                   <div className="border-top border-base-lighter margin-top-6 padding-top-1">
-                    <p className="text-align-center">
+                    <p className="text-center">
                       {"Log in to store a new account"}
                     </p>
                     <p>

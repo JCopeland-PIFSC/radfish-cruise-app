@@ -37,7 +37,7 @@ function App({ application }) {
                         </CruisesAndStationsProvider>
                       </ListTablesProvider>
                     }>
-                      <Route path="/app-init-status" element={<AppStatus />} />
+                      <Route path="/app-status" element={<AppStatus />} />
                       <Route path="/cruises" element={<CruiseList />} />
                       <Route path="/cruises/new" element={<CruiseNew />} />
                       <Route

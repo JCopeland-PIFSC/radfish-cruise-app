@@ -65,7 +65,7 @@ const AppInitStatusPage = () => {
       {additionalWarning && (
         <Grid row>
           <Grid col={12}>
-            <p class="text-error">{additionalWarning}</p>
+            <p className="text-error">{additionalWarning}</p>
           </Grid>
         </Grid>
       )}
@@ -78,10 +78,10 @@ const AppInitStatusPage = () => {
       )}
       <Grid row>
         <Grid col={12}>
-          <ul class="usa-list--unstyled padding-left-0">
+          <ul className="usa-list--unstyled padding-left-0">
             {statuses &&
               Object.entries(statuses).map(([statusName, statusValue]) => (
-                <li key={statusName} class="margin-bottom-2">
+                <li key={statusName}>
                   {renderStatusIndicator(statusValue)}
                   <strong>{statusName}</strong>
                 </li>

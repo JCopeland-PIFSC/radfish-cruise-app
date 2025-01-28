@@ -174,3 +174,7 @@ body {
 .text-error {
   color: var(--noaa-error-color);
 }
+
+.usa-list--unstyled > li {
+  margin-bottom: 1rem !important;
+}

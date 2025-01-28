@@ -31,7 +31,7 @@ const Login = () => {
       if (data) {
         await login(data.user);
         event.target.reset();
-        navigate("/app-init-status");
+        navigate("/app-status");
       } else {
         setError("Invalid username or password.");
       }
