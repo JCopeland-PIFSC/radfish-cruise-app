@@ -10,12 +10,15 @@ export const AuthProvider = ({ children }) => {
     signOutUser,
     getAllUsers,
     getCurrentUser,
+    loadingAllUsers,
   } = useStoreUser();
   const [userLoading, setUserLoading] = useState(true);
 
   useEffect(() => {
-    setUserLoading(false);
-  }, [getCurrentUser]);
+    if (!loadingAllUsers) {
+      setUserLoading(false);
+    }
+  }, [loadingAllUsers]);
 
   const login = async (authUserData) => {
     try {

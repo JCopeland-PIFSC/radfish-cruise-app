@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import { Spinner, useOfflineStatus } from "@nmfs-radfish/react-radfish";
+import { useOfflineStatus } from "@nmfs-radfish/react-radfish";
 import {
   Button,
   Icon,
@@ -14,6 +14,7 @@ import {
   Link,
 } from "@trussworks/react-uswds";
 import { useAuth } from "../context/AuthContext";
+import {Spinner} from "../components";
 
 const SwitchAccounts = () => {
   const {

@@ -22,6 +22,7 @@ export const useStoreUser = () => {
 
   // Holds a list of "authenticated" users retrieved from IndexedDB
   const [allUsers, setAllUsers] = useState([]);
+  const [loadingAllUsers, setLoadingAllUsers] = useState(true);
 
   // Fetch all user records from IndexedDB and updtes allUsers state
   const fetchAllUsersFromDB = async () => {
@@ -33,6 +34,8 @@ export const useStoreUser = () => {
     } catch (err) {
       console.error("Error fetching users from IndexedDB:", err);
       setAllUsers([]);
+    } finally {
+      setLoadingAllUsers(false);
     }
   };
 
@@ -142,5 +145,6 @@ export const useStoreUser = () => {
     getAllUsers,
     currentUser,
     allUsers,
+    loadingAllUsers,
   };
 };

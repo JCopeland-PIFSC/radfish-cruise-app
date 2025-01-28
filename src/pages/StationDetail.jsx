@@ -6,6 +6,7 @@ import {
   EventForm,
   HeaderWithEdit,
   AppCard,
+  Spinner,
 } from "../components";
 import { EventType } from "../utils/listLookup";
 import { camelStrToTitle } from "../utils/stringUtilities";
@@ -62,7 +63,7 @@ const StationDetailPage = () => {
     }
   }, [station, newEvent, showCatchButton])
 
-  if (stationLoading) return <div>Loading Station Data...</div>;
+  if (stationLoading) return <Spinner message="Loading Station Data" fillViewport />;
   if (stationError) return <div>Error Loading Station Data: {errorStation?.message}</div>;
 
   const { cruiseName, } = cruise;

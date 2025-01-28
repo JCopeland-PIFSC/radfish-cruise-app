@@ -8,7 +8,7 @@ const AuthenticatedApp = () => {
 
   if (userLoading) return;
 
-  // Redirect to login if not authenticated and not offline
+  // Redirect to Switch Accounts if not authenticated and not offline
   if (!user?.id && !isOffline) {
     return <Navigate to="/switch-accounts" replace />;
   }

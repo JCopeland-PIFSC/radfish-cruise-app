@@ -6,16 +6,27 @@ import { Table } from "@nmfs-radfish/react-radfish";
 import { listValueLookup } from "../utils/listLookup";
 import { setStatusColor } from "../utils/setStatusColor";
 import { useListTablesContext, useCruisesAndStationsContext } from "../context";
+import { Spinner } from "../components";
 
 const CruiseListPage = () => {
   const navigate = useNavigate();
-  const { loading: listsLoading, error: listsError, lists } = useListTablesContext();
-  const { loading: cruisesLoading, error: cruisesError, cruises } = useCruisesAndStationsContext();
+  const {
+    loading: listsLoading,
+    error: listsError,
+    lists,
+  } = useListTablesContext();
+  const {
+    loading: cruisesLoading,
+    error: cruisesError,
+    cruises,
+  } = useCruisesAndStationsContext();
 
-  if (listsLoading) return <div>Loading Lists...</div>;
-  if (cruisesLoading) return <div>Loading Cruises...</div>;
-  if (listsError) return <div>Error Loading List Data: {listsError.message}</div>;
-  if (cruisesError) return <div>Error Loading Cruise Data: {cruisesError.message}</div>;
+  if (listsLoading) return <Spinner message="Loading Lists Data" fillViewport/>;
+  if (cruisesLoading) return <Spinner message="Loading Cruises Data" fillViewport />;
+  if (listsError)
+    return <div>Error Loading List Data: {listsError.message}</div>;
+  if (cruisesError)
+    return <div>Error Loading Cruise Data: {cruisesError.message}</div>;
 
   const { ports, cruiseStatuses } = lists;
   const handleNavNewCruise = () => {
@@ -24,7 +35,7 @@ const CruiseListPage = () => {
 
   const handleRowClick = ({ id }) => {
     navigate(`/cruises/${id}`);
-  }
+  };
 
   const columns = [
     {
@@ -50,10 +61,15 @@ const CruiseListPage = () => {
       key: "cruiseStatus",
       label: "Status",
       render: (row) => {
-        const cruiseStatus = listValueLookup(cruiseStatuses, row.cruiseStatusId);
+        const cruiseStatus = listValueLookup(
+          cruiseStatuses,
+          row.cruiseStatusId,
+        );
         return (
-          <Tag className={`usa-tag--big ${setStatusColor(row.cruiseStatusId)}`}>{cruiseStatus}</Tag>
-        )
+          <Tag className={`usa-tag--big ${setStatusColor(row.cruiseStatusId)}`}>
+            {cruiseStatus}
+          </Tag>
+        );
       },
     },
     {
@@ -71,11 +87,18 @@ const CruiseListPage = () => {
         </Button>
       </Grid>
       <Grid row className="margin-top-2">
-        <Table columns={columns} data={cruises?.length ? cruises : []} onRowClick={handleRowClick} className="margin-top-0" bordered striped />
+        <Table
+          columns={columns}
+          data={cruises?.length ? cruises : []}
+          onRowClick={handleRowClick}
+          className="margin-top-0"
+          bordered
+          striped
+        />
         {!cruises?.length && <p>No Cruises Recorded!</p>}
       </Grid>
     </>
   );
-}
+};
 
 export default CruiseListPage;
