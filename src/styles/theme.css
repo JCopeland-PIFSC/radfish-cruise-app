@@ -28,6 +28,9 @@ body {
   border-radius: 4px;
 }
 
+#main-content {
+  height: 100vh;
+}
 /* -------------------------------------------------------------------------- */
 /* Header Styles                                                           */
 /* -------------------------------------------------------------------------- */
@@ -134,6 +137,44 @@ body {
   gap: 0.3rem;
   font-size: 14px;
   font-weight: 600;
+}
+
+.usa-form {
+  max-width: 22rem !important;
+}
+
+.login-image {
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+}
+
+.left-side {
+  flex: 1;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.desktop-only {
+  display: block;
+}
+
+@media screen and (max-width: 1024px) {
+  .desktop-only {
+    display: none;
+  }
+
+  .left-side {
+    background: url("cruise-station-mobile.webp") no-repeat center center;
+    background-size: cover;
+  }
+
+  .form-wrapper {
+    background-color: #fff;
+    padding: 2rem;
+    border-radius: 10px;
+  }
 }
 
 /* -------------------------------------------------------------------------- */

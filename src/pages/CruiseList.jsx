@@ -6,7 +6,7 @@ import { Table } from "@nmfs-radfish/react-radfish";
 import { listValueLookup } from "../utils/listLookup";
 import { setStatusColor } from "../utils/setStatusColor";
 import { useListTablesContext, useCruisesAndStationsContext } from "../context";
-import { Spinner } from "../components";
+import { AppCard, Spinner } from "../components";
 
 const CruiseListPage = () => {
   const navigate = useNavigate();
@@ -21,8 +21,10 @@ const CruiseListPage = () => {
     cruises,
   } = useCruisesAndStationsContext();
 
-  if (listsLoading) return <Spinner message="Loading Lists Data" fillViewport/>;
-  if (cruisesLoading) return <Spinner message="Loading Cruises Data" fillViewport />;
+  if (listsLoading)
+    return <Spinner message="Loading Lists Data" fillViewport />;
+  if (cruisesLoading)
+    return <Spinner message="Loading Cruises Data" fillViewport />;
   if (listsError)
     return <div>Error Loading List Data: {listsError.message}</div>;
   if (cruisesError)
@@ -87,14 +89,16 @@ const CruiseListPage = () => {
         </Button>
       </Grid>
       <Grid row className="margin-top-2">
-        <Table
-          columns={columns}
-          data={cruises?.length ? cruises : []}
-          onRowClick={handleRowClick}
-          className="margin-top-0"
-          bordered
-          striped
-        />
+        <AppCard>
+          <Table
+            columns={columns}
+            data={cruises?.length ? cruises : []}
+            onRowClick={handleRowClick}
+            className="margin-top-0"
+            bordered
+            striped
+          />
+        </AppCard>
         {!cruises?.length && <p>No Cruises Recorded!</p>}
       </Grid>
     </>

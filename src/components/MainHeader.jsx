@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import {
-  Title,
   NavMenuButton,
   ExtendedNav,
   Header,
@@ -58,7 +57,11 @@ const MainHeader = () => {
     >
       <div className="usa-nav-container">
         <div className="usa-navbar">
-          <Title className="header__title ">RADFish Cruise App</Title>
+        <img
+            src="logo.png"
+            alt="RADFish Cruise App logo"
+            style={{ width: "120px"}}
+          />
           {user?.username && (
             <NavMenuButton
               onClick={() => setExpanded((prvExpanded) => !prvExpanded)}

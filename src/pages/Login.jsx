@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { post } from "../utils/requestMethods";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
@@ -8,14 +8,12 @@ import {
   Label,
   TextInput,
   Button,
-  GridContainer,
-  Grid,
   Icon,
 } from "@trussworks/react-uswds";
 
 const Login = () => {
   const [error, setError] = useState("");
-  const [showPassword, setShowPassword] = React.useState(false);
+  const [showPassword, setShowPassword] = useState(false);
   const { login, user } = useAuth();
   const navigate = useNavigate();
 
@@ -40,81 +38,96 @@ const Login = () => {
     }
   };
 
-  const handleNavigateSwitchAccounts = (user) => {
+  const handleNavigateSwitchAccounts = () => {
     navigate("/switch-accounts");
   };
 
   return (
-    <main id="main-content">
-      <div className="bg-base-lightest">
-        <GridContainer className="usa-section">
-          <Grid row={true} className="flex-justify-center">
-            <Grid
-              col={12}
-              tablet={{
-                col: 8,
-              }}
-              desktop={{
-                col: 6,
-              }}
+    <div
+      row={true}
+      className="flex-align-center bg-white"
+      style={{ display: "flex", height: "100%", overflowY: "hidden" }}
+    >
+      {/* Left Side - Container */}
+      <div className="left-side">
+        <div style={{ flex: 1, margin: "20px auto 0", opacity: 1 }}>
+          <img
+            src="logo.png"
+            alt="RADFish Cruise App logo"
+            style={{ width: "120px" }}
+          />
+        </div>
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            height: "100%",
+            flex: 2,
+          }}
+        >
+          {user && (
+            <div
+              onClick={handleNavigateSwitchAccounts}
+              className="login__go-back-button"
             >
-              <div className="bg-white padding-y-3 padding-x-5 border border-base-lighter">
-                {user && (
-                  <div
-                    onClick={() => handleNavigateSwitchAccounts(user)}
-                   className="login__go-back-button"
-                  >
-                    <Icon.ArrowBack
-                      size={2}
-                      aria-label="Back to switch accounts"
-                    ></Icon.ArrowBack>
-                    Switch Accounts
-                  </div>
-                )}
-                <h1 className="margin-bottom-0">Sign in</h1>
-                <Form onSubmit={handleLogin}>
-                  <Fieldset legend="Access your account" legendStyle="medium">
-                    <Label htmlFor="username">Username</Label>
-                    <TextInput
-                      id="username"
-                      name="username"
-                      type="username"
-                      autoCorrect="off"
-                      autoCapitalize="off"
-                      required
-                    />
+              <Icon.ArrowBack size={2} aria-label="Back to switch accounts" />
+              Go Back to Switch Accounts
+            </div>
+          )}
+          <div className="form-wrapper">
+            <h1 className="margin-bottom-2">Log in</h1>
+            <Form onSubmit={handleLogin}>
+              <Fieldset
+                legend="View and store your cruise data for offline access"
+                legendStyle="medium"
+              >
+                <Label htmlFor="username">Username</Label>
+                <TextInput
+                  id="username"
+                  name="username"
+                  type="text"
+                  autoCorrect="off"
+                  autoCapitalize="off"
+                  required
+                />
 
-                    <Label htmlFor="password-sign-in">Password</Label>
-                    <TextInput
-                      id="password"
-                      name="password"
-                      type={showPassword ? "text" : "password"}
-                      autoCorrect="off"
-                      autoCapitalize="off"
-                      required
-                    />
+                <Label htmlFor="password">Password</Label>
+                <TextInput
+                  id="password"
+                  name="password"
+                  type={showPassword ? "text" : "password"}
+                  autoCorrect="off"
+                  autoCapitalize="off"
+                  required
+                />
 
-                    <button
-                      title="Show password"
-                      type="button"
-                      className="usa-show-password"
-                      aria-controls="password-sign-in"
-                      onClick={() =>
-                        setShowPassword((showPassword) => !showPassword)
-                      }
-                    >
-                      {showPassword ? "Hide password" : "Show password"}
-                    </button>
-                    <Button type="submit">Sign in</Button>
-                  </Fieldset>
-                </Form>
-                {error && <p className="text-error">{error}</p>}
-              </div>
-            </Grid>
-          </Grid>
-        </GridContainer>
+                <button
+                  title="Show password"
+                  type="button"
+                  className="usa-show-password"
+                  aria-controls="password"
+                  onClick={() => setShowPassword((prev) => !prev)}
+                >
+                  {showPassword ? "Hide password" : "Show password"}
+                </button>
+                <Button type="submit">Sign in</Button>
+              </Fieldset>
+            </Form>
+            {error && <p className="text-error">{error}</p>}
+          </div>
+        </div>
       </div>
-    </main>
+
+      {/* Right Side - Image */}
+      <div style={{ flex: 1, height: "100%" }} className="desktop-only">
+        <img
+          src="cruise-station.webp"
+          alt="Cruise Station"
+          className="login-image"
+        />
+      </div>
+    </div>
   );
 };
 

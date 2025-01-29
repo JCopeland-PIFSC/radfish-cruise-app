@@ -22,6 +22,7 @@ const StationSummary = ({ cruiseId, station, activeAction, stationRef }) => {
         </Grid>
         <Grid col={12} tablet={{ col: true }} />
       </Grid>
+      <hr/>
       <Grid row>
         <Grid col={12} tablet={{ col: true }}>
           <DescriptionListItem term="Latitude:" description={latitude} />
@@ -53,6 +54,7 @@ const StationSummary = ({ cruiseId, station, activeAction, stationRef }) => {
           />
         </Grid>
       </Grid>
+      <hr/>
       <Grid row>
         <Grid row className="width-full">
           <h3 className="app-sec-header">Catch Summary</h3>
