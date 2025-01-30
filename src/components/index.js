@@ -16,3 +16,4 @@ export { default as SampleView } from "./SampleView";
 export { default as Spinner } from "./Spinner";
 export { default as StationNew } from "./StationNew";
 export { default as StationSummary } from "./StationSummary";
+export { default as Footer } from "./Footer";

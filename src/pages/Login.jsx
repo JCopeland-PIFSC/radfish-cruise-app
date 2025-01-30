@@ -45,8 +45,8 @@ const Login = () => {
   return (
     <div
       row={true}
-      className="flex-align-center bg-white"
-      style={{ display: "flex", height: "100%", overflowY: "hidden" }}
+      className="flex-align-center"
+      style={{ display: "flex", height: "100vh", overflowY: "hidden" }}
     >
       {/* Left Side - Container */}
       <div className="left-side">
@@ -66,16 +66,16 @@ const Login = () => {
             flex: 2,
           }}
         >
-          {user && (
-            <div
-              onClick={handleNavigateSwitchAccounts}
-              className="login__go-back-button"
-            >
-              <Icon.ArrowBack size={2} aria-label="Back to switch accounts" />
-              Go Back to Switch Accounts
-            </div>
-          )}
           <div className="form-wrapper">
+            {user && (
+              <div
+                onClick={handleNavigateSwitchAccounts}
+                className="login__go-back-button"
+              >
+                <Icon.ArrowBack size={2} aria-label="Back to switch accounts" />
+                Go Back to Switch Accounts
+              </div>
+            )}
             <h1 className="margin-bottom-2">Log in</h1>
             <Form onSubmit={handleLogin}>
               <Fieldset

@@ -1,7 +1,7 @@
 import "../index.css";
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { Button, Grid, Tag } from "@trussworks/react-uswds";
+import { Button, Grid, GridContainer, Tag } from "@trussworks/react-uswds";
 import { Table } from "@nmfs-radfish/react-radfish";
 import { listValueLookup } from "../utils/listLookup";
 import { setStatusColor } from "../utils/setStatusColor";
@@ -81,7 +81,7 @@ const CruiseListPage = () => {
   ];
 
   return (
-    <>
+    <GridContainer>
       <Grid row className="flex-justify margin-top-2">
         <h1 className="app-sec-header">Cruise List</h1>
         <Button className="margin-right-0" onClick={handleNavNewCruise}>
@@ -89,7 +89,7 @@ const CruiseListPage = () => {
         </Button>
       </Grid>
       <Grid row className="margin-top-2">
-        <AppCard>
+        <AppCard className="width-full">
           <Table
             columns={columns}
             data={cruises?.length ? cruises : []}
@@ -101,7 +101,7 @@ const CruiseListPage = () => {
         </AppCard>
         {!cruises?.length && <p>No Cruises Recorded!</p>}
       </Grid>
-    </>
+    </GridContainer>
   );
 };
 

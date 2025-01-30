@@ -3,6 +3,7 @@
 /* -------------------------------------------------------------------------- */
 :root {
   --noaa-dark-blue: #0054a4;
+  --noaa-darker-blue: #162e51;
   --noaa-light-blue: #0093d0;
   --noaa-yellow-one: #fff3cd;
   --noaa-yellow-two: #ffeeba;
@@ -14,6 +15,7 @@
   --noaa-label-color: #0054a4;
   --noaa-border-dark: #565c65;
   --noaa-border-light: #ddd;
+  --noaa-lightest-gray: #f0f0f0;
 }
 
 /* -------------------------------------------------------------------------- */
@@ -26,25 +28,35 @@ body {
   color: var(--noaa-text-color);
   line-height: 1.6;
   border-radius: 4px;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+#root {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+.app-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
 }
 
 #main-content {
-  height: 100vh;
+  flex: 1;
 }
 /* -------------------------------------------------------------------------- */
 /* Header Styles                                                           */
 /* -------------------------------------------------------------------------- */
 .header {
-  background: var(--noaa-dark-blue);
-}
-
-.header__title {
-  color: white;
+  background: var(--noaa-lightest-gray);
 }
 
 .header__username {
-  font-weight: 600;
-  color: #ebe6e6;
+  font-weight: 800;
   text-transform: capitalize;
 }
 
@@ -53,11 +65,13 @@ body {
 }
 
 .header__menu-item--collapsed {
-  color: white !important;
+  color: #fff !important;
+  background-color: var(--noaa-dark-blue);
+  border-radius: 5px;
 }
 
 .header__submenu-item {
-  color: #ebe6e6 !important;
+  color: black !important;
 }
 
 @media (max-width: 1023px) {
@@ -77,12 +91,15 @@ body {
 }
 
 .usa-nav__secondary {
-  bottom: 3rem !important;
-  right: 1rem !important;
+  right: 0rem !important;
 }
 
 .usa-nav__secondary-links {
   height: 1rem;
+}
+
+.usa-nav__secondary-links a {
+  color: var(--noaa-dark-blue) !important;
 }
 
 .usa-nav__secondary-item {
@@ -93,6 +110,16 @@ body {
 
 .usa-navbar {
   border-bottom: none !important;
+}
+
+.usa-show-password {
+  color: white !important;
+}
+
+@media (max-width: 1023px) {
+  .usa-navbar {
+    height: 10vh !important;
+  }
 }
 
 /* -------------------------------------------------------------------------- */
@@ -131,12 +158,12 @@ body {
 /* -------------------------------------------------------------------------- */
 
 .login__go-back-button {
+  color: var(--noaa-light-blue);
   display: flex;
-  color: var(--noaa-dark-blue);
   align-items: center;
   gap: 0.3rem;
   font-size: 14px;
-  font-weight: 600;
+  font-weight: 700;
 }
 
 .usa-form {
@@ -171,7 +198,7 @@ body {
   }
 
   .form-wrapper {
-    background-color: #fff;
+    background-color: var(--noaa-darker-blue);
     padding: 2rem;
     border-radius: 10px;
   }

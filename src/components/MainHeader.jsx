@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import {
+  Title,
   NavMenuButton,
   ExtendedNav,
   Header,
@@ -17,51 +18,47 @@ const MainHeader = () => {
 
   const menuItems = user?.username
     ? [
-      <Link
-        to="/cruises"
-        className={`header__menu-item--${isExpanded ? "expanded" : "collapsed"}`}
-        onClick={closeMobileNav}
-      >
-        Cruises
-      </Link>,
-    ]
+        <Link
+          to="/cruises"
+          className={`header__menu-item--${isExpanded ? "expanded" : "collapsed"}`}
+          onClick={closeMobileNav}
+        >
+          Cruises
+        </Link>,
+        
+      ]
     : [];
   const accountItems = user?.username
     ? [
-      <Link
-        className="header__submenu-item"
-        to="/app-status"
-        key="one"
-        onClick={closeMobileNav}
-      >
-        App Status
-      </Link>,
-      <Link
-        className="header__submenu-item"
-        to="/switch-accounts"
-        key="two"
-        onClick={closeMobileNav}
-      >
-        Switch Accounts
-      </Link>,
-      <p className="header__username" key="three">
-        {user.username}
-      </p>,
-    ]
+        <Link
+          className="header__submenu-item"
+          to="/app-status"
+          key="one"
+          onClick={closeMobileNav}
+        >
+          App Status
+        </Link>,
+        <Link
+          className="header__username"
+          to="/switch-accounts"
+          key="two"
+          onClick={closeMobileNav}
+        >
+          {user?.username}
+        </Link>,
+      ]
     : [];
   return (
-    <Header
-      basic={true}
-      showMobileOverlay={isExpanded}
-      className="header"
-    >
+    <Header basic={true} showMobileOverlay={isExpanded} className="header">
       <div className="usa-nav-container">
         <div className="usa-navbar">
-        <img
-            src="logo.png"
-            alt="RADFish Cruise App logo"
-            style={{ width: "120px"}}
-          />
+          <Title>
+            <img
+              src="logo.png"
+              alt="RADFish Cruise App logo"
+              style={{ width: "120px" }}
+            />
+          </Title>
           {user?.username && (
             <NavMenuButton
               onClick={() => setExpanded((prvExpanded) => !prvExpanded)}
