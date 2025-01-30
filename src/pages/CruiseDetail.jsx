@@ -240,7 +240,7 @@ const CruiseDetailPage = () => {
     }
   };
   
-  const handleCruiseSubmit = useCallback(async (event) => {
+  const handleCruiseSubmit = async (event) => {
     event.preventDefault();
 
     const users = JSON.parse(localStorage.getItem('users')) || [];
@@ -268,7 +268,7 @@ const CruiseDetailPage = () => {
     } catch (err) {
       console.error(err);
     }
-  }, [cruise, cruiseStations, navigate]);
+  };
 
   return (
     <>
