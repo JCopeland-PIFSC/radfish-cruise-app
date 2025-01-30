@@ -16,6 +16,7 @@
   --noaa-border-dark: #565c65;
   --noaa-border-light: #ddd;
   --noaa-lightest-gray: #f0f0f0;
+  --noaa-cool-blue: #00bde3;
 }
 
 /* -------------------------------------------------------------------------- */
@@ -47,6 +48,20 @@ body {
 
 #main-content {
   flex: 1;
+}
+
+.go-back-button {
+  color: var(--noaa-cool-blue);
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.go-back-button:hover {
+  text-decoration: underline;
 }
 /* -------------------------------------------------------------------------- */
 /* Header Styles                                                           */
@@ -86,16 +101,9 @@ body {
 }
 
 /* USWDS Navigation Overrides (customizing default USWDS nav classes)         */
-.usa-nav-container {
-  padding: 1rem 0;
-}
 
 .usa-nav__secondary {
   right: 0rem !important;
-}
-
-.usa-nav__secondary-links {
-  height: 1rem;
 }
 
 .usa-nav__secondary-links a {
@@ -156,19 +164,6 @@ body {
 /* -------------------------------------------------------------------------- */
 /* Login                                                */
 /* -------------------------------------------------------------------------- */
-
-.login__go-back-button {
-  color: var(--noaa-light-blue);
-  display: flex;
-  align-items: center;
-  gap: 0.3rem;
-  font-size: 14px;
-  font-weight: 700;
-}
-
-.usa-form {
-  max-width: 22rem !important;
-}
 
 .login-image {
   height: 100%;
@@ -237,6 +232,35 @@ body {
 }
 
 /* -------------------------------------------------------------------------- */
+/* Cruise List Page                                            */
+/* -------------------------------------------------------------------------- */
+
+.app-sec-header {
+  font-size: 2em !important;
+  color: white;
+}
+
+/* -------------------------------------------------------------------------- */
+/* Cruise Details Page                                            */
+/* -------------------------------------------------------------------------- */
+.cruise-details-header {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.cruise-details-description {
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+@media screen and (min-width: 640px) {
+  .header-with-edit-container {
+    position: absolute;
+    right: 20px;
+  }
+}
+
+/* -------------------------------------------------------------------------- */
 /* Utility & Helper Classes                                                */
 /* -------------------------------------------------------------------------- */
 .text-error {
@@ -245,4 +269,20 @@ body {
 
 .usa-list--unstyled > li {
   margin-bottom: 1rem !important;
+}
+
+.z-10 {
+  z-index: 10;
+}
+
+.hr-2 {
+  border: 2px solid #000;
+}
+
+.gap-10 {
+  gap: 10px;
+}
+
+.text-color-black {
+  color: black;
 }

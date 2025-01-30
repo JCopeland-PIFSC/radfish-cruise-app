@@ -4,19 +4,25 @@ import {
   Form,
   Button,
   Grid,
+  GridContainer,
   Label,
   TextInput,
   Select,
 } from "@trussworks/react-uswds";
-import { AppCard, ResponsiveRow } from "../components";
+import { AppCard, ResponsiveRow , GoBackButton} from "../components";
 import { DatePicker } from "@nmfs-radfish/react-radfish";
 import { useNavigate } from "react-router-dom";
-import { useAuth, useListTablesContext, useCruisesAndStationsContext } from "../context";
+import {
+  useAuth,
+  useListTablesContext,
+  useCruisesAndStationsContext,
+} from "../context";
 
 const CruiseNewPage = () => {
   const { user } = useAuth();
   const { lists } = useListTablesContext();
-  const { refreshCruisesState, addCruise, loading } = useCruisesAndStationsContext();
+  const { refreshCruisesState, addCruise, loading } =
+    useCruisesAndStationsContext();
   const { ports } = lists;
   const navigate = useNavigate();
   const [resetToggle, setResetToggle] = useState(false);
@@ -30,10 +36,6 @@ const CruiseNewPage = () => {
   }, [resetToggle]);
 
   if (loading) return;
-
-  const handleNavCruisesList = () => {
-    navigate("/cruises");
-  };
 
   const handleNewCruise = async (event) => {
     event.preventDefault();
@@ -67,12 +69,10 @@ const CruiseNewPage = () => {
   };
 
   return (
-    <>
+    <GridContainer className="text-color-black">
       <Grid col={12}>
         <Grid row className="margin-top-2">
-          <Button className="margin-right-0" onClick={handleNavCruisesList}>
-            &lt; Cruise List
-          </Button>
+          <GoBackButton to="/cruises" label="Cruise List" />
         </Grid>
         <Grid row className="margin-top-2">
           <Grid col={12}>
@@ -168,7 +168,7 @@ const CruiseNewPage = () => {
           </Grid>
         </Grid>
       </Grid>
-    </>
+    </GridContainer>
   );
 };
 

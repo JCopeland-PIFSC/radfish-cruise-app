@@ -70,7 +70,7 @@ const Login = () => {
             {user && (
               <div
                 onClick={handleNavigateSwitchAccounts}
-                className="login__go-back-button"
+                className="go-back-button"
               >
                 <Icon.ArrowBack size={2} aria-label="Back to switch accounts" />
                 Go Back to Switch Accounts
@@ -111,7 +111,7 @@ const Login = () => {
                 >
                   {showPassword ? "Hide password" : "Show password"}
                 </button>
-                <Button type="submit">Sign in</Button>
+                <Button type="submit" accentStyle="cool">Sign in</Button>
               </Fieldset>
             </Form>
             {error && <p className="text-error">{error}</p>}

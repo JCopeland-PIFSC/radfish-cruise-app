@@ -82,7 +82,7 @@ const AppInitStatusPage = () => {
       return {
         type: "success",
         heading: "Cruises & Stations Loaded",
-        message: "Cruises & stations data is ready.",
+        message: "Cruises & stations data are ready.",
       };
     }
   };
@@ -125,45 +125,43 @@ const AppInitStatusPage = () => {
         </Grid>
       </Grid>
 
-      <AppCard>
-        {/* Additional Warnings (from location.state) */}
-        {additionalWarning && (
-          <Grid row>
-            <Grid col={12}>
-              <Alert type="warning" heading="Warning status" headingLevel="h4">
-                {additionalWarning}
-              </Alert>
-            </Grid>
-          </Grid>
-        )}
-
-        {cruisesWarning && (
-          <Grid row>
-            <Grid col={12}>
-              <Alert type="warning" heading="Warning status" headingLevel="h4">
-                {cruisesWarning}
-              </Alert>
-            </Grid>
-          </Grid>
-        )}
-
+      {/* Additional Warnings (from location.state) */}
+      {additionalWarning && (
         <Grid row>
           <Grid col={12}>
-            {Object.entries(statuses).map(
-              ([statusKey, { type, heading, message }]) => (
-                <Alert
-                  key={statusKey}
-                  type={type}
-                  heading={heading}
-                  headingLevel="h4"
-                >
-                  {message}
-                </Alert>
-              ),
-            )}
+            <Alert type="warning" heading="Warning status" headingLevel="h4">
+              {additionalWarning}
+            </Alert>
           </Grid>
         </Grid>
-      </AppCard>
+      )}
+
+      {cruisesWarning && (
+        <Grid row>
+          <Grid col={12}>
+            <Alert type="warning" heading="Warning status" headingLevel="h4">
+              {cruisesWarning}
+            </Alert>
+          </Grid>
+        </Grid>
+      )}
+
+      <Grid row>
+        <Grid col={12}>
+          {Object.entries(statuses).map(
+            ([statusKey, { type, heading, message }]) => (
+              <Alert
+                key={statusKey}
+                type={type}
+                heading={heading}
+                headingLevel="h4"
+              >
+                {message}
+              </Alert>
+            ),
+          )}
+        </Grid>
+      </Grid>
 
       <Grid row className="margin-top-6">
         <Grid col={12}>

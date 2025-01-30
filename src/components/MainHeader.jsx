@@ -16,24 +16,20 @@ const MainHeader = () => {
     setExpanded(false);
   };
 
-  const menuItems = user?.username
-    ? [
-        <Link
-          to="/cruises"
-          className={`header__menu-item--${isExpanded ? "expanded" : "collapsed"}`}
-          onClick={closeMobileNav}
-        >
-          Cruises
-        </Link>,
-        
-      ]
-    : [];
   const accountItems = user?.username
     ? [
         <Link
           className="header__submenu-item"
-          to="/app-status"
+          to="/cruises"
           key="one"
+          onClick={closeMobileNav}
+        >
+          Cruises
+        </Link>,
+        <Link
+          className="header__submenu-item"
+          to="/app-status"
+          key="two"
           onClick={closeMobileNav}
         >
           App Status
@@ -41,7 +37,7 @@ const MainHeader = () => {
         <Link
           className="header__username"
           to="/switch-accounts"
-          key="two"
+          key="three"
           onClick={closeMobileNav}
         >
           {user?.username}
@@ -49,7 +45,7 @@ const MainHeader = () => {
       ]
     : [];
   return (
-    <Header basic={true} showMobileOverlay={isExpanded} className="header">
+    <Header basic={true} showMobileOverlay={isExpanded} className="header z-top">
       <div className="usa-nav-container">
         <div className="usa-navbar">
           <Title>
@@ -67,7 +63,7 @@ const MainHeader = () => {
           )}
         </div>
         <ExtendedNav
-          primaryItems={menuItems}
+          primaryItems={[]}
           secondaryItems={accountItems}
           mobileExpanded={isExpanded}
           onToggleMobileNav={() => setExpanded((prvExpanded) => !prvExpanded)}

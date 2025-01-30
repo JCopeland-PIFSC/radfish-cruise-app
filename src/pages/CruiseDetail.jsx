@@ -1,6 +1,11 @@
 import "../index.css";
 import React, { useEffect, useState, useRef } from "react";
-import { Button, Grid, Tag } from "@trussworks/react-uswds";
+import {
+  Button,
+  Grid,
+  GridContainer,
+  Tag,
+} from "@trussworks/react-uswds";
 import {
   StationSummary,
   StationNew,
@@ -9,6 +14,7 @@ import {
   CruiseForm,
   AppCard,
   Spinner,
+  GoBackButton,
 } from "../components";
 import { useNavigate, useLocation, useParams } from "react-router-dom";
 import { listValueLookup } from "../utils/listLookup";
@@ -92,7 +98,6 @@ const CruiseDetailPage = () => {
   const cruise = getCruiseById(cruiseId);
 
   if (!cruise) return <div>Cruise Not Found</div>;
-  
   const {
     id,
     cruiseName,
@@ -105,10 +110,6 @@ const CruiseDetailPage = () => {
     uuid,
   } = cruise;
   const cruiseStatus = listValueLookup(cruiseStatuses, cruiseStatusId);
-
-  const handleNavCruisesList = () => {
-    navigate("/cruises");
-  };
 
   const handleSaveCruise = async (event) => {
     event.preventDefault();
@@ -183,23 +184,21 @@ const CruiseDetailPage = () => {
   };
 
   return (
-    <>
+    <GridContainer className="text-color-black">
       <Grid row className="margin-top-2">
-        <Button className="margin-right-0" onClick={handleNavCruisesList}>
-          &lt; Cruise List
-        </Button>
+        <GoBackButton to="/cruises" label="Cruise List" />
       </Grid>
-      <Grid row className="flex-justify margin-top-2">
+      <Grid row className="margin-top-2">
         <h1 className="app-sec-header">Cruise Details</h1>
         <div className="margin-top-05 margin-bottom-2 mobile-lg:margin-bottom-0">
           <Tag
-            className={`padding-1 usa-tag--big ${setStatusColor(cruiseStatusId)}`}
+            className={`margin-left-1 radius-md usa-tag--big ${setStatusColor(cruiseStatusId)}`}
           >
             {cruiseStatus}
           </Tag>
         </div>
       </Grid>
-      <AppCard>
+      <AppCard className="position-relative margin-bottom-6">
         <HeaderWithEdit
           title=""
           editLabel={"Cruise"}
@@ -219,7 +218,7 @@ const CruiseDetailPage = () => {
           <CruiseView cruise={cruise} ports={ports} />
         )}
       </AppCard>
-      <Grid row className="flex-justify margin-bottom-1">
+      <Grid row className="flex-justify margin-bottom-1 gap-10">
         <h2 className="app-sec-header">Stations</h2>
         {activeAction === CruiseAction.NEW ? (
           <Button
@@ -256,7 +255,7 @@ const CruiseDetailPage = () => {
             />
           ))
         : ""}
-    </>
+    </GridContainer>
   );
 };
 
