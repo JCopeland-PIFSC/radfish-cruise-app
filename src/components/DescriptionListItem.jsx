@@ -4,6 +4,7 @@ const DescriptionListItem = ({
   term,
   description,
   className = "",
+  descriptionClassName = "",
 }) => {
   return (
     <Grid row className={`app-desc-list grid-row ${className}`}>
@@ -11,7 +12,7 @@ const DescriptionListItem = ({
         <dt>{term}</dt>
       </Grid>
       <Grid col={12} mobileLg={{ col: 8 }} tablet={{ col: 12 }}>
-        <dd>{description}</dd>
+        <dd className={descriptionClassName}>{description}</dd>
       </Grid>
     </Grid>
   );

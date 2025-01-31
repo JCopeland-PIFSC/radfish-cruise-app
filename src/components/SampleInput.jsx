@@ -56,7 +56,7 @@ const SampleInput = ({ sample, dataIndex, sampleTypesList, onChange, handleRemov
         <Grid col={12} tablet={{ col: true }}>
           <div className="display-flex flex-column height-full">
             <Button type="button" onClick={handleRemoveSample} className="btn-bot-right" accentStyle="warm" >
-              <Icon.Delete aria-hidden={true} alt="delete sample" />
+              <Icon.Delete aria-hidden={true} aria-label="delete sample" />
             </Button>
           </div>
         </Grid>

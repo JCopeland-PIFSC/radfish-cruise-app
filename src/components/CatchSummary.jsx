@@ -14,10 +14,11 @@ const CatchSummary = ({ catchItem }) => {
         <DescriptionListItem
           term="Species:"
           description={listValueLookup(species, speciesId)}
+          descriptionClassName="cruise-details__description"
         />
       </Grid>
       <Grid col={12} tablet={{ col: true }}>
-        <DescriptionListItem term="Weight:" description={aggregateWeightKg} />
+        <DescriptionListItem term="Weight:" description={aggregateWeightKg} descriptionClassName="cruise-details__description" />
       </Grid>
     </Grid>
   );

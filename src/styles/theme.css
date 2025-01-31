@@ -3,6 +3,7 @@
 /* -------------------------------------------------------------------------- */
 :root {
   --noaa-dark-blue: #0054a4;
+  --noaa-darker-blue: #162e51;
   --noaa-light-blue: #0093d0;
   --noaa-yellow-one: #fff3cd;
   --noaa-yellow-two: #ffeeba;
@@ -14,6 +15,8 @@
   --noaa-label-color: #0054a4;
   --noaa-border-dark: #565c65;
   --noaa-border-light: #ddd;
+  --noaa-lightest-gray: #f0f0f0;
+  --noaa-lightest-blue: #D1F6FF;
 }
 
 /* -------------------------------------------------------------------------- */
@@ -26,22 +29,57 @@ body {
   color: var(--noaa-text-color);
   line-height: 1.6;
   border-radius: 4px;
+  height: 100%;
+  margin: 0;
+  padding: 0;
 }
 
+#root {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+.app-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+#main-content {
+  flex: 1;
+}
+
+.go-back-button {
+  color: var(--noaa-lightest-blue);
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.go-back-button:hover {
+  text-decoration: underline;
+}
+
+.usa-section {
+  color: black;
+}
+
+.usa-form {
+  max-width: 100% !important;
+}
 /* -------------------------------------------------------------------------- */
 /* Header Styles                                                           */
 /* -------------------------------------------------------------------------- */
 .header {
-  background: var(--noaa-dark-blue);
-}
-
-.header__title {
-  color: white;
+  background: var(--noaa-lightest-gray);
 }
 
 .header__username {
-  font-weight: 600;
-  color: #ebe6e6;
+  font-weight: 800;
   text-transform: capitalize;
 }
 
@@ -50,11 +88,17 @@ body {
 }
 
 .header__menu-item--collapsed {
-  color: white !important;
+  color: #fff !important;
+  background-color: var(--noaa-dark-blue);
+  border-radius: 5px;
 }
 
 .header__submenu-item {
-  color: #ebe6e6 !important;
+  color: black !important;
+}
+
+.header-logo {
+  width: 120px;
 }
 
 @media (max-width: 1023px) {
@@ -69,17 +113,18 @@ body {
 }
 
 /* USWDS Navigation Overrides (customizing default USWDS nav classes)         */
-.usa-nav-container {
-  padding: 1rem 0;
-}
 
 .usa-nav__secondary {
-  bottom: 3rem !important;
-  right: 1rem !important;
+  right: 0rem !important;
 }
 
-.usa-nav__secondary-links {
-  height: 1rem;
+.usa-nav__secondary-links a {
+  color: var(--noaa-darker-blue) !important;
+  font-size: 1rem !important;
+  text-transform: capitalize;
+  display: flex !important;
+  align-items: center;
+  gap: 5px;
 }
 
 .usa-nav__secondary-item {
@@ -92,48 +137,72 @@ body {
   border-bottom: none !important;
 }
 
-/* -------------------------------------------------------------------------- */
-/* Status Indicator Styles                                                 */
-/* -------------------------------------------------------------------------- */
-/*
-  Used for small colored circles that indicate different statuses
-  (green, yellow, red, or loading = blue).
-*/
-.status-indicator {
-  display: inline-block;
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
-  margin-right: 8px;
+.usa-show-password {
+  color: white !important;
 }
 
-.status-indicator.green {
-  background-color: green;
+.usa-menu-btn {
+  font-size: 1.1rem !important;
+  margin-right: 2rem !important;
 }
 
-.status-indicator.yellow {
-  background-color: yellow;
-}
-
-.status-indicator.red {
-  background-color: var(--noaa-error-color);
-}
-
-.status-indicator.loading {
-  background-color: blue;
+@media (max-width: 1023px) {
+  .usa-navbar {
+    height: 10vh !important;
+  }
 }
 
 /* -------------------------------------------------------------------------- */
 /* Login                                                */
 /* -------------------------------------------------------------------------- */
 
-.login__go-back-button {
+.login__container {
   display: flex;
-  color: var(--noaa-dark-blue);
+  height: 100vh;
+  overflow-y: hidden;
+}
+
+.login__image {
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+}
+
+.login__left-side {
+  flex: 1;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
   align-items: center;
-  gap: 0.3rem;
-  font-size: 14px;
-  font-weight: 600;
+}
+
+.login__right-side {
+  display: block;
+  flex: 1;
+  height: 100%;
+}
+
+.login__logo {
+  width: 120px;
+  margin-bottom: 2rem;
+}
+
+@media screen and (max-width: 1024px) {
+  .login__left-side {
+    background: url("birdseye-ship-mobile.webp") no-repeat center center;
+    background-size: cover;
+  }
+
+  .login__right-side {
+    display: none;
+  }
+
+  .login__form-wrapper {
+    background-color: var(--noaa-darker-blue);
+    padding: 2rem;
+    border-radius: 10px;
+  }
 }
 
 /* -------------------------------------------------------------------------- */
@@ -159,6 +228,7 @@ body {
   margin-left: 3rem;
   text-transform: capitalize;
   font-weight: 600;
+  justify-content: center;
 }
 
 .switch-accounts__close-button {
@@ -166,6 +236,55 @@ body {
   border: none;
   cursor: pointer;
   margin-left: 16px;
+}
+
+/* -------------------------------------------------------------------------- */
+/* Cruise List Page                                            */
+/* -------------------------------------------------------------------------- */
+
+.app-sec-header {
+  font-size: 2em !important;
+  color: white;
+}
+
+/* -------------------------------------------------------------------------- */
+/* Cruise Details Page                                            */
+/* -------------------------------------------------------------------------- */
+.cruise-details__header {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.cruise-details__description {
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+@media screen and (min-width: 640px) {
+  .header-with-edit-container {
+    position: absolute;
+    right: 20px;
+  }
+}
+
+/* -------------------------------------------------------------------------- */
+/* Footer                                       */
+/* -------------------------------------------------------------------------- */
+
+.footer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 1rem;
+  background-color: #f1f1f1;
+}
+
+.footer__logo {
+  width: 50px;
+}
+
+.footer__text {
+  margin-left: .5rem;
 }
 
 /* -------------------------------------------------------------------------- */
@@ -177,4 +296,24 @@ body {
 
 .usa-list--unstyled > li {
   margin-bottom: 1rem !important;
+}
+
+.z-10 {
+  z-index: 10;
+}
+
+.hr-2 {
+  border: 2px solid #000;
+}
+
+.gap-10 {
+  gap: 10px;
+}
+
+.text-color-white {
+  color: white;
+}
+
+.text-color-black {
+  color: black !important;
 }

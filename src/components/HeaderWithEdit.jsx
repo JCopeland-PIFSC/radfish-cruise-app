@@ -10,12 +10,12 @@ const HeaderWithEdit = ({
   statusLock = false
 }) => {
   return (
-    <Grid row className="flex-justify margin-bottom-1">
+    <Grid row className="header-with-edit-container flex-justify margin-bottom-1">
       <h1 className="app-sec-header">{title}</h1>
       {activeAction === actionCheck
         ?
         <Button
-          className="margin-right-0"
+          className="margin-right-0 cursor-pointer z-10"
           onClick={handleCancelAction}
           secondary
         >
@@ -23,7 +23,7 @@ const HeaderWithEdit = ({
         </Button>
         :
         <Button
-          className="margin-right-0"
+          className="margin-right-0 cursor-pointer z-10"
           onClick={handleSetAction}
           disabled={activeAction !== null && activeAction !== actionCheck || statusLock === true}
         >

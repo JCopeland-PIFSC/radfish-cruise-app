@@ -1,11 +1,12 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import {
   Title,
   NavMenuButton,
   ExtendedNav,
   Header,
+  Icon,
 } from "@trussworks/react-uswds";
 
 const MainHeader = () => {
@@ -16,62 +17,73 @@ const MainHeader = () => {
     setExpanded(false);
   };
 
-  const menuItems = user?.username
-    ? [
-      <Link
-        to="/cruises"
-        className={`header__menu-item--${isExpanded ? "expanded" : "collapsed"}`}
-        onClick={closeMobileNav}
-      >
-        Cruises
-      </Link>,
-    ]
-    : [];
+  const getNavItemClass = ({ isActive }) =>
+    isActive ? "header__submenu-item text-bold" : "header__submenu-item";
+
   const accountItems = user?.username
     ? [
-      <Link
-        className="header__submenu-item"
-        to="/app-status"
-        key="one"
-        onClick={closeMobileNav}
-      >
-        App Status
-      </Link>,
-      <Link
-        className="header__submenu-item"
-        to="/switch-accounts"
-        key="two"
-        onClick={closeMobileNav}
-      >
-        Switch Accounts
-      </Link>,
-      <p className="header__username" key="three">
-        {user.username}
-      </p>,
-    ]
+        <NavLink
+          to="/cruises"
+          key="one"
+          onClick={closeMobileNav}
+          className={getNavItemClass}
+        >
+          Cruises
+        </NavLink>,
+
+        <NavLink
+          to="/app-status"
+          key="two"
+          onClick={closeMobileNav}
+          className={getNavItemClass}
+        >
+          App Status
+        </NavLink>,
+
+        <NavLink
+          to="/switch-accounts"
+          key="three"
+          onClick={closeMobileNav}
+          className={({ isActive }) =>
+            isActive
+              ? "nav-link-with-icon text-bold header__submenu-item"
+              : "nav-link-with-icon header__submenu-item"
+          }
+        >
+          <Icon.AccountCircle size={3} />
+          {user?.username}
+        </NavLink>,
+      ]
     : [];
+
   return (
     <Header
       basic={true}
       showMobileOverlay={isExpanded}
-      className="header"
+      className="header z-top"
     >
       <div className="usa-nav-container">
         <div className="usa-navbar">
-          <Title className="header__title ">RADFish Cruise App</Title>
+          <Title>
+            <img
+              src="logo.png"
+              alt="RADFish Cruise App logo"
+              className="header-logo"
+            />
+          </Title>
           {user?.username && (
             <NavMenuButton
-              onClick={() => setExpanded((prvExpanded) => !prvExpanded)}
+              onClick={() => setExpanded((prevExpanded) => !prevExpanded)}
               label="Menu"
             />
           )}
         </div>
         <ExtendedNav
-          primaryItems={menuItems}
+          primaryItems={[]}
           secondaryItems={accountItems}
           mobileExpanded={isExpanded}
-          onToggleMobileNav={() => setExpanded((prvExpanded) => !prvExpanded)}
-        ></ExtendedNav>
+          onToggleMobileNav={() => setExpanded((prevExpanded) => !prevExpanded)}
+        />
       </div>
     </Header>
   );
