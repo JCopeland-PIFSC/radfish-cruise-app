@@ -1,5 +1,5 @@
-import React, { useContext } from "react";
-import { Grid, Button } from "@trussworks/react-uswds";
+import React from "react";
+import { Grid } from "@trussworks/react-uswds";
 import { listValueLookup } from "../utils/listLookup";
 import DescriptionListItem from "./DescriptionListItem";
 import { useListTablesContext } from "../context";
@@ -25,7 +25,7 @@ const EventView = ({ event }) => {
       <Grid col={12}>
         <Grid row>
           <Grid col={12} tablet={{ col: true }}>
-            <DescriptionListItem term="DateTime:" description={timestamp} descriptionClassName="cruise-details-header"/>
+            <DescriptionListItem term="DateTime:" description={timestamp} descriptionClassName="cruise-details__header"/>
           </Grid>
           <Grid col={12} tablet={{ col: true }} />
         </Grid>
@@ -35,14 +35,14 @@ const EventView = ({ event }) => {
             <DescriptionListItem
               term="Latitude:"
               description={latitude}
-              descriptionClassName="cruise-details-description"
+              descriptionClassName="cruise-details__description"
             />
           </Grid>
           <Grid col={12} tablet={{ col: true }}>
             <DescriptionListItem
               term="Longitude:"
               description={longitude}
-              descriptionClassName="cruise-details-description"
+              descriptionClassName="cruise-details__description"
             />
           </Grid>
         </Grid>
@@ -51,14 +51,14 @@ const EventView = ({ event }) => {
             <DescriptionListItem
               term="Wind Speed:"
               description={windSpeedKnots}
-              descriptionClassName="cruise-details-description"
+              descriptionClassName="cruise-details__description"
             />
           </Grid>
           <Grid col={12} tablet={{ col: true }}>
             <DescriptionListItem
               term="Wave Height:"
               description={waveHeightMeters}
-              descriptionClassName="cruise-details-description"
+              descriptionClassName="cruise-details__description"
             />
           </Grid>
         </Grid>
@@ -67,7 +67,7 @@ const EventView = ({ event }) => {
             <DescriptionListItem
               term="Visibility:"
               description={visibilityKm}
-              descriptionClassName="cruise-details-description"
+              descriptionClassName="cruise-details__description"
             />
           </Grid>
           <Grid col={12} tablet={{ col: true }}>
@@ -78,7 +78,7 @@ const EventView = ({ event }) => {
                 precipitationId,
                 "description",
               )}
-              descriptionClassName="cruise-details-description"
+              descriptionClassName="cruise-details__description"
             />
           </Grid>
         </Grid>
@@ -87,7 +87,7 @@ const EventView = ({ event }) => {
             <DescriptionListItem
               term="Comments:"
               description={comments}
-              descriptionClassName="cruise-details-description"
+              descriptionClassName="cruise-details__description"
             />
           </Grid>
           <Grid col={12} tablet={{ col: true }} />

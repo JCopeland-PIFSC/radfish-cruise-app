@@ -4,7 +4,6 @@ import { Button, GridContainer, Grid, Alert } from "@trussworks/react-uswds";
 import { useOfflineStatus } from "@nmfs-radfish/react-radfish";
 import { useAuth } from "../context";
 import { useListTablesContext, useCruisesAndStationsContext } from "../context";
-import { AppCard } from "../components";
 
 const AppInitStatusPage = () => {
   const { isOffline } = useOfflineStatus();
@@ -118,16 +117,16 @@ const AppInitStatusPage = () => {
   };
 
   return (
-    <GridContainer>
+    <GridContainer className="usa-section">
       <Grid row>
         <Grid col={12}>
-          <h1>Application Status</h1>
+          <h1 className="text-color-white">Application Status</h1>
         </Grid>
       </Grid>
 
       {/* Additional Warnings (from location.state) */}
       {additionalWarning && (
-        <Grid row>
+        <Grid row className="margin-bottom-2">
           <Grid col={12}>
             <Alert type="warning" heading="Warning status" headingLevel="h4">
               {additionalWarning}

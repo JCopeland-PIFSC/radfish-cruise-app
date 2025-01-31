@@ -22,14 +22,14 @@ const CruiseView = ({ cruise, ports }) => {
           <DescriptionListItem
             term="Cruise Name:"
             description={cruiseName}
-            descriptionClassName="cruise-details-header"
+            descriptionClassName="cruise-details__header"
           />
         </Grid>
         <Grid col={12} tablet={{ col: true }}>
           <DescriptionListItem
             term="Vessel Name:"
             description={vesselName}
-            descriptionClassName="cruise-details-header"
+            descriptionClassName="cruise-details__header"
           />
         </Grid>
       </Grid>
@@ -40,12 +40,12 @@ const CruiseView = ({ cruise, ports }) => {
             <DescriptionListItem
               term="Date:"
               description={startDate}
-              descriptionClassName="cruise-details-description"
+              descriptionClassName="cruise-details__description"
             />
             <DescriptionListItem
               term="Port:"
               description={departurePort}
-              descriptionClassName="cruise-details-description"
+              descriptionClassName="cruise-details__description"
             />
           </Fieldset>
         </Grid>
@@ -54,12 +54,12 @@ const CruiseView = ({ cruise, ports }) => {
             <DescriptionListItem
               term="Date:"
               description={endDate}
-              descriptionClassName="cruise-details-description"
+              descriptionClassName="cruise-details__description"
             />
             <DescriptionListItem
               term="Port:"
               description={returnPort}
-              descriptionClassName="cruise-details-description"
+              descriptionClassName="cruise-details__description"
             />
           </Fieldset>
         </Grid>

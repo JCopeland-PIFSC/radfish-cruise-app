@@ -14,7 +14,7 @@ const SampleView = ({
           <DescriptionListItem
             term="Sample Name:"
             description={sampleName}
-            descriptionClassName="cruise-details-description"
+            descriptionClassName="cruise-details__description"
           />
         </Grid>
         <Grid col={12} tablet={{ col: true }} />
@@ -24,14 +24,14 @@ const SampleView = ({
           <DescriptionListItem
             term="Length in cm:"
             description={lengthCm}
-            descriptionClassName="cruise-details-description"
+            descriptionClassName="cruise-details__description"
           />
         </Grid>
         <Grid col={12} tablet={{ col: true }}>
           <DescriptionListItem
             term="Sample Type:"
             description={sampleType}
-            descriptionClassName="cruise-details-description"
+            descriptionClassName="cruise-details__description"
           />
         </Grid>
       </Grid>
@@ -40,7 +40,7 @@ const SampleView = ({
           <DescriptionListItem
             term="Sample Notes:"
             description={notes}
-            descriptionClassName="cruise-details-description"
+            descriptionClassName="cruise-details__description"
           />
         </Grid>
         <Grid col={12} tablet={{ col: true }} />

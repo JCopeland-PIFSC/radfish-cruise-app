@@ -13,14 +13,14 @@ const CatchView = ({ catchDetails, speciesList, sampleTypesList }) => {
           <DescriptionListItem
             term="Species Name:"
             description={listValueLookup(speciesList, speciesId)}
-            descriptionClassName="cruise-details-header"
+            descriptionClassName="cruise-details__header"
           />
         </Grid>
         <Grid col={12} tablet={{ col: true }}>
           <DescriptionListItem
             term="Tot Weight Kg:"
             description={aggregateWeightKg}
-            descriptionClassName="cruise-details-header"
+            descriptionClassName="cruise-details__header"
           />
         </Grid>
       </Grid>

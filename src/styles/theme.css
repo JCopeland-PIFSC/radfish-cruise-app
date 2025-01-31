@@ -16,7 +16,7 @@
   --noaa-border-dark: #565c65;
   --noaa-border-light: #ddd;
   --noaa-lightest-gray: #f0f0f0;
-  --noaa-cool-blue: #00bde3;
+  --noaa-lightest-blue: #D1F6FF;
 }
 
 /* -------------------------------------------------------------------------- */
@@ -51,7 +51,7 @@ body {
 }
 
 .go-back-button {
-  color: var(--noaa-cool-blue);
+  color: var(--noaa-lightest-blue);
   display: flex;
   align-items: center;
   gap: 0.3rem;
@@ -62,6 +62,14 @@ body {
 
 .go-back-button:hover {
   text-decoration: underline;
+}
+
+.usa-section {
+  color: black;
+}
+
+.usa-form {
+  max-width: 100% !important;
 }
 /* -------------------------------------------------------------------------- */
 /* Header Styles                                                           */
@@ -89,6 +97,10 @@ body {
   color: black !important;
 }
 
+.header-logo {
+  width: 120px;
+}
+
 @media (max-width: 1023px) {
   .header__username {
     color: #000;
@@ -107,7 +119,12 @@ body {
 }
 
 .usa-nav__secondary-links a {
-  color: var(--noaa-dark-blue) !important;
+  color: var(--noaa-darker-blue) !important;
+  font-size: 1rem !important;
+  text-transform: capitalize;
+  display: flex !important;
+  align-items: center;
+  gap: 5px;
 }
 
 .usa-nav__secondary-item {
@@ -124,6 +141,11 @@ body {
   color: white !important;
 }
 
+.usa-menu-btn {
+  font-size: 1.1rem !important;
+  margin-right: 2rem !important;
+}
+
 @media (max-width: 1023px) {
   .usa-navbar {
     height: 10vh !important;
@@ -131,68 +153,52 @@ body {
 }
 
 /* -------------------------------------------------------------------------- */
-/* Status Indicator Styles                                                 */
-/* -------------------------------------------------------------------------- */
-/*
-  Used for small colored circles that indicate different statuses
-  (green, yellow, red, or loading = blue).
-*/
-.status-indicator {
-  display: inline-block;
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
-  margin-right: 8px;
-}
-
-.status-indicator.green {
-  background-color: green;
-}
-
-.status-indicator.yellow {
-  background-color: yellow;
-}
-
-.status-indicator.red {
-  background-color: var(--noaa-error-color);
-}
-
-.status-indicator.loading {
-  background-color: blue;
-}
-
-/* -------------------------------------------------------------------------- */
 /* Login                                                */
 /* -------------------------------------------------------------------------- */
 
-.login-image {
+.login__container {
+  display: flex;
+  height: 100vh;
+  overflow-y: hidden;
+}
+
+.login__image {
   height: 100%;
   width: 100%;
   object-fit: cover;
 }
 
-.left-side {
+.login__left-side {
   flex: 1;
   height: 100%;
   display: flex;
   flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
-.desktop-only {
+.login__right-side {
   display: block;
+  flex: 1;
+  height: 100%;
+}
+
+.login__logo {
+  width: 120px;
+  margin-bottom: 2rem;
 }
 
 @media screen and (max-width: 1024px) {
-  .desktop-only {
-    display: none;
-  }
-
-  .left-side {
-    background: url("cruise-station-mobile.webp") no-repeat center center;
+  .login__left-side {
+    background: url("birdseye-ship-mobile.webp") no-repeat center center;
     background-size: cover;
   }
 
-  .form-wrapper {
+  .login__right-side {
+    display: none;
+  }
+
+  .login__form-wrapper {
     background-color: var(--noaa-darker-blue);
     padding: 2rem;
     border-radius: 10px;
@@ -222,6 +228,7 @@ body {
   margin-left: 3rem;
   text-transform: capitalize;
   font-weight: 600;
+  justify-content: center;
 }
 
 .switch-accounts__close-button {
@@ -243,12 +250,12 @@ body {
 /* -------------------------------------------------------------------------- */
 /* Cruise Details Page                                            */
 /* -------------------------------------------------------------------------- */
-.cruise-details-header {
+.cruise-details__header {
   font-size: 1.5rem;
   font-weight: bold;
 }
 
-.cruise-details-description {
+.cruise-details__description {
   font-size: 1.2rem;
   font-weight: bold;
 }
@@ -258,6 +265,27 @@ body {
     position: absolute;
     right: 20px;
   }
+}
+
+/* -------------------------------------------------------------------------- */
+/* Footer                                       */
+/* -------------------------------------------------------------------------- */
+
+.footer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 1rem;
+  background-color: #f1f1f1;
+}
+
+.footer__logo {
+  width: 50px;
+}
+
+.footer__text {
+  margin-bottom: 0;
+  margin-left: 1rem;
 }
 
 /* -------------------------------------------------------------------------- */
@@ -283,6 +311,10 @@ body {
   gap: 10px;
 }
 
+.text-color-white {
+  color: white;
+}
+
 .text-color-black {
-  color: black;
+  color: black !important;
 }

@@ -184,7 +184,7 @@ const CruiseDetailPage = () => {
   };
 
   return (
-    <GridContainer className="text-color-black">
+    <GridContainer className="usa-section">
       <Grid row className="margin-top-2">
         <GoBackButton to="/cruises" label="Cruise List" />
       </Grid>

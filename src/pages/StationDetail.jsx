@@ -155,7 +155,7 @@ const StationDetailPage = () => {
   };
 
   return (
-    <GridContainer className="text-color-black">
+    <GridContainer className="usa-section">
       {/* Station Header */}
       <Grid row className="margin-top-2">
         <GoBackButton

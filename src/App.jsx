@@ -31,10 +31,7 @@ function App({ application }) {
         <BrowserRouter>
           <AuthProvider>
             <ConditionalHeader />
-            <main
-              id="main-content"
-              className="bg-primary-darker text-white padding-top-6 padding-bottom-10"
-            >
+            <main id="main-content" className="bg-primary-darker text-white">
               <Routes>
                 <Route path="/" element={<SwitchAccounts />} />
                 <Route path="/switch-accounts" element={<SwitchAccounts />} />

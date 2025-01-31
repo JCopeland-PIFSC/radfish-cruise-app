@@ -21,7 +21,7 @@ const StationSummary = ({ cruiseId, station, activeAction, stationRef }) => {
           <DescriptionListItem
             term="Station Name:"
             description={stationName}
-            descriptionClassName="cruise-details-header"
+            descriptionClassName="cruise-details__header"
           />
         </Grid>
         <Grid col={12} tablet={{ col: true }} />
@@ -32,34 +32,34 @@ const StationSummary = ({ cruiseId, station, activeAction, stationRef }) => {
           <DescriptionListItem
             term="Latitude:"
             description={latitude}
-            descriptionClassName="cruise-details-description"
+            descriptionClassName="cruise-details__description"
           />
           <DescriptionListItem
             term="Longitude:"
             description={longitude}
-            descriptionClassName="cruise-details-description"
+            descriptionClassName="cruise-details__description"
           />
         </Grid>
         <Grid col={12} tablet={{ col: true }}>
           <DescriptionListItem
             term="Begin Set:"
             description={displayTzDateTime(events?.beginSet?.timestamp)}
-            descriptionClassName="cruise-details-description"
+            descriptionClassName="cruise-details__description"
           />
           <DescriptionListItem
             term="End Set:"
             description={displayTzDateTime(events?.endSet?.timestamp)}
-            descriptionClassName="cruise-details-description"
+            descriptionClassName="cruise-details__description"
           />
           <DescriptionListItem
             term="Begin Haul:"
             description={displayTzDateTime(events?.beginHaul?.timestamp)}
-            descriptionClassName="cruise-details-description"
+            descriptionClassName="cruise-details__description"
           />
           <DescriptionListItem
             term="End Haul:"
             description={displayTzDateTime(events?.endHaul?.timestamp)}
-            descriptionClassName="cruise-details-description"
+            descriptionClassName="cruise-details__description"
           />
           <DescriptionListItem
             term="Soak Time:"
@@ -67,7 +67,7 @@ const StationSummary = ({ cruiseId, station, activeAction, stationRef }) => {
               events?.endSet?.timestamp,
               events?.beginHaul?.timestamp,
             )}
-            descriptionClassName="cruise-details-description"
+            descriptionClassName="cruise-details__description"
           />
         </Grid>
       </Grid>
@@ -82,7 +82,7 @@ const StationSummary = ({ cruiseId, station, activeAction, stationRef }) => {
               <CatchSummary key={idx} catchItem={catchItem} />
             ))
           ) : (
-            <div className="cruise-details-description">
+            <div className="cruise-details__description">
               No Catches Reported
             </div>
           )}

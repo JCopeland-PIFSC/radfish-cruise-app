@@ -1,11 +1,12 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import {
   Title,
   NavMenuButton,
   ExtendedNav,
   Header,
+  Icon,
 } from "@trussworks/react-uswds";
 
 const MainHeader = () => {
@@ -16,48 +17,63 @@ const MainHeader = () => {
     setExpanded(false);
   };
 
+  const getNavItemClass = ({ isActive }) =>
+    isActive ? "header__submenu-item text-bold" : "header__submenu-item";
+
   const accountItems = user?.username
     ? [
-        <Link
-          className="header__submenu-item"
+        <NavLink
           to="/cruises"
           key="one"
           onClick={closeMobileNav}
+          className={getNavItemClass}
         >
           Cruises
-        </Link>,
-        <Link
-          className="header__submenu-item"
+        </NavLink>,
+
+        <NavLink
           to="/app-status"
           key="two"
           onClick={closeMobileNav}
+          className={getNavItemClass}
         >
           App Status
-        </Link>,
-        <Link
-          className="header__username"
+        </NavLink>,
+
+        <NavLink
           to="/switch-accounts"
           key="three"
           onClick={closeMobileNav}
+          className={({ isActive }) =>
+            isActive
+              ? "nav-link-with-icon text-bold header__submenu-item"
+              : "nav-link-with-icon header__submenu-item"
+          }
         >
+          <Icon.AccountCircle size={3} />
           {user?.username}
-        </Link>,
+        </NavLink>,
       ]
     : [];
+
   return (
-    <Header basic={true} showMobileOverlay={isExpanded} className="header z-top">
+    <Header
+      basic={true}
+      showMobileOverlay={isExpanded}
+      className="header z-top"
+    >
       <div className="usa-nav-container">
         <div className="usa-navbar">
           <Title>
             <img
               src="logo.png"
               alt="RADFish Cruise App logo"
-              style={{ width: "120px" }}
+              className="header-logo"
             />
           </Title>
           {user?.username && (
             <NavMenuButton
-              onClick={() => setExpanded((prvExpanded) => !prvExpanded)}
+              onClick={() => setExpanded((prevExpanded) => !prevExpanded)}
               label="Menu"
             />
           )}
@@ -66,8 +82,8 @@ const MainHeader = () => {
           primaryItems={[]}
           secondaryItems={accountItems}
           mobileExpanded={isExpanded}
-          onToggleMobileNav={() => setExpanded((prvExpanded) => !prvExpanded)}
-        ></ExtendedNav>
+          onToggleMobileNav={() => setExpanded((prevExpanded) => !prevExpanded)}
+        />
       </div>
     </Header>
   );

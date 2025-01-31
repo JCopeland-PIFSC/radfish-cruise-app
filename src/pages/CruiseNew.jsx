@@ -9,7 +9,7 @@ import {
   TextInput,
   Select,
 } from "@trussworks/react-uswds";
-import { AppCard, ResponsiveRow , GoBackButton} from "../components";
+import { AppCard, ResponsiveRow, GoBackButton } from "../components";
 import { DatePicker } from "@nmfs-radfish/react-radfish";
 import { useNavigate } from "react-router-dom";
 import {
@@ -69,7 +69,7 @@ const CruiseNewPage = () => {
   };
 
   return (
-    <GridContainer className="text-color-black">
+    <GridContainer className="usa-section">
       <Grid col={12}>
         <Grid row className="margin-top-2">
           <GoBackButton to="/cruises" label="Cruise List" />

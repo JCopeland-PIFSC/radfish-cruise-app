@@ -81,7 +81,7 @@ const CruiseListPage = () => {
   ];
 
   return (
-    <GridContainer>
+    <GridContainer className="usa-section">
       <Grid row className="flex-justify margin-top-2">
         <h1 className="app-sec-header">Cruise List</h1>
         <Button

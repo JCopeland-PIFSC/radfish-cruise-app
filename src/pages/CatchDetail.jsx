@@ -96,7 +96,7 @@ const CatchDetailPage = () => {
   };
 
   return (
-    <GridContainer className="text-color-black">
+    <GridContainer className="usa-section">
       <Grid row className="margin-top-2">
         <GoBackButton
           to={`/cruises/${cruiseId}`}
