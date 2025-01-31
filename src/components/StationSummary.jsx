@@ -18,31 +18,48 @@ const StationSummary = ({ cruiseId, station, activeAction, stationRef }) => {
     <AppCard ref={stationRef}>
       <Grid row>
         <Grid col={12} tablet={{ col: true }}>
-          <DescriptionListItem term="Station Name:" description={stationName} />
+          <DescriptionListItem
+            term="Station Name:"
+            description={stationName}
+            descriptionClassName="cruise-details__header"
+          />
         </Grid>
         <Grid col={12} tablet={{ col: true }} />
       </Grid>
+      <hr className="hr-2" />
       <Grid row>
         <Grid col={12} tablet={{ col: true }}>
-          <DescriptionListItem term="Latitude:" description={latitude} />
-          <DescriptionListItem term="Longitude:" description={longitude} />
+          <DescriptionListItem
+            term="Latitude:"
+            description={latitude}
+            descriptionClassName="cruise-details__description"
+          />
+          <DescriptionListItem
+            term="Longitude:"
+            description={longitude}
+            descriptionClassName="cruise-details__description"
+          />
         </Grid>
         <Grid col={12} tablet={{ col: true }}>
           <DescriptionListItem
             term="Begin Set:"
             description={displayTzDateTime(events?.beginSet?.timestamp)}
+            descriptionClassName="cruise-details__description"
           />
           <DescriptionListItem
             term="End Set:"
             description={displayTzDateTime(events?.endSet?.timestamp)}
+            descriptionClassName="cruise-details__description"
           />
           <DescriptionListItem
             term="Begin Haul:"
             description={displayTzDateTime(events?.beginHaul?.timestamp)}
+            descriptionClassName="cruise-details__description"
           />
           <DescriptionListItem
             term="End Haul:"
             description={displayTzDateTime(events?.endHaul?.timestamp)}
+            descriptionClassName="cruise-details__description"
           />
           <DescriptionListItem
             term="Soak Time:"
@@ -50,19 +67,25 @@ const StationSummary = ({ cruiseId, station, activeAction, stationRef }) => {
               events?.endSet?.timestamp,
               events?.beginHaul?.timestamp,
             )}
+            descriptionClassName="cruise-details__description"
           />
         </Grid>
       </Grid>
+      <hr />
       <Grid row>
         <Grid row className="width-full">
           <h3 className="app-sec-header">Catch Summary</h3>
         </Grid>
         <Grid col>
-          {catchList?.length
-            ? catchList.map((catchItem, idx) => (
+          {catchList?.length ? (
+            catchList.map((catchItem, idx) => (
               <CatchSummary key={idx} catchItem={catchItem} />
             ))
-            : "No Catches Reported"}
+          ) : (
+            <div className="cruise-details__description">
+              No Catches Reported
+            </div>
+          )}
         </Grid>
       </Grid>
       <Grid row className="margin-top-2">
@@ -70,7 +93,8 @@ const StationSummary = ({ cruiseId, station, activeAction, stationRef }) => {
           disabled={activeAction !== null}
           className="margin-right-0"
           onClick={handleNavEditStation(cruiseId, id)}
-        >Station Details
+        >
+          Station Details
         </Button>
       </Grid>
     </AppCard>

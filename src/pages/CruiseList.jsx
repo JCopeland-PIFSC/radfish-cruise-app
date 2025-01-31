@@ -1,21 +1,34 @@
 import "../index.css";
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { Button, Grid, Tag } from "@trussworks/react-uswds";
+import { Button, Grid, GridContainer, Tag } from "@trussworks/react-uswds";
 import { Table } from "@nmfs-radfish/react-radfish";
 import { listValueLookup } from "../utils/listLookup";
 import { setStatusColor } from "../utils/setStatusColor";
 import { useListTablesContext, useCruisesAndStationsContext } from "../context";
+import { AppCard, Spinner } from "../components";
 
 const CruiseListPage = () => {
   const navigate = useNavigate();
-  const { loading: listsLoading, error: listsError, lists } = useListTablesContext();
-  const { loading: cruisesLoading, error: cruisesError, cruises } = useCruisesAndStationsContext();
+  const {
+    loading: listsLoading,
+    error: listsError,
+    lists,
+  } = useListTablesContext();
+  const {
+    loading: cruisesLoading,
+    error: cruisesError,
+    cruises,
+  } = useCruisesAndStationsContext();
 
-  if (listsLoading) return <div>Loading Lists...</div>;
-  if (cruisesLoading) return <div>Loading Cruises...</div>;
-  if (listsError) return <div>Error Loading List Data: {listsError.message}</div>;
-  if (cruisesError) return <div>Error Loading Cruise Data: {cruisesError.message}</div>;
+  if (listsLoading)
+    return <Spinner message="Loading Lists Data" fillViewport />;
+  if (cruisesLoading)
+    return <Spinner message="Loading Cruises Data" fillViewport />;
+  if (listsError)
+    return <div>Error Loading List Data: {listsError.message}</div>;
+  if (cruisesError)
+    return <div>Error Loading Cruise Data: {cruisesError.message}</div>;
 
   const { ports, cruiseStatuses } = lists;
   const handleNavNewCruise = () => {
@@ -24,7 +37,7 @@ const CruiseListPage = () => {
 
   const handleRowClick = ({ id }) => {
     navigate(`/cruises/${id}`);
-  }
+  };
 
   const columns = [
     {
@@ -50,10 +63,15 @@ const CruiseListPage = () => {
       key: "cruiseStatus",
       label: "Status",
       render: (row) => {
-        const cruiseStatus = listValueLookup(cruiseStatuses, row.cruiseStatusId);
+        const cruiseStatus = listValueLookup(
+          cruiseStatuses,
+          row.cruiseStatusId,
+        );
         return (
-          <Tag className={`usa-tag--big ${setStatusColor(row.cruiseStatusId)}`}>{cruiseStatus}</Tag>
-        )
+          <Tag className={`usa-tag--big ${setStatusColor(row.cruiseStatusId)}`}>
+            {cruiseStatus}
+          </Tag>
+        );
       },
     },
     {
@@ -63,19 +81,29 @@ const CruiseListPage = () => {
   ];
 
   return (
-    <>
+    <GridContainer className="usa-section">
       <Grid row className="flex-justify margin-top-2">
         <h1 className="app-sec-header">Cruise List</h1>
-        <Button className="margin-right-0" onClick={handleNavNewCruise}>
+        <Button
+          className="margin-right-0"
+          onClick={handleNavNewCruise}
+        >
           New Cruise
         </Button>
       </Grid>
       <Grid row className="margin-top-2">
-        <Table columns={columns} data={cruises?.length ? cruises : []} onRowClick={handleRowClick} className="margin-top-0" bordered striped />
-        {!cruises?.length && <p>No Cruises Recorded!</p>}
+        <Table
+          columns={columns}
+          data={cruises?.length ? cruises : []}
+          onRowClick={handleRowClick}
+          className="margin-top-5"
+          bordered
+          striped
+        />
+        {!cruises?.length && <p className="width-full text-color-white text-center">No Cruises Recorded!</p>}
       </Grid>
-    </>
+    </GridContainer>
   );
-}
+};
 
 export default CruiseListPage;
