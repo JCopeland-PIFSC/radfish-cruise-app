@@ -6,7 +6,7 @@ import { Table } from "@nmfs-radfish/react-radfish";
 import { listValueLookup } from "../utils/listLookup";
 import { setStatusColor } from "../utils/setStatusColor";
 import { useListTablesContext, useCruisesAndStationsContext } from "../context";
-import { Spinner } from "../components";
+import { AppCard, Spinner } from "../components";
 
 const CruiseListPage = () => {
   const navigate = useNavigate();
@@ -100,7 +100,7 @@ const CruiseListPage = () => {
           bordered
           striped
         />
-        {!cruises?.length && <p>No Cruises Recorded!</p>}
+        {!cruises?.length && <p className="width-full text-color-white text-center">No Cruises Recorded!</p>}
       </Grid>
     </GridContainer>
   );
