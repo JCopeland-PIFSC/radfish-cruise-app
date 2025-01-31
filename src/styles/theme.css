@@ -1,5 +1,9 @@
+/* -------------------------------------------------------------------------- */
+/* CSS Variables (Theme Colors, etc.)                                      */
+/* -------------------------------------------------------------------------- */
 :root {
   --noaa-dark-blue: #0054a4;
+  --noaa-darker-blue: #162e51;
   --noaa-light-blue: #0093d0;
   --noaa-yellow-one: #fff3cd;
   --noaa-yellow-two: #ffeeba;
@@ -11,8 +15,13 @@
   --noaa-label-color: #0054a4;
   --noaa-border-dark: #565c65;
   --noaa-border-light: #ddd;
+  --noaa-lightest-gray: #f0f0f0;
+  --noaa-lightest-blue: #D1F6FF;
 }
 
+/* -------------------------------------------------------------------------- */
+/* Global Resets / Base Styles                                             */
+/* -------------------------------------------------------------------------- */
 body {
   font-family:
     Arial Narrow,
@@ -20,36 +29,102 @@ body {
   color: var(--noaa-text-color);
   line-height: 1.6;
   border-radius: 4px;
+  height: 100%;
+  margin: 0;
+  padding: 0;
 }
 
-.header-container {
-  background: var(--noaa-dark-blue);
+#root {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
 }
 
-.header-title {
-  color: white;
+.app-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
 }
 
-/* Minimum size for NOAA logo must be 72px (0.75 in) */
+#main-content {
+  flex: 1;
+}
+
+.go-back-button {
+  color: var(--noaa-lightest-blue);
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.go-back-button:hover {
+  text-decoration: underline;
+}
+
+.usa-section {
+  color: black;
+}
+
+.usa-form {
+  max-width: 100% !important;
+}
+/* -------------------------------------------------------------------------- */
+/* Header Styles                                                           */
+/* -------------------------------------------------------------------------- */
+.header {
+  background: var(--noaa-lightest-gray);
+}
+
+.header__username {
+  font-weight: 800;
+  text-transform: capitalize;
+}
+
+.header__menu-item--expanded {
+  color: black;
+}
+
+.header__menu-item--collapsed {
+  color: #fff !important;
+  background-color: var(--noaa-dark-blue);
+  border-radius: 5px;
+}
+
+.header__submenu-item {
+  color: black !important;
+}
+
 .header-logo {
-  width: 72px;
+  width: 120px;
 }
 
-.header-username {
-  font-weight: 500;
+@media (max-width: 1023px) {
+  .header__username {
+    color: #000;
+  }
+
+  .header__submenu-item {
+    color: #000 !important;
+    margin-bottom: 0.8rem;
+  }
 }
 
-.usa-nav-container {
-  padding: 1rem 0;
-}
+/* USWDS Navigation Overrides (customizing default USWDS nav classes)         */
 
 .usa-nav__secondary {
-  bottom: 3rem !important;
-  right: 1rem !important;
+  right: 0rem !important;
 }
 
-.usa-nav__secondary-links {
-  height: 1rem;
+.usa-nav__secondary-links a {
+  color: var(--noaa-darker-blue) !important;
+  font-size: 1rem !important;
+  text-transform: capitalize;
+  display: flex !important;
+  align-items: center;
+  gap: 5px;
 }
 
 .usa-nav__secondary-item {
@@ -58,38 +133,187 @@ body {
   color: white;
 }
 
-.text_username {
-  color: #ebe6e6;
-  font-weight: 600;
+.usa-navbar {
+  border-bottom: none !important;
 }
 
-.text_align-center {
-  text-align: center;
+.usa-show-password {
+  color: white !important;
 }
 
-.text_transform-capitalize {
-  text-transform: capitalize;
+.usa-menu-btn {
+  font-size: 1.1rem !important;
+  margin-right: 2rem !important;
 }
 
-.text_color-white {
-  color: #ebe6e6 !important;
-}
-
-@media (max-width: 768px) {
+@media (max-width: 1023px) {
   .usa-navbar {
-   border-bottom: none !important;
+    height: 10vh !important;
+  }
+}
+
+/* -------------------------------------------------------------------------- */
+/* Login                                                */
+/* -------------------------------------------------------------------------- */
+
+.login__container {
+  display: flex;
+  height: 100vh;
+  overflow-y: hidden;
+}
+
+.login__image {
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+}
+
+.login__left-side {
+  flex: 1;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.login__right-side {
+  display: block;
+  flex: 1;
+  height: 100%;
+}
+
+.login__logo {
+  width: 120px;
+  margin-bottom: 2rem;
+}
+
+@media screen and (max-width: 1024px) {
+  .login__left-side {
+    background: url("birdseye-ship-mobile.webp") no-repeat center center;
+    background-size: cover;
   }
 
-  .text_color-white {
-    color: #000 !important;
+  .login__right-side {
+    display: none;
   }
 
-  .text_margin-bottom {
-    margin-bottom: 0.8rem;
+  .login__form-wrapper {
+    background-color: var(--noaa-darker-blue);
+    padding: 2rem;
+    border-radius: 10px;
   }
+}
 
-  .text_username {
-    color: #000;
-    font-weight: 600;
+/* -------------------------------------------------------------------------- */
+/* Switch Accounts                                               */
+/* -------------------------------------------------------------------------- */
+
+.switch-accounts__button {
+  border: 2px solid var(--noaa-dark-blue);
+  border-radius: 4px;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  background-color: #fff;
+  color: #005ea2;
+}
+
+.switch-accounts__username {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  margin-left: 3rem;
+  text-transform: capitalize;
+  font-weight: 600;
+  justify-content: center;
+}
+
+.switch-accounts__close-button {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  margin-left: 16px;
+}
+
+/* -------------------------------------------------------------------------- */
+/* Cruise List Page                                            */
+/* -------------------------------------------------------------------------- */
+
+.app-sec-header {
+  font-size: 2em !important;
+  color: white;
+}
+
+/* -------------------------------------------------------------------------- */
+/* Cruise Details Page                                            */
+/* -------------------------------------------------------------------------- */
+.cruise-details__header {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.cruise-details__description {
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+@media screen and (min-width: 640px) {
+  .header-with-edit-container {
+    position: absolute;
+    right: 20px;
   }
+}
+
+/* -------------------------------------------------------------------------- */
+/* Footer                                       */
+/* -------------------------------------------------------------------------- */
+
+.footer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 1rem;
+  background-color: #f1f1f1;
+}
+
+.footer__logo {
+  width: 50px;
+}
+
+.footer__text {
+  margin-left: .5rem;
+}
+
+/* -------------------------------------------------------------------------- */
+/* Utility & Helper Classes                                                */
+/* -------------------------------------------------------------------------- */
+.text-error {
+  color: var(--noaa-error-color);
+}
+
+.usa-list--unstyled > li {
+  margin-bottom: 1rem !important;
+}
+
+.z-10 {
+  z-index: 10;
+}
+
+.hr-2 {
+  border: 2px solid #000;
+}
+
+.gap-10 {
+  gap: 10px;
+}
+
+.text-color-white {
+  color: white;
+}
+
+.text-color-black {
+  color: black !important;
 }

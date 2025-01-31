@@ -6,16 +6,19 @@ const AuthContext = createContext();
 export const AuthProvider = ({ children }) => {
   const {
     loginUser,
-    resetAndSetCurrentUser,
+    setCurrentUserInLocalStorage,
     signOutUser,
     getAllUsers,
     getCurrentUser,
+    loadingAllUsers,
   } = useStoreUser();
   const [userLoading, setUserLoading] = useState(true);
 
   useEffect(() => {
-    setUserLoading(false);
-  }, [getCurrentUser]);
+    if (!loadingAllUsers) {
+      setUserLoading(false);
+    }
+  }, [loadingAllUsers]);
 
   const login = async (authUserData) => {
     try {
@@ -28,11 +31,11 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  const switchUser = async (authUserData) => {
+  const setCurrentUser = async (authUserData) => {
     try {
-      await resetAndSetCurrentUser(authUserData.id);
+      await setCurrentUserInLocalStorage(authUserData);
     } catch (err) {
-      console.error("Error in switchUser:", err);
+      console.error("Error in setCurrentUser:", err);
       throw err;
     } finally {
       setUserLoading(false);
@@ -60,7 +63,7 @@ export const AuthProvider = ({ children }) => {
         user,
         allUsers,
         login,
-        switchUser,
+        setCurrentUser,
         signOut,
         userLoading,
       }}

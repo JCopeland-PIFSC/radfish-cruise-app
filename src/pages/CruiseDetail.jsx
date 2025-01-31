@@ -1,10 +1,6 @@
 import "../index.css";
 import React, { useCallback, useEffect, useState, useRef } from "react";
-import {
-  Button,
-  Grid,
-  Tag,
-} from "@trussworks/react-uswds";
+import { Button, Grid, GridContainer, Tag } from "@trussworks/react-uswds";
 import { useOfflineStatus } from "@nmfs-radfish/react-radfish";
 import {
   StationSummary,
@@ -13,7 +9,9 @@ import {
   CruiseView,
   CruiseForm,
   AppCard,
-} from "../components"
+  Spinner,
+  GoBackButton,
+} from "../components";
 import { useNavigate, useLocation, useParams } from "react-router-dom";
 import { CruiseStatus, listValueLookup } from "../utils/listLookup";
 import { setStatusColor } from "../utils/setStatusColor";
@@ -39,9 +37,9 @@ const InitializedStation = {
       waveHeightMeters: null,
       visibilityKm: null,
       precipitationId: null,
-      comments: null
+      comments: null,
     },
-  }
+  },
 };
 
 function canSubmit(user, cruise, stations) {
@@ -51,14 +49,14 @@ function canSubmit(user, cruise, stations) {
 
   // Validate cruise data
   const requiredCruiseFields = [
-    'id',
-    'cruiseName',
-    'cruiseStatusId',
-    'vesselName',
-    'startDate',
-    'endDate',
-    'departurePortId',
-    'returnPortId'
+    "id",
+    "cruiseName",
+    "cruiseStatusId",
+    "vesselName",
+    "startDate",
+    "endDate",
+    "departurePortId",
+    "returnPortId",
   ];
   for (const field of requiredCruiseFields) {
     if (!cruise[field]) {
@@ -80,7 +78,7 @@ function canSubmit(user, cruise, stations) {
 
   for (const station of stations) {
     // Check required station fields
-    const requiredStationFields = ['id', 'cruiseId', 'stationName'];
+    const requiredStationFields = ["id", "cruiseId", "stationName"];
     for (const field of requiredStationFields) {
       if (!station[field]) {
         return false;
@@ -93,7 +91,7 @@ function canSubmit(user, cruise, stations) {
     }
 
     // Validate station events
-    const requiredEventSets = ['beginSet', 'endSet', 'beginHaul', 'endHaul'];
+    const requiredEventSets = ["beginSet", "endSet", "beginHaul", "endHaul"];
     for (const setName of requiredEventSets) {
       const eventSet = station.events[setName];
       if (!eventSet) {
@@ -101,9 +99,13 @@ function canSubmit(user, cruise, stations) {
       }
 
       // Check required event fields
-      const requiredEventFields = ['timestamp', 'latitude', 'longitude'];
+      const requiredEventFields = ["timestamp", "latitude", "longitude"];
       for (const field of requiredEventFields) {
-        if (eventSet[field] === null || eventSet[field] === undefined || eventSet[field] === '') {
+        if (
+          eventSet[field] === null ||
+          eventSet[field] === undefined ||
+          eventSet[field] === ""
+        ) {
           return false;
         }
       }
@@ -116,8 +118,12 @@ function canSubmit(user, cruise, stations) {
 const CruiseDetailPage = () => {
   const { cruiseId } = useParams();
   const { user } = useAuth();
-  const { loading: listsLoading, error: listsError, lists } = useListTablesContext();
   const { isOffline } = useOfflineStatus();
+  const {
+    loading: listsLoading,
+    error: listsError,
+    lists,
+  } = useListTablesContext();
   const { ports, cruiseStatuses } = lists;
   const {
     loading: cruisesLoading,
@@ -126,7 +132,10 @@ const CruiseDetailPage = () => {
     refreshStationsState,
     getCruiseById,
     getStationsByCruiseId,
-    updateCruise, addStation, useCruiseStatusLock } = useCruisesAndStationsContext();
+    updateCruise,
+    addStation,
+    useCruiseStatusLock,
+  } = useCruisesAndStationsContext();
   const navigate = useNavigate();
   const location = useLocation();
   const stationRefs = useRef({});
@@ -140,21 +149,26 @@ const CruiseDetailPage = () => {
         element.scrollIntoView({ behavior: "smooth" });
       }
     }
-  }, [location])
+  }, [location]);
 
-  if (listsLoading) return <div>Loading List Data...</div>;
-  if (listsError) return <div>Error Loading List Data: {listsError.message}</div>;
+  if (listsLoading) return <Spinner message="Loading List Data" fillViewport />;
+  if (listsError)
+    return <div>Error Loading List Data: {listsError.message}</div>;
 
-  if (cruisesLoading) return <div>Loading Cruise Data...</div>;
-  if (cruisesError) return <div>Error Loading Cruise Data: {cruiseError.message}</div>;
+  if (cruisesLoading) return <Spinner message="Loading Cruises" fillViewport />;
+  if (cruisesError)
+    return <div>Error Loading Cruise Data: {cruiseError.message}</div>;
 
   const cruiseStations = getStationsByCruiseId(cruiseId);
 
   cruiseStations.forEach((station) => {
-    stationRefs.current[station.id] = stationRefs.current[station.id] || React.createRef();
+    stationRefs.current[station.id] =
+      stationRefs.current[station.id] || React.createRef();
   });
 
   const cruise = getCruiseById(cruiseId);
+
+  if (!cruise) return <div>Cruise Not Found</div>;
   const {
     id,
     cruiseName,
@@ -167,10 +181,6 @@ const CruiseDetailPage = () => {
     uuid,
   } = cruise;
   const cruiseStatus = listValueLookup(cruiseStatuses, cruiseStatusId);
-
-  const handleNavCruisesList = () => {
-    navigate("/cruises");
-  };
 
   const handleSaveCruise = async (event) => {
     event.preventDefault();
@@ -195,7 +205,7 @@ const CruiseDetailPage = () => {
       await updateCruise(id, values);
       event.target.reset();
       refreshCruisesState(user.id);
-      setActiveAction(null)
+      setActiveAction(null);
     } catch (error) {
       console.error("Failed to update cruise: ", error);
     }
@@ -212,7 +222,11 @@ const CruiseDetailPage = () => {
     }
 
     const timezone = getLocationTz(values.latitude, values.longitude);
-    const beginSetDateTime = generateTzDateTime(values.eventDate, values.eventTime, timezone);
+    const beginSetDateTime = generateTzDateTime(
+      values.eventDate,
+      values.eventTime,
+      timezone,
+    );
     const newStation = structuredClone(InitializedStation);
     newStation.id = values.id;
     newStation.cruiseId = values.cruiseId;
@@ -225,7 +239,7 @@ const CruiseDetailPage = () => {
       waveHeightMeters: values.waveHeight,
       visibilityKm: values.visibility,
       precipitationId: values.precipitationId,
-      comments: values.comments
+      comments: values.comments,
     };
     newStation.events.beginSet = newBeginSetValues;
 
@@ -239,12 +253,12 @@ const CruiseDetailPage = () => {
       console.error("Failed to add new Station: ", error);
     }
   };
-  
+
   const handleCruiseSubmit = async (event) => {
     event.preventDefault();
 
-    const users = JSON.parse(localStorage.getItem('users')) || [];
-    const user = users.find(u => u.isAuthenticated);
+    const users = JSON.parse(localStorage.getItem("users")) || [];
+    const user = users.find((u) => u.isAuthenticated);
 
     if (!user) {
       console.error("No authenticated user found.");
@@ -256,11 +270,14 @@ const CruiseDetailPage = () => {
         data: {
           cruise: cruise,
           stations: cruiseStations,
-          user: user
-        }
+          user: user,
+        },
       };
-      
-      const data = await post(`${import.meta.env.VITE_API_HOST}/api/cruises`, payload);
+
+      const data = await post(
+        `${import.meta.env.VITE_API_HOST}/api/cruises`,
+        payload,
+      );
 
       console.debug("Cruise submitted successfully:", data);
 
@@ -271,17 +288,21 @@ const CruiseDetailPage = () => {
   };
 
   return (
-    <>
+    <GridContainer className="usa-section">
       <Grid row className="margin-top-2">
-        <Button className="margin-right-0" onClick={handleNavCruisesList}>&lt; Cruise List</Button>
+        <GoBackButton to="/cruises" label="Cruise List" />
       </Grid>
-      <Grid row className="flex-justify margin-top-2">
+      <Grid row className="margin-top-2">
         <h1 className="app-sec-header">Cruise Details</h1>
         <div className="margin-top-05 margin-bottom-2 mobile-lg:margin-bottom-0">
-          <Tag className={`padding-1 usa-tag--big ${setStatusColor(cruiseStatusId)}`}>{cruiseStatus}</Tag>
+          <Tag
+            className={`margin-left-1 radius-md usa-tag--big ${setStatusColor(cruiseStatusId)}`}
+          >
+            {cruiseStatus}
+          </Tag>
         </div>
       </Grid>
-      <AppCard>
+      <AppCard className="position-relative margin-bottom-6">
         <HeaderWithEdit
           title=""
           editLabel={"Cruise"}
@@ -289,44 +310,54 @@ const CruiseDetailPage = () => {
           activeAction={activeAction}
           handleSetAction={() => setActiveAction(CruiseAction.EDIT)}
           handleCancelAction={() => setActiveAction(null)}
-          statusLock={isStatusLocked} />
-        {activeAction !== null && activeAction === CruiseAction.EDIT
-          ?
-          <CruiseForm cruise={cruise} ports={ports} handleSaveCruise={handleSaveCruise} />
-          :
+          statusLock={isStatusLocked}
+        />
+        {activeAction !== null && activeAction === CruiseAction.EDIT ? (
+          <CruiseForm
+            cruise={cruise}
+            ports={ports}
+            handleSaveCruise={handleSaveCruise}
+          />
+        ) : (
           <CruiseView cruise={cruise} ports={ports} />
-        }
+        )}
       </AppCard>
-      <Grid row className="flex-justify margin-bottom-1">
+      <Grid row className="flex-justify margin-bottom-1 gap-10">
         <h2 className="app-sec-header">Stations</h2>
-        {
-          activeAction === CruiseAction.NEW
-            ? <Button
-              className="margin-right-0"
-              onClick={() => setActiveAction(null)}
-              secondary
-            >
-              Cancel New Station
-            </Button>
-            : <Button
-              className="margin-right-0"
-              onClick={() => setActiveAction(CruiseAction.NEW)}
-              disabled={activeAction !== null && activeAction !== CruiseAction.NEW || isStatusLocked}
-            >
-              New Station
-            </Button>
-        }
+        {activeAction === CruiseAction.NEW ? (
+          <Button
+            className="margin-right-0"
+            onClick={() => setActiveAction(null)}
+            secondary
+          >
+            Cancel New Station
+          </Button>
+        ) : (
+          <Button
+            className="margin-right-0"
+            onClick={() => setActiveAction(CruiseAction.NEW)}
+            disabled={
+              (activeAction !== null && activeAction !== CruiseAction.NEW) ||
+              isStatusLocked
+            }
+          >
+            New Station
+          </Button>
+        )}
       </Grid>
-      {activeAction === CruiseAction.NEW && <StationNew handleNewStation={handleNewStation} />}
+      {activeAction === CruiseAction.NEW && (
+        <StationNew handleNewStation={handleNewStation} />
+      )}
       {cruiseStations?.length
         ? cruiseStations.map((station) => (
-          <StationSummary
-            key={station.id}
-            stationRef={stationRefs.current[station.id]}
-            cruiseId={id}
-            station={station}
-            activeAction={activeAction} />
-        ))
+            <StationSummary
+              key={station.id}
+              stationRef={stationRefs.current[station.id]}
+              cruiseId={id}
+              station={station}
+              activeAction={activeAction}
+            />
+          ))
         : ""}
       {!isStatusLocked && (
         <Button
@@ -336,8 +367,8 @@ const CruiseDetailPage = () => {
           Submit
         </Button>
       )}
-    </>
+    </GridContainer>
   );
-}
+};
 
 export default CruiseDetailPage;
