@@ -74,8 +74,8 @@ const AppInitStatusPage = () => {
       if (cruisesWarning) {
         return {
           type: "warning",
-          heading: "Cruises & Stations Loaded",
-          message: cruisesWarning,
+          heading: "Cruises & Stations Warning",
+          message: "Cruises and stations data not found",
         };
       }
       return {
@@ -130,16 +130,6 @@ const AppInitStatusPage = () => {
           <Grid col={12}>
             <Alert type="warning" heading="Warning status" headingLevel="h4">
               {additionalWarning}
-            </Alert>
-          </Grid>
-        </Grid>
-      )}
-
-      {cruisesWarning && (
-        <Grid row>
-          <Grid col={12}>
-            <Alert type="warning" heading="Warning status" headingLevel="h4">
-              {cruisesWarning}
             </Alert>
           </Grid>
         </Grid>

@@ -93,6 +93,7 @@ const SwitchAccounts = () => {
         await login(data.user);
         event.target.reset();
         setError("");
+        navigate("/app-status");
       } else {
         setError("Invalid username or password.");
       }
