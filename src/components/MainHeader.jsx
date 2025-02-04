@@ -66,7 +66,7 @@ const MainHeader = () => {
         <div className="usa-navbar">
           <Title>
             <img
-              src="logo.png"
+              src="/logo.png"
               alt="RADFish Cruise App logo"
               className="header-logo"
             />
