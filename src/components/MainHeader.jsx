@@ -50,7 +50,7 @@ const MainHeader = () => {
               : "nav-link-with-icon header__submenu-item"
           }
         >
-          <Icon.AccountCircle size={3} />
+          <Icon.AccountCircle aria-label="account" size={3} />
           {user?.username}
         </NavLink>,
       ]
