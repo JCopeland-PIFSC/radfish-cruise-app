@@ -2,6 +2,7 @@ import { useOfflineStorage } from "@nmfs-radfish/react-radfish";
 import { get, genListQueryParams } from "../utils/requestMethods";
 import { tableNames } from "../db/store";
 import { getUserCruisesList } from "../utils/databaseHelpers";
+import { CruiseStatus } from "../utils/listLookup";
 
 export const useCruiseAndStations = () => {
   const { findOne, create, update, storageMethod } = useOfflineStorage();
@@ -126,6 +127,15 @@ export const useCruiseAndStations = () => {
   };
 
   const updateCruise = async (cruiseId, updates) => {
+    let startDate = new Date(updates.startDate);
+    let endDate = new Date(updates.endDate);
+    if (updates.cruiseStatusId === CruiseStatus.REJECTED) {
+      if (startDate <= endDate) {
+        updates.cruiseStatusId = CruiseStatus.ENDED;
+      } else if (!isNaN(startDate)) {
+        updates.cruiseStatusId = CruiseStatus.STARTED;
+      }
+    }
     try {
       await update(tableNames.cruises, [
         { id: cruiseId, ...updates, uuid: updates.uuid || crypto.randomUUID() },
