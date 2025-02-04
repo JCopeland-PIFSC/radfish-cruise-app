@@ -292,14 +292,26 @@ const CruiseDetailPage = () => {
       <Grid row className="margin-top-2">
         <GoBackButton to="/cruises" label="Cruise List" />
       </Grid>
-      <Grid row className="margin-top-2">
-        <h1 className="app-sec-header">Cruise Details</h1>
-        <div className="margin-top-05 margin-bottom-2 mobile-lg:margin-bottom-0">
-          <Tag
-            className={`margin-left-1 radius-md usa-tag--big ${setStatusColor(cruiseStatusId)}`}
-          >
-            {cruiseStatus}
-          </Tag>
+      <Grid row className="flex-justify margin-top-2">
+        <div className="">
+          <h1 className="app-sec-header">
+            Cruise Details
+            <Tag
+              className={`margin-left-1 radius-md usa-tag--big ${setStatusColor(cruiseStatusId)}`}
+            >
+              {cruiseStatus}
+            </Tag>
+          </h1>
+        </div>
+        <div className="flex">
+          {!isStatusLocked && (
+            <Button
+              disabled={isOffline || !canSubmit(user, cruise, cruiseStations)}
+              onClick={handleCruiseSubmit}
+            >
+              Submit
+            </Button>
+          )}
         </div>
       </Grid>
       <AppCard className="position-relative margin-bottom-6">
@@ -359,14 +371,6 @@ const CruiseDetailPage = () => {
             />
           ))
         : ""}
-      {!isStatusLocked && (
-        <Button
-          disabled={isOffline || !canSubmit(user, cruise, cruiseStations)}
-          onClick={handleCruiseSubmit}
-        >
-          Submit
-        </Button>
-      )}
     </GridContainer>
   );
 };
