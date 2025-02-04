@@ -43,76 +43,21 @@ const InitializedStation = {
 };
 
 function canSubmit(user, cruise, stations) {
-  if (!user || !user.isAuthenticated) {
+  if (!user) {
     return false;
   }
 
-  // Validate cruise data
-  const requiredCruiseFields = [
-    "id",
-    "cruiseName",
-    "cruiseStatusId",
-    "vesselName",
-    "startDate",
-    "endDate",
-    "departurePortId",
-    "returnPortId",
-  ];
-  for (const field of requiredCruiseFields) {
-    if (!cruise[field]) {
-      return false;
-    }
+  if (
+    cruise.cruiseStatusId === CruiseStatus.SUBMITTED ||
+    cruise.cruiseStatusId === CruiseStatus.ACCEPTED
+  ) {
+    return false;
   }
 
-  // Ensure startDate is before endDate
   const startDate = new Date(cruise.startDate);
   const endDate = new Date(cruise.endDate);
-  if (isNaN(startDate) || isNaN(endDate) || startDate >= endDate) {
-    return false;
-  }
 
-  // Validate stations array
-  if (!Array.isArray(stations) || stations.length === 0) {
-    return false;
-  }
-
-  for (const station of stations) {
-    // Check required station fields
-    const requiredStationFields = ["id", "cruiseId", "stationName"];
-    for (const field of requiredStationFields) {
-      if (!station[field]) {
-        return false;
-      }
-    }
-
-    // Check if station's cruiseId matches cruise.id
-    if (station.cruiseId !== cruise.id) {
-      return false;
-    }
-
-    // Validate station events
-    const requiredEventSets = ["beginSet", "endSet", "beginHaul", "endHaul"];
-    for (const setName of requiredEventSets) {
-      const eventSet = station.events[setName];
-      if (!eventSet) {
-        return false;
-      }
-
-      // Check required event fields
-      const requiredEventFields = ["timestamp", "latitude", "longitude"];
-      for (const field of requiredEventFields) {
-        if (
-          eventSet[field] === null ||
-          eventSet[field] === undefined ||
-          eventSet[field] === ""
-        ) {
-          return false;
-        }
-      }
-    }
-  }
-
-  return true;
+  return endDate > startDate;
 }
 
 const CruiseDetailPage = () => {
@@ -157,7 +102,7 @@ const CruiseDetailPage = () => {
 
   if (cruisesLoading) return <Spinner message="Loading Cruises" fillViewport />;
   if (cruisesError)
-    return <div>Error Loading Cruise Data: {cruiseError.message}</div>;
+    return <div>Error Loading Cruise Data: {cruisesError.message}</div>;
 
   const cruiseStations = getStationsByCruiseId(cruiseId);
 
