@@ -47,7 +47,7 @@ const Login = () => {
       {/* Left Side - Container */}
       <div className="login__left-side">
         <img
-          src="logo-white.webp"
+          src="/logo-white.webp"
           alt="RADFish Cruise App logo"
           className="login__logo"
         />
@@ -106,7 +106,7 @@ const Login = () => {
       {/* Right Side - Image */}
       <div className="login__right-side">
         <img
-          src="birdseye-ship.webp"
+          src="/birdseye-ship.webp"
           alt="Cruise Station"
           className="login__image"
         />
