@@ -7,7 +7,7 @@ const Footer = () => {
       className="footer"
     >
       <img
-        src="radfish-logo.webp"
+        src="/radfish-logo.webp"
         alt="radfish logo"
         className="footer__logo"
       />

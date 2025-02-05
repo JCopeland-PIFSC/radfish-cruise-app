@@ -1,11 +1,7 @@
 import "../index.css";
-import React, { useEffect, useState, useRef } from "react";
-import {
-  Button,
-  Grid,
-  GridContainer,
-  Tag,
-} from "@trussworks/react-uswds";
+import React, { useCallback, useEffect, useState, useRef } from "react";
+import { Button, Grid, GridContainer, Tag } from "@trussworks/react-uswds";
+import { useOfflineStatus } from "@nmfs-radfish/react-radfish";
 import {
   StationSummary,
   StationNew,
@@ -17,11 +13,12 @@ import {
   GoBackButton,
 } from "../components";
 import { useNavigate, useLocation, useParams } from "react-router-dom";
-import { listValueLookup } from "../utils/listLookup";
+import { CruiseStatus, listValueLookup } from "../utils/listLookup";
 import { setStatusColor } from "../utils/setStatusColor";
 import { generateTzDateTime, getLocationTz } from "../utils/dateTimeHelpers";
 import { useListTablesContext, useCruisesAndStationsContext } from "../context";
 import { useAuth } from "../context/AuthContext";
+import { post } from "../utils/requestMethods";
 
 const CruiseAction = {
   NEW: "NEW",
@@ -45,9 +42,28 @@ const InitializedStation = {
   },
 };
 
+function canSubmit(user, cruise, stations) {
+  if (!user) {
+    return false;
+  }
+
+  if (
+    cruise.cruiseStatusId === CruiseStatus.SUBMITTED ||
+    cruise.cruiseStatusId === CruiseStatus.ACCEPTED
+  ) {
+    return false;
+  }
+
+  const startDate = new Date(cruise.startDate);
+  const endDate = new Date(cruise.endDate);
+
+  return endDate > startDate;
+}
+
 const CruiseDetailPage = () => {
   const { cruiseId } = useParams();
   const { user } = useAuth();
+  const { isOffline } = useOfflineStatus();
   const {
     loading: listsLoading,
     error: listsError,
@@ -86,7 +102,7 @@ const CruiseDetailPage = () => {
 
   if (cruisesLoading) return <Spinner message="Loading Cruises" fillViewport />;
   if (cruisesError)
-    return <div>Error Loading Cruise Data: {cruiseError.message}</div>;
+    return <div>Error Loading Cruise Data: {cruisesError.message}</div>;
 
   const cruiseStations = getStationsByCruiseId(cruiseId);
 
@@ -183,19 +199,64 @@ const CruiseDetailPage = () => {
     }
   };
 
+  const handleCruiseSubmit = async (event) => {
+    event.preventDefault();
+    const user = JSON.parse(localStorage.getItem("currentUser"));
+
+    if (!user) {
+      console.error("No authenticated user found.");
+      return;
+    }
+
+    try {
+      const payload = {
+        data: {
+          cruise: cruise,
+          stations: cruiseStations,
+          user: user,
+        },
+      };
+
+      const data = await post(
+        `${import.meta.env.VITE_API_HOST}/api/cruises`,
+        payload,
+      );
+
+      await updateCruise(cruise.id, data.cruise);
+      await refreshCruisesState(user.id);
+      console.debug("Cruise submitted successfully:", data);
+
+      navigate("/cruises");
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
   return (
     <GridContainer className="usa-section">
       <Grid row className="margin-top-2">
         <GoBackButton to="/cruises" label="Cruise List" />
       </Grid>
-      <Grid row className="margin-top-2">
-        <h1 className="app-sec-header">Cruise Details</h1>
-        <div className="margin-top-05 margin-bottom-2 mobile-lg:margin-bottom-0">
-          <Tag
-            className={`margin-left-1 radius-md usa-tag--big ${setStatusColor(cruiseStatusId)}`}
-          >
-            {cruiseStatus}
-          </Tag>
+      <Grid row className="flex-justify margin-top-2">
+        <div className="">
+          <h1 className="app-sec-header">
+            Cruise Details
+            <Tag
+              className={`margin-left-1 radius-md usa-tag--big ${setStatusColor(cruiseStatusId)}`}
+            >
+              {cruiseStatus}
+            </Tag>
+          </h1>
+        </div>
+        <div className="flex">
+          {!isStatusLocked && (
+            <Button
+              disabled={isOffline || !canSubmit(user, cruise, cruiseStations)}
+              onClick={handleCruiseSubmit}
+            >
+              Submit
+            </Button>
+          )}
         </div>
       </Grid>
       <AppCard className="position-relative margin-bottom-6">

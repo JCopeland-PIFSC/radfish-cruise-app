@@ -43,7 +43,7 @@ const Login = () => {
   };
 
   return (
-    <div row={true} className="login__container">
+    <div row="true" className="login__container">
       {/* Left Side - Container */}
       <div className="login__left-side">
         <img

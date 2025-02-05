@@ -50,7 +50,7 @@ const MainHeader = () => {
               : "nav-link-with-icon header__submenu-item"
           }
         >
-          <Icon.AccountCircle size={3} />
+          <Icon.AccountCircle aria-label="account" size={3} />
           {user?.username}
         </NavLink>,
       ]
@@ -66,7 +66,7 @@ const MainHeader = () => {
         <div className="usa-navbar">
           <Title>
             <img
-              src="logo.png"
+              src="/logo.png"
               alt="RADFish Cruise App logo"
               className="header-logo"
             />
