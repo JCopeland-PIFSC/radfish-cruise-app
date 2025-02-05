@@ -190,7 +190,7 @@ body {
 
 @media screen and (max-width: 1024px) {
   .login__left-side {
-    background: url("birdseye-ship-mobile.webp") no-repeat center center;
+    background: url("/birdseye-ship-mobile.webp") no-repeat center center;
     background-size: cover;
   }
 
