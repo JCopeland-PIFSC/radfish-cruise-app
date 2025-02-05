@@ -56,22 +56,13 @@ server.post("/api/cruises", (req, res) => {
 
   // Check if cruise ID already exists
   const existingCruise = db.get("cruises").find({ id: cruise.id }).value();
-  if (existingCruise) {
+  if (existingCruise && cruise.cruiseStatusId !== 4) {
     return res.status(400).json({ error: "Cruise ID already exists." });
   }
 
   // Determine if it's a new cruise or a previously rejected cruise
-  if (cruise.cruiseStatusId === 4) {
-    // Previously rejected cruise: Duplicate cruise and stations with new IDs
-    const newCruiseId = uuidv4();
-    cruise.id = newCruiseId;
-    cruise.cruiseStatusId = 3; // Set to '3' as per requirement
-
-    // Update cruise ID in all stations
-    stations.forEach((station) => {
-      station.cruiseId = newCruiseId;
-      station.id = uuidv4(); // Generate new station ID
-    });
+  if (cruise.cruiseStatusId === 4) { // if rejected
+    cruise.cruiseStatusId = 3; // Set status to submitted
   } else if ([1, 2].includes(cruise.cruiseStatusId)) {
     // New cruise: Validate cruiseStatusId and set to '3'
     cruise.cruiseStatusId = 3;
@@ -120,13 +111,11 @@ server.post("/api/cruises", (req, res) => {
     }
   }
 
-  return res
-    .status(201)
-    .json({
-      message: "Cruise and stations created successfully.",
-      cruise,
-      stations,
-    });
+  return res.status(201).json({
+    message: "Cruise and stations created successfully.",
+    cruise,
+    stations,
+  });
 });
 
 server.use(router);
