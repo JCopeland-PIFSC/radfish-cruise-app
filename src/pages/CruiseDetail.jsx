@@ -201,9 +201,7 @@ const CruiseDetailPage = () => {
 
   const handleCruiseSubmit = async (event) => {
     event.preventDefault();
-
-    const users = JSON.parse(localStorage.getItem("users")) || [];
-    const user = users.find((u) => u.isAuthenticated);
+    const user = JSON.parse(localStorage.getItem("currentUser"));
 
     if (!user) {
       console.error("No authenticated user found.");
@@ -224,6 +222,8 @@ const CruiseDetailPage = () => {
         payload,
       );
 
+      await updateCruise(cruise.id, data.cruise);
+      await refreshCruisesState(user.id);
       console.debug("Cruise submitted successfully:", data);
 
       navigate("/cruises");
