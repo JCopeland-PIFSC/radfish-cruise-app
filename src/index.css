@@ -53,7 +53,6 @@ body {
 .app-sec-header {
   font-size: large;
   font-weight: bold;
-  line-height: 1rem;
   margin: 0.5rem 0;
 }
 
@@ -92,7 +91,6 @@ hr.app-hr-light {
 @media (min-width: 640px) {
   .app-sec-header {
     font-size: x-large;
-    line-height: 1.2rem;
   }
 
   .usa-form .usa-button.btn-bot-right {

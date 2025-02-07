@@ -91,7 +91,7 @@ const StationNew = ({ handleNewStation }) => {
             </Fieldset>
           </Grid>
         </Grid>
-        <Grid row className="flex-column flex-align-end">
+        <Grid row className="flex-column flex-align-end margin-top-2">
           <Button type="submit" >Add Station</Button>
         </Grid>
       </Form>

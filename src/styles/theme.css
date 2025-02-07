@@ -16,7 +16,7 @@
   --noaa-border-dark: #565c65;
   --noaa-border-light: #ddd;
   --noaa-lightest-gray: #f0f0f0;
-  --noaa-lightest-blue: #D1F6FF;
+  --noaa-lightest-blue: #d1f6ff;
 }
 
 /* -------------------------------------------------------------------------- */
@@ -102,6 +102,10 @@ body {
 }
 
 @media (max-width: 1023px) {
+  .header-logo {
+    width: 90px;
+  }
+
   .header__username {
     color: #000;
   }
@@ -251,6 +255,18 @@ body {
   color: initial;
 }
 
+@media screen and (max-width: 426px) {
+  .app-sec-header {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .app-sec-header > .usa-tag {
+    margin-left: 0 !important;
+    width: fit-content;
+  }
+}
+
 /* -------------------------------------------------------------------------- */
 /* Cruise Details Page                                            */
 /* -------------------------------------------------------------------------- */
@@ -281,7 +297,7 @@ body {
 }
 
 .footer__text {
-  margin-left: .5rem;
+  margin-left: 0.5rem;
 }
 
 /* -------------------------------------------------------------------------- */

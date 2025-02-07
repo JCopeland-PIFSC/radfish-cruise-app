@@ -10,7 +10,7 @@ const HeaderWithEdit = ({
   statusLock = false
 }) => {
   return (
-    <Grid row className="header-with-edit-container flex-justify margin-bottom-1">
+    <Grid row className="flex-justify flex-align-center margin-bottom-1">
       <h1 className="app-sec-header">{title}</h1>
       {activeAction === actionCheck
         ?
