@@ -106,7 +106,7 @@ const CatchDetailPage = () => {
       <Grid row className="flex-justify margin-top-2">
         <h1 className="app-sec-header">Station: {stationName.toUpperCase()}</h1>
       </Grid>
-      <Grid row className="flex-justify margin-bottom-1  margin-top-5 gap-10">
+      <Grid row className="flex-justify flex-align-center margin-bottom-1  margin-top-5 gap-10">
         <h2 className="app-sec-header">Catches</h2>
         {activeAction === CatchAction.NEW ? (
           <Button

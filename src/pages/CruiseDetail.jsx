@@ -237,8 +237,8 @@ const CruiseDetailPage = () => {
       <Grid row className="margin-top-2">
         <GoBackButton to="/cruises" label="Cruise List" />
       </Grid>
-      <Grid row className="flex-justify margin-top-2">
-        <div className="">
+      <Grid row className="flex-justify flex-align-center margin-top-2">
+        <div>
           <h1 className="app-sec-header">
             Cruise Details
             <Tag
@@ -279,7 +279,7 @@ const CruiseDetailPage = () => {
           <CruiseView cruise={cruise} ports={ports} />
         )}
       </AppCard>
-      <Grid row className="flex-justify margin-bottom-1 gap-10">
+      <Grid row className="flex-justify flex-align-center margin-bottom-1 gap-10">
         <h2 className="app-sec-header">Stations</h2>
         {activeAction === CruiseAction.NEW ? (
           <Button

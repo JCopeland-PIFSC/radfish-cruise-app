@@ -82,16 +82,16 @@ const CruiseListPage = () => {
 
   return (
     <GridContainer className="usa-section">
-      <Grid row className="flex-justify margin-top-2">
+      <Grid row className="flex-justify flex-align-center margin-top-2">
         <h1 className="app-sec-header">Cruise List</h1>
         <Button
-          className="margin-right-0"
+          className="margin-right-0 margin-top-1"
           onClick={handleNavNewCruise}
         >
           New Cruise
         </Button>
       </Grid>
-      <Grid row className="margin-top-2">
+      <Grid row >
         <Table
           columns={columns}
           data={cruises?.length ? cruises : []}

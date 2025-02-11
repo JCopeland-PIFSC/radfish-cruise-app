@@ -74,7 +74,7 @@ const StationSummary = ({ cruiseId, station, activeAction, stationRef }) => {
       <hr />
       <Grid row>
         <Grid row className="width-full">
-          <h3 className="app-sec-header">Catch Summary</h3>
+          <h2>Catch Summary</h2>
         </Grid>
         <Grid col>
           {catchList?.length ? (
