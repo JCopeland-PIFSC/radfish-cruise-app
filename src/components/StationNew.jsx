@@ -39,16 +39,16 @@ const StationNew = ({ handleNewStation }) => {
           <Grid col={12}>
             <Fieldset legend="Begin Set" className="app-legend-bold-text top-margin-1">
               <ResponsiveRow>
-                <Label htmlFor="latitude" className="text-bold margin-top-2" hint=" (Decimal Deg)" requiredMarker>Latitude:</Label>
-                <TextInput id="latitude" name="latitude" required />
-                <Label htmlFor="longitude" className="text-bold margin-top-2" hint=" (Decimal Deg)" requiredMarker>Longitude:</Label>
-                <TextInput id="longitude" name="longitude" required />
-              </ResponsiveRow>
-              <ResponsiveRow>
                 <Label htmlFor="begin-set-date" className="text-bold margin-top-2" hint=" (MM/DD/YYYY)" requiredMarker>Begin Set Date:</Label>
                 <DatePicker id="begin-set-date" name="eventDate" required />
                 <Label htmlFor="begin-set-time" className="text-bold margin-top-2" hint=" (24hr 00:00 - 23:59)" requiredMarker>Begin Set Time:</Label>
                 <TextInputMask id="begin-set-time" name="eventTime" type="text" aria-labelledby="time" aria-describedby="hint-time" mask="__:__" pattern="([01]\d|2[0-3]):[0-5]\d" />
+              </ResponsiveRow>
+              <ResponsiveRow>
+                <Label htmlFor="latitude" className="text-bold margin-top-2" hint=" (Decimal Deg)" requiredMarker>Latitude:</Label>
+                <TextInput id="latitude" name="latitude" required />
+                <Label htmlFor="longitude" className="text-bold margin-top-2" hint=" (Decimal Deg)" requiredMarker>Longitude:</Label>
+                <TextInput id="longitude" name="longitude" required />
               </ResponsiveRow>
               <ResponsiveRow>
                 <Label htmlFor="wind-speed" className="text-bold margin-top-2" hint=" (Knots)" requiredMarker>Wind Speed:</Label>
