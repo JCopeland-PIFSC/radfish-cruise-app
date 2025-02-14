@@ -12,7 +12,7 @@ import { clientsClaim } from "workbox-core";
 import { ExpirationPlugin } from "workbox-expiration";
 import { precacheAndRoute, createHandlerBoundToURL } from "workbox-precaching";
 import { registerRoute } from "workbox-routing";
-import { StaleWhileRevalidate } from "workbox-strategies";
+import { CacheFirst, StaleWhileRevalidate } from "workbox-strategies";
 
 const url = new URL(location.href);
 
@@ -66,6 +66,25 @@ registerRoute(
       // Ensure that once this runtime cache reaches a maximum size the
       // least-recently used images are removed.
       new ExpirationPlugin({ maxEntries: 50 }),
+    ],
+  }),
+);
+
+// Cache font files
+registerRoute(
+  ({ url }) =>
+    url.origin === self.location.origin &&
+    (url.pathname.endsWith(".woff") ||
+      url.pathname.endsWith(".woff2") ||
+      url.pathname.endsWith(".ttf") ||
+      url.pathname.endsWith(".otf")),
+  new CacheFirst({
+    cacheName: "fonts",
+    plugins: [
+      new ExpirationPlugin({
+        maxEntries: 20, // Limit number of cached fonts
+        maxAgeSeconds: 30 * 24 * 60 * 60, // Cache for 30 days
+      }),
     ],
   }),
 );
